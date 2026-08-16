@@ -114,3 +114,1092 @@
     .lead {
       font-size: 18px;
       color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta a, .primary, .secondary {
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .calculator-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 3rem;
+      margin: 4rem 0;
+      border: 1px solid var(--border);
+    }
+
+    .calculator-section h2 {
+      font-size: 28px;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .slider-desc {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 15px;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2.5rem;
+    }
+
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+
+    .input-group input[type="number"],
+    .input-group select {
+      padding: 0.6rem;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .input-group input[type="number"]:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .input-display {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-light);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      margin: 0.5rem 0;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .calc-output {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .output-card {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .output-card.primary-output {
+      border: 2px solid var(--accent);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .output-header {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-header small {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .output-header strong {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .output-subtext {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    .output-breakdown {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(52, 65, 85, 0.3);
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .breakdown-row span {
+      color: var(--text-secondary);
+    }
+
+    .breakdown-row strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .breakdown-row.divider {
+      padding: 0.8rem 0;
+      margin: 0.5rem 0;
+      border-top: 1px solid rgba(52, 65, 85, 0.5);
+      border-bottom: 1px solid rgba(52, 65, 85, 0.5);
+    }
+
+    .breakdown-row.profit-row span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .breakdown-row.profit-row strong {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .risk-alert {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid #ef4444;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #fca5a5;
+      margin-top: 0.5rem;
+      min-height: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .story {
+      margin: 5rem 0;
+    }
+
+    .roadmap {
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #0d1425 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .roadmap h2 {
+      font-size: 32px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .roadmap-intro {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      font-size: 16px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .phases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .phase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .phase-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);
+    }
+
+    .phase-badge {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .phase-live {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(16, 185, 129, 0.05) 100%);
+    }
+
+    .phase-live .phase-badge {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .phase-coming .phase-badge {
+      background: var(--bg-light);
+      color: var(--text-secondary);
+    }
+
+    .phase-card h3 {
+      font-size: 18px;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-card > p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .phase-features {
+      list-style: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .phase-features li {
+      margin-bottom: 0.75rem;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .phase-features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .story {
+      margin: 5rem 0;
+    }
+
+    .story h2 {
+      font-size: 32px;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .story-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .story-num {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      color: var(--bg-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .story-item h3 {
+      font-size: 16px;
+      margin-bottom: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .story-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .features {
+      margin: 5rem 0;
+    }
+
+    .features > h2 {
+      font-size: 32px;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .feature-note {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .differentiator {
+      background: var(--bg-light);
+      border-radius: 8px;
+      padding: 3rem;
+      margin: 5rem 0;
+      text-align: center;
+    }
+
+    .differentiator h2 {
+      font-size: 24px;
+      margin-bottom: 1rem;
+    }
+
+    .differentiator p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 15px;
+    }
+
+    .niche-focus {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem;
+      border-radius: 4px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .niche-focus strong {
+      color: var(--accent);
+    }
+
+    .niche-focus ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .niche-focus li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .niche-focus li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .pilot {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 3rem;
+      margin: 5rem 0;
+      text-align: center;
+    }
+
+    .pilot h2 {
+      font-size: 32px;
+      margin-bottom: 1rem;
+    }
+
+    .pilot > p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 15px;
+    }
+
+    .pilot-form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .pilot-form button {
+      margin-top: 1rem;
+    }
+
+    .pilot-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+    }
+
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 5rem;
+    }
+
+    footer p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+    }
+
+    footer strong {
+      color: var(--accent);
+    }
+
+    footer small {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .slider-card,
+      .story-grid,
+      .phases-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        gap: 1.5rem;
+      }
+
+      .slider-output {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#top">✓ ConeQuotes</a>
+  <nav>
+    <a href="#slider">Calculator</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#features">Features</a>
+    <a href="#pilot">Pilot</a>
+  </nav>
+  <div class="actions">
+    <button class="secondary" onclick="document.getElementById('pilot').scrollIntoView({ behavior: 'smooth' })">Join pilot</button>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <p class="eyebrow">For Commercial Cleaning Contractors</p>
+  <h1>The operating system for profitable cleaning contracts.</h1>
+  <p class="lead">Bid profitable recurring contracts. Prove every shift. Catch scope creep before it kills your margin.</p>
+  <div class="cta">
+    <a href="#slider" class="primary">See the margin calculator →</a>
+  </div>
+</section>
+
+<section class="calculator-section" id="slider">
+  <h2>Build a profitable bid—see your margin in real-time</h2>
+  <p class="slider-desc">Adjust facility details to see how revenue, labor costs, and profit change.</p>
+  
+  <div class="calculator-grid">
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>Facility type</label>
+        <select id="facilityType" onchange="updateCalculator()">
+          <option value="office">Office ($0.12–0.16/sq ft)</option>
+          <option value="retail">Retail ($0.14–0.18/sq ft)</option>
+          <option value="warehouse">Warehouse ($0.08–0.12/sq ft)</option>
+          <option value="medical">Medical/Healthcare ($0.20–0.28/sq ft)</option>
+          <option value="industrial">Industrial ($0.10–0.15/sq ft)</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Cleanable square footage</label>
+        <input type="range" id="sqftSlider" min="1000" max="150000" value="20000" step="1000" oninput="updateCalculator()">
+        <div class="input-display"><span id="sqftValue">20,000</span> sq ft</div>
+      </div>
+
+      <div class="input-group">
+        <label>Service frequency</label>
+        <select id="frequency" onchange="updateCalculator()">
+          <option value="daily">Daily</option>
+          <option value="5x">5x per week</option>
+          <option value="3x">3x per week</option>
+          <option value="2x">2x per week</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Restrooms / service areas</label>
+        <input type="number" id="restrooms" min="0" value="4" onchange="updateCalculator()">
+      </div>
+
+      <div class="input-group">
+        <label>Debris / condition level</label>
+        <select id="debris" onchange="updateCalculator()">
+          <option value="0.9">Light — maintained</option>
+          <option value="1" selected>Moderate — routine buildup</option>
+          <option value="1.2">Heavy — deep clean needed</option>
+          <option value="1.4">Severe — restoration-level</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Crew size (# of cleaners)</label>
+        <input type="number" id="crewSize" min="1" max="20" value="3" onchange="updateCalculator()">
+      </div>
+
+      <div class="input-group">
+        <label>Labor cost per hour</label>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span>$</span>
+          <input type="number" id="laborRate" min="10" max="60" value="24" style="width: 60px;" onchange="updateCalculator()">
+          <span style="font-size: 12px; color: var(--text-muted);">/hr per cleaner</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Supplies & materials (% of revenue)</label>
+        <input type="range" id="suppliesPercent" min="5" max="20" value="8" step="1" oninput="updateCalculator()">
+        <div class="input-display"><span id="suppliesValue">8</span>%</div>
+      </div>
+
+      <div class="input-group">
+        <label>Overhead & admin (% of costs)</label>
+        <input type="range" id="overheadPercent" min="10" max="30" value="15" step="1" oninput="updateCalculator()">
+        <div class="input-display"><span id="overheadValue">15</span>%</div>
+      </div>
+
+      <div class="input-group">
+        <label>Target profit margin (%)</label>
+        <input type="range" id="marginTarget" min="15" max="40" value="25" step="1" oninput="updateCalculator()">
+        <div class="input-display" style="color: var(--accent);"><span id="marginValue">25</span>%</div>
+      </div>
+    </div>
+
+    <div class="calc-output">
+      <div class="output-card primary-output">
+        <div class="output-header">
+          <small>Suggested Quote Price (per visit)</small>
+          <strong id="dailyPrice">$250</strong>
+        </div>
+        <div class="output-subtext" id="dailyPerSqFt">$0.13/sq ft — what you charge your client</div>
+      </div>
+
+      <div class="output-card">
+        <div class="output-header">
+          <small>Monthly Revenue (4 weeks)</small>
+          <strong id="monthlyRevenue">$4,000</strong>
+        </div>
+      </div>
+
+      <div class="output-breakdown">
+        <div class="breakdown-row">
+          <span>Planned crew hours (daily)</span>
+          <strong id="dailyHours">24</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Labor cost (daily)</span>
+          <strong id="dailyLabor">$172.80</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Supplies & materials (daily)</span>
+          <strong id="dailySupplies">$20</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Overhead (daily)</span>
+          <strong id="dailyOverhead">$29</strong>
+        </div>
+        <div class="breakdown-row divider">
+          <span>Break-even (daily)</span>
+          <strong id="dailyBreakeven">$222</strong>
+        </div>
+        <div class="breakdown-row profit-row">
+          <span>Your profit margin (daily)</span>
+          <strong id="dailyProfit">$28</strong>
+        </div>
+      </div>
+
+      <div class="output-breakdown">
+        <div class="breakdown-row">
+          <span>Estimated labor hours / month</span>
+          <strong id="monthlyHours">96</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Monthly labor cost</span>
+          <strong id="monthlyLabor">$691</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Monthly supplies</span>
+          <strong id="monthlySupplies">$80</strong>
+        </div>
+        <div class="breakdown-row">
+          <span>Monthly overhead</span>
+          <strong id="monthlyOverhead">$116</strong>
+        </div>
+        <div class="breakdown-row divider">
+          <span>Monthly break-even</span>
+          <strong id="monthlyBreakeven">$887</strong>
+        </div>
+        <div class="breakdown-row profit-row">
+          <span>Monthly profit / margin %</span>
+          <strong id="monthlyProfit">$113 (12.7%)</strong>
+        </div>
+      </div>
+
+      <div class="risk-alert" id="riskAlert"></div>
+    </div>
+  </div>
+</section>
+
+</section>
+
+<section class="roadmap" id="roadmap">
+  <h2>The ConeQuotes roadmap: From bids to profit protection</h2>
+  <p class="roadmap-intro">Build and manage profitable contracts in phases. Start bidding today. Earn better margins every month.</p>
+  
+  <div class="phases-grid">
+    <article class="phase-card phase-live">
+      <div class="phase-badge">LIVE NOW</div>
+      <h3>Phase 1: Build Profitable Bids</h3>
+      <p>Calculate the exact price to charge. See your margin before you send the proposal.</p>
+      <ul class="phase-features">
+        <li>Facility type & size calculator</li>
+        <li>Service frequency options</li>
+        <li>Labor costs + supplies breakdown</li>
+        <li>Real-time margin calculation</li>
+      </ul>
+    </article>
+
+    <article class="phase-card phase-coming">
+      <div class="phase-badge">Q1 2027</div>
+      <h3>Phase 2: Win Bids Professionally</h3>
+      <p>Mobile walkthrough → auto-generated scope → professional proposal → client signature. No pen and paper.</p>
+      <ul class="phase-features">
+        <li>Mobile walkthrough form (photos, sq ft, restrooms)</li>
+        <li>Auto-generated scope by zone + frequency</li>
+        <li>Professional proposal builder</li>
+        <li>Client signature acceptance</li>
+      </ul>
+    </article>
+
+    <article class="phase-card phase-coming">
+      <div class="phase-badge">Q2 2027</div>
+      <h3>Phase 3: Protect Your Margin</h3>
+      <p>See what you're making (or losing) on every contract every month. Catch labor overruns before they hurt profit.</p>
+      <ul class="phase-features">
+        <li>Crew time tracking (mobile check-in/out)</li>
+        <li>Shift checklists + photo proof</li>
+        <li>Margin Guardian (planned vs. actual labor)</li>
+        <li>Client proof-of-service portal</li>
+      </ul>
+    </article>
+
+    <article class="phase-card phase-coming">
+      <div class="phase-badge">Q4 2027</div>
+      <h3>Phase 4: Grow & Automate</h3>
+      <p>Scope-creep recovery. Renewal automation. Benchmarking data. Tools to scale from 1 contract to 100.</p>
+      <ul class="phase-features">
+        <li>Scope-creep evidence locker (auto change orders)</li>
+        <li>Renewal Story Builder (data-backed pricing)</li>
+        <li>Industry benchmarking data</li>
+        <li>Integrations (payroll, accounting, scheduling)</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="story">
+  <h2>The cleaning contract problem—and how ConeQuotes fixes it</h2>
+  
+  <div class="story-grid">
+    <article class="story-item">
+      <span class="story-num">1</span>
+      <h3>Vague scope = scope creep</h3>
+      <p>You quote "general cleaning" at a rate per square foot. Within three months, restrooms need daily attention, breakroom gets extra attention, trash volumes increase. Nowhere to document it. No change order. Extra labor = lost profit.</p>
+    </article>
+    
+    <article class="story-item">
+      <h3 style="color: var(--accent);">✓ ConeQuotes way</h3>
+      <p>You capture a detailed scope—restrooms, breakroom, lobbies, trash, frequency. A crew or client requests extra work. You log it (photo + estimate), and it's documented for a change order. No unbilled extras.</p>
+    </article>
+
+    <article class="story-item">
+      <span class="story-num">2</span>
+      <h3>No profit visibility</h3>
+      <p>You send a proposal and think you're at 25% margin. Six months in, actual labor is 30% over plan. You discover it too late when the renewal comes. Margin is now 8%. Too late to fix it.</p>
+    </article>
+    
+    <article class="story-item">
+      <h3 style="color: var(--accent);">✓ ConeQuotes way</h3>
+      <p>Every month, you see planned versus actual labor. If hours exceed scope, you get an alert: "Restroom work is 18 hours over plan." You submit a change order, or adjust next month's crew plan. Margin stays protected.</p>
+    </article>
+
+    <article class="story-item">
+      <span class="story-num">3</span>
+      <h3>Clients question service</h3>
+      <p>"Was cleaning done last Tuesday?" You have no proof beyond a crew member's word. Dispute, churn, reputation damage.</p>
+    </article>
+    
+    <article class="story-item">
+      <h3 style="color: var(--accent);">✓ ConeQuotes way</h3>
+      <p>After every shift, a supervisor logs arrival, completed checklist, any issues, optional photos. Client sees it in a branded portal. Zero disputes. Renewal is easy because the data proves value.</p>
+    </article>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <h2>How ConeQuotes protects profit</h2>
+  
+  <div class="feature-grid">
+    <article class="feature-card">
+      <h3>📊 Margin Guardian</h3>
+      <p>Every contract shows monthly revenue, actual labor hours, full labor cost, supplies, and your real margin. If a contract drifts into the red, you see it before the owner does. Status: healthy, watch, or at risk.</p>
+      <p class="feature-note">The thing no other cleaning software does.</p>
+    </article>
+
+    <article class="feature-card">
+      <h3>🔐 Scope-Creep Locker</h3>
+      <p>Crew sees extra work? They snap a photo, log the request, and it's documented. You draft a change order or client email in seconds. No unbilled extras. No forgotten text messages.</p>
+    </article>
+
+    <article class="feature-card">
+      <h3>✓ Proof of Service</h3>
+      <p>After every shift: crew check-in, task completion, supervisor inspection, optional photos. Client sees it in their branded portal. Zero "was cleaning done?" disputes. Renewals feel earned, not pitched.</p>
+    </article>
+
+    <article class="feature-card">
+      <h3>🎯 Renewal Story</h3>
+      <p>Before renewal: visits completed, quality scores, scope changes, labor trends, client requests. Data-backed price increase feels fair, not arbitrary. Clients renew because they see the value.</p>
+    </article>
+
+    <article class="feature-card">
+      <h3>🛡️ Risk Flags</h3>
+      <p>Before you send a bid, the system flags missing inputs: square footage not verified, restroom count missing, access/security unclear, wage assumptions not confirmed. Send only defensible bids.</p>
+    </article>
+
+    <article class="feature-card">
+      <h3>🌐 Client Portal</h3>
+      <p>Branded view of scope, visit proof, quality scores, issues resolved, inspections, and invoices. Builds trust. Reduces disputes. Makes renewal conversations easier.</p>
+    </article>
+  </div>
+</section>
+
+<section class="differentiator">
+  <h2>Built for commercial cleaning. Not for medical, schools, government—yet.</h2>
+  <p>We focus on office, retail, and warehouse contracts first. Compliance for healthcare and government comes later once we've perfected the profit-protection engine.</p>
+  
+  <div class="niche-focus">
+    <strong>Right fit:</strong>
+    <ul>
+      <li>Commercial janitorial companies</li>
+      <li>Recurring office, retail, warehouse contracts</li>
+      <li>Teams managing 10–50 locations</li>
+      <li>Owners who want data, not guesswork</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pilot" id="pilot">
+  <h2>Join the ConeQuotes pilot</h2>
+  <p>We're building with cleaning contractors—not for them. Early pilots get lifetime discounts and direct input on features.</p>
+  
+  <form class="pilot-form" action="https://formspree.io/f/xdenlden" method="POST">
+    <div class="form-group">
+      <input type="text" name="company" placeholder="Your company name" required>
+    </div>
+    <div class="form-group">
+      <input type="email" name="email" placeholder="your@email.com" required>
+    </div>
+    <div class="form-group">
+      <input type="tel" name="phone" placeholder="Phone (optional)">
+    </div>
+    <div class="form-group">
+      <textarea name="challenge" placeholder="Tell us about your biggest challenge: margin, scope creep, proof, or renewal growth." rows="3" required></textarea>
+    </div>
+    <button class="primary" type="submit">Join the pilot →</button>
+  </form>
+  
+  <p class="pilot-note">Early pilot: no charge. We're learning from your workflow.</p>
+</section>
+
+</main>
+
+<footer>
+  <p><strong>ConeQuotes</strong><br>The operating system for profitable commercial cleaning contracts.</p>
+  <p>© 2026 ConeQuotes. Built by Max.<br><small>The operating system for profitable commercial cleaning contracts.</small></p>
+</footer>
+
+<script>
+function updateCalculator() {
+  // Get all input values
+  const facilityType = document.getElementById('facilityType').value;
+  const sqft = parseInt(document.getElementById('sqftSlider').value) || 20000;
+  const frequency = document.getElementById('frequency').value;
+  const restrooms = parseInt(document.getElementById('restrooms').value) || 4;
+  const debris = parseFloat(document.getElementById('debris').value) || 1;
+  const crewSize = parseInt(document.getElementById('crewSize').value) || 3;
+  const laborRate = parseFloat(document.getElementById('laborRate').value) || 24;
+  const suppliesPercent = parseInt(document.getElementById('suppliesPercent').value) || 8;
+  const overheadPercent = parseInt(document.getElementById('overheadPercent').value) || 15;
+  const marginTarget = parseInt(document.getElementById('marginTarget').value) || 25;
+
+  // Facility type rates (per sq ft per visit)
+  const rateMap = {
+    'office': 0.14,
+    'retail': 0.16,
+    'warehouse': 0.10,
+    'medical': 0.24,
+    'industrial': 0.12
+  };
+  
+  const baseRate = rateMap[facilityType] || 0.14;
+  const debrisAdjustedRate = baseRate * debris;
+  const restroomAdj = Math.max(0, (restrooms - 2) * 0.015);
+  const finalRate = debrisAdjustedRate + restroomAdj;
+
+  // Frequency multiplier
+  const freqMap = {
+    'daily': 5,
+    '5x': 5,
+    '3x': 3,
+    '2x': 2,
+    'weekly': 1,
+    'biweekly': 0.5,
+    'monthly': 0.25
+  };
+  
+  const timesPerWeek = freqMap[frequency] || 1;
+  
+  // Daily calculations
+  const dailyRevenue = sqft * finalRate;
+  const productivityPerHour = 1000;
+  const baseHoursNeeded = sqft / productivityPerHour;
+  const dailyHours = baseHoursNeeded * crewSize;
+  
+  const dailyLaborCost = dailyHours * laborRate;
+  const dailySupplies = dailyRevenue * (suppliesPercent / 100);
+  const subtotal = dailyLaborCost + dailySupplies;
+  const dailyOverhead = subtotal * (overheadPercent / 100);
+  const dailyBreakeven = dailyLaborCost + dailySupplies + dailyOverhead;
+  
+  // Work backwards from margin target to find price
+  const dailyPrice = dailyBreakeven / (1 - (marginTarget / 100));
+  const dailyProfit = dailyPrice - dailyBreakeven;
+  const dailyMarginPct = (dailyProfit / dailyPrice) * 100;
+  
+  // Monthly calculations
+  const weeksPerMonth = 4.33;
+  const visitsPerMonth = timesPerWeek * weeksPerMonth;
+  const monthlyRevenue = dailyRevenue * visitsPerMonth;
+  const monthlyPrice = dailyPrice * visitsPerMonth;
+  const monthlyHours = dailyHours * visitsPerMonth;
+  const monthlyLaborCost = dailyLaborCost * visitsPerMonth;
+  const monthlySupplies = dailySupplies * visitsPerMonth;
+  const monthlyOverhead = dailyOverhead * visitsPerMonth;
+  const monthlyBreakeven = dailyBreakeven * visitsPerMonth;
+  const monthlyProfit = dailyProfit * visitsPerMonth;
+  
+  // Risk alert
+  let riskAlert = '';
+  if (dailyMarginPct < 20) {
+    riskAlert = '⚠️ Margin is below 20%. Consider adjusting pricing or reducing costs.';
+  } else if (dailyMarginPct < 25) {
+    riskAlert = '⚠️ Margin is below target. Monitor labor closely.';
+  } else {
+    riskAlert = '✓ Margin is healthy. This bid is defensible.';
+  }
+
+  // Update display
+  document.getElementById('sqftValue').textContent = sqft.toLocaleString();
+  document.getElementById('suppliesValue').textContent = suppliesPercent;
+  document.getElementById('overheadValue').textContent = overheadPercent;
+  document.getElementById('marginValue').textContent = marginTarget;
+  
+  document.getElementById('dailyPrice').textContent = '$' + Math.round(dailyPrice).toLocaleString();
+  document.getElementById('dailyPerSqFt').textContent = '$' + (finalRate).toFixed(3) + '/sq ft';
+  document.getElementById('monthlyRevenue').textContent = '$' + Math.round(monthlyPrice).toLocaleString();
+  
+  document.getElementById('dailyHours').textContent = dailyHours.toFixed(1);
+  document.getElementById('dailyLabor').textContent = '$' + Math.round(dailyLaborCost);
+  document.getElementById('dailySupplies').textContent = '$' + Math.round(dailySupplies);
+  document.getElementById('dailyOverhead').textContent = '$' + Math.round(dailyOverhead);
+  document.getElementById('dailyBreakeven').textContent = '$' + Math.round(dailyBreakeven);
+  document.getElementById('dailyProfit').textContent = '$' + Math.round(dailyProfit);
+  
+  document.getElementById('monthlyHours').textContent = monthlyHours.toFixed(0);
+  document.getElementById('monthlyLabor').textContent = '$' + Math.round(monthlyLaborCost);
+  document.getElementById('monthlySupplies').textContent = '$' + Math.round(monthlySupplies);
+  document.getElementById('monthlyOverhead').textContent = '$' + Math.round(monthlyOverhead);
+  document.getElementById('monthlyBreakeven').textContent = '$' + Math.round(monthlyBreakeven);
+  document.getElementById('monthlyProfit').textContent = '$' + Math.round(monthlyProfit) + ' (' + dailyMarginPct.toFixed(1) + '%)';
+  
+  document.getElementById('riskAlert').textContent = riskAlert;
+}
+
+updateCalculator();
+</script>
+
+</body>
+</html>
