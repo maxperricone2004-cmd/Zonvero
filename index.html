@@ -6,847 +6,87 @@
   <title>ConeQuotes — The Operating System for Profitable Cleaning Contracts</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f7fa;
-      color: #1a202c;
-      line-height: 1.6;
-    }
-
-    header {
-      background: white;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-weight: 600;
-      font-size: 18px;
-      color: #10b981;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      transition: color 0.2s;
-    }
-
-    .logo:hover {
-      color: #059669;
-    }
-
-    nav {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    nav button {
-      background: none;
-      border: none;
-      color: #4a5568;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    nav button:hover {
-      color: #10b981;
-    }
-
-    nav button.active {
-      color: #10b981;
-      border-bottom: 2px solid #10b981;
-      padding-bottom: 0.5rem;
-    }
-
-    .cta {
-      background: #10b981;
-      color: white !important;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.2s;
-      border: none;
-      cursor: pointer;
-    }
-
-    .cta:hover {
-      background: #059669;
-    }
-
-    .hero {
-      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-      padding: 4rem 2rem;
-      text-align: center;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .hero h1 {
-      font-size: 42px;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    .hero .subtitle {
-      font-size: 16px;
-      color: #4a5568;
-      margin-bottom: 1.5rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-      min-height: 80vh;
-    }
-
-    .tab-content {
-      display: none !important;
-    }
-
-    .tab-content.active {
-      display: block !important;
-    }
-
-    h2 {
-      font-size: 28px;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    .section-intro {
-      color: #4a5568;
-      margin-bottom: 2rem;
-      font-size: 14px;
-    }
-
-    .calculator {
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 2rem;
-    }
-
-    .calc-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group label {
-      font-weight: 500;
-      font-size: 13px;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: 0.75rem;
-      border: 1px solid #cbd5e0;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #10b981;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-    }
-
-    .output-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-    }
-
-    .output-box {
-      background: #f7fafc;
-      padding: 1.5rem;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .output-label {
-      color: #718096;
-      font-size: 12px;
-      margin-bottom: 0.5rem;
-    }
-
-    .output-value {
-      font-size: 24px;
-      font-weight: 600;
-      color: #10b981;
-    }
-
-    .output-unit {
-      color: #718096;
-      font-size: 12px;
-      margin-top: 0.25rem;
-    }
-
-    .upload-box {
-      border: 2px dashed #cbd5e0;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 2rem;
-    }
-
-    .upload-box:hover {
-      border-color: #10b981;
-      background: #f0fdf4;
-    }
-
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .photo-item {
-      position: relative;
-      border-radius: 6px;
-      overflow: hidden;
-      aspect-ratio: 1;
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-    }
-
-    .photo-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .room-tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid #e2e8f0;
-      flex-wrap: wrap;
-    }
-
-    .room-tab {
-      padding: 0.75rem;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: #718096;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
-
-    .room-tab:hover {
-      color: #10b981;
-    }
-
-    .room-tab.active {
-      color: #10b981;
-      border-bottom-color: #10b981;
-    }
-
-    .room-content {
-      display: none !important;
-    }
-
-    .room-content.active {
-      display: block !important;
-    }
-
-    .proposal-box {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .proposal-header {
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .proposal-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #1a202c;
-      margin-bottom: 0.5rem;
-    }
-
-    .proposal-info {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      font-size: 14px;
-    }
-
-    .info-row {
-      padding: 1rem;
-      background: white;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .info-label {
-      color: #718096;
-      font-size: 12px;
-      margin-bottom: 0.25rem;
-    }
-
-    .info-value {
-      font-weight: 500;
-      color: #1a202c;
-    }
-
-    .scope-section h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    .scope-list {
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .scope-list li {
-      padding: 0.75rem 0;
-      color: #4a5568;
-      font-size: 14px;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-
-    .scope-list li:before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: #10b981;
-      font-weight: bold;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 8px;
-      padding: 1.5rem;
-      border: 1px solid #e2e8f0;
-    }
-
-    .stat-label {
-      color: #718096;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-value {
-      font-size: 28px;
-      font-weight: 600;
-      color: #1a202c;
-    }
-
-    .stat-change {
-      font-size: 12px;
-      margin-top: 0.5rem;
-      color: #718096;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    .contract-card {
-      background: white;
-      border-radius: 8px;
-      padding: 1.5rem;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 2rem;
-    }
-
-    .contract-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      margin-bottom: 1rem;
-    }
-
-    .contract-name {
-      font-weight: 600;
-      font-size: 16px;
-      color: #1a202c;
-    }
-
-    .contract-freq {
-      color: #718096;
-      font-size: 12px;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 0.35rem 0.75rem;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .status-healthy {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-watch {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-risk {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .contract-metrics {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .metric {
-      background: #f7fafc;
-      padding: 1rem;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .metric-label {
-      color: #718096;
-      font-size: 12px;
-      margin-bottom: 0.25rem;
-    }
-
-    .metric-value {
-      font-weight: 600;
-      font-size: 18px;
-      color: #1a202c;
-    }
-
-    .progress-bar {
-      background: #e2e8f0;
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: #10b981;
-      transition: width 0.3s;
-    }
-
-    .progress-fill.warning {
-      background: #f59e0b;
-    }
-
-    .progress-fill.danger {
-      background: #ef4444;
-    }
-
-    .labor-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 0.5rem;
-    }
-
-    .labor-label {
-      color: #718096;
-    }
-
-    .labor-value {
-      font-weight: 500;
-      color: #1a202c;
-    }
-
-    .alert-section {
-      background: #fef3c7;
-      border: 1px solid #fcd34d;
-      border-radius: 6px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-
-    .alert-title {
-      font-weight: 600;
-      color: #92400e;
-      margin-bottom: 0.25rem;
-      font-size: 13px;
-    }
-
-    .alert-text {
-      color: #78350f;
-      font-size: 12px;
-    }
-
-    .danger-alert {
-      background: #fee2e2;
-      border-color: #fecaca;
-    }
-
-    .danger-alert .alert-title,
-    .danger-alert .alert-text {
-      color: #7f1d1d;
-    }
-
-    button.primary, button.submit {
-      background: #10b981;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: 500;
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    button.primary:hover, button.submit:hover {
-      background: #059669;
-    }
-
-    button.primary {
-      width: 100%;
-    }
-
-    .hours-form {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-
-    .hours-form .form-group {
-      margin-bottom: 0.75rem;
-    }
-
-    .hours-form .form-group label {
-      font-size: 12px;
-    }
-
-    .hours-form .form-group input {
-      padding: 0.5rem;
-      font-size: 13px;
-    }
-
-    .hours-form button {
-      width: 100%;
-      margin-top: 0.75rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 3rem 2rem;
-      color: #718096;
-      font-size: 14px;
-      background: #f7fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .economics-section {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .economics-table {
-      width: 100%;
-      margin-bottom: 1.5rem;
-    }
-
-    .econ-row {
-      display: grid;
-      grid-template-columns: 1fr 150px;
-      gap: 1rem;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 14px;
-    }
-
-    .econ-row:last-child {
-      border-bottom: none;
-    }
-
-    .econ-label {
-      color: #4a5568;
-      font-weight: 500;
-    }
-
-    .econ-value {
-      font-weight: 600;
-      color: #1a202c;
-      text-align: right;
-    }
-
-    .econ-value.positive {
-      color: #10b981;
-    }
-
-    .econ-value.negative {
-      color: #ef4444;
-    }
-
-    .econ-value.highlight {
-      font-size: 18px;
-      padding: 0.5rem;
-      background: #f7fafc;
-      border-radius: 6px;
-    }
-
-    .econ-divider {
-      height: 2px;
-      background: #e2e8f0;
-      margin: 1rem 0;
-    }
-
-    .expense-breakdown {
-      background: #f7fafc;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .expense-breakdown-title {
-      font-weight: 600;
-      font-size: 13px;
-      color: #2d3748;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 1rem;
-    }
-
-    .expense-row {
-      display: grid;
-      grid-template-columns: 1fr 120px;
-      gap: 1rem;
-      align-items: center;
-      padding: 0.5rem 0;
-      font-size: 13px;
-    }
-
-    .expense-row-label {
-      color: #4a5568;
-    }
-
-    .expense-row-value {
-      font-weight: 600;
-      color: #1a202c;
-      text-align: right;
-    }
-
-    .expense-form {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .expense-form-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    .expense-form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .expense-form-row.full {
-      grid-template-columns: 1fr;
-    }
-
-    .expense-list {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .expense-list-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 1rem;
-      color: #1a202c;
-    }
-
-    .expense-item {
-      display: grid;
-      grid-template-columns: 100px 60px 120px 1fr 80px;
-      gap: 1rem;
-      align-items: center;
-      padding: 0.75rem;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 13px;
-    }
-
-    .expense-item:last-child {
-      border-bottom: none;
-    }
-
-    .expense-type {
-      font-weight: 500;
-      color: #1a202c;
-    }
-
-    .expense-amount {
-      font-weight: 600;
-      color: #10b981;
-    }
-
-    .expense-date {
-      color: #718096;
-      font-size: 12px;
-    }
-
-    .expense-note {
-      color: #718096;
-      font-size: 12px;
-    }
-
-    .expense-delete {
-      background: none;
-      border: none;
-      color: #ef4444;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 12px;
-    }
-
-    .expense-delete:hover {
-      color: #dc2626;
-    }
-
-    @media (max-width: 1024px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contract-metrics {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .output-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .calc-row {
-        grid-template-columns: 1fr;
-      }
-
-      .proposal-info {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    footer {
-      background: white;
-      border-top: 1px solid #e2e8f0;
-      padding: 2rem;
-      text-align: center;
-      margin-top: 3rem;
-      color: #718096;
-      font-size: 13px;
-    }
-
-    footer a {
-      color: #10b981;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    footer a:hover {
-      color: #059669;
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      nav {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .hero h1 {
-        font-size: 28px;
-      }
-
-      main {
-        padding: 1.5rem;
-      }
-
-      .room-tabs {
-        flex-direction: column;
-      }
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #1a202c; line-height: 1.6; }
+    header { background: white; border-bottom: 1px solid #e2e8f0; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-weight: 600; font-size: 18px; color: #10b981; background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
+    .logo:hover { color: #059669; }
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
+    nav button:hover { color: #10b981; }
+    nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
+    .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }
+    .cta:hover { background: #059669; }
+    .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
+    .hero h1 { font-size: 42px; line-height: 1.2; margin-bottom: 1rem; color: #1a202c; }
+    .hero .subtitle { font-size: 16px; color: #4a5568; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+    main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; min-height: 80vh; }
+    .tab-content { display: none !important; }
+    .tab-content.active { display: block !important; }
+    h2 { font-size: 28px; margin-bottom: 1rem; color: #1a202c; }
+    h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; color: #1a202c; }
+    .section-intro { color: #4a5568; margin-bottom: 2rem; font-size: 14px; }
+    .calculator { background: white; border-radius: 8px; padding: 2rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-weight: 500; font-size: 13px; color: #2d3748; margin-bottom: 0.5rem; }
+    .form-group input, .form-group select { padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; font-family: inherit; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+    .output-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .output-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .output-label { color: #718096; font-size: 12px; margin-bottom: 0.5rem; }
+    .output-value { font-size: 24px; font-weight: 600; color: #10b981; }
+    .output-unit { color: #718096; font-size: 12px; margin-top: 0.25rem; }
+    .economics-section { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .econ-row { display: grid; grid-template-columns: 1fr 150px; gap: 1rem; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    .econ-label { color: #4a5568; font-weight: 500; }
+    .econ-value { font-weight: 600; color: #1a202c; text-align: right; }
+    .econ-value.positive { color: #10b981; }
+    .econ-value.negative { color: #ef4444; }
+    .econ-value.highlight { font-size: 18px; padding: 0.5rem; background: #f7fafc; border-radius: 6px; }
+    .econ-divider { height: 2px; background: #e2e8f0; margin: 1rem 0; }
+    .expense-breakdown { background: #f7fafc; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+    .expense-breakdown-title { font-weight: 600; font-size: 13px; color: #2d3748; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
+    .expense-row { display: grid; grid-template-columns: 1fr 120px; gap: 1rem; align-items: center; padding: 0.5rem 0; font-size: 13px; }
+    .expense-row-label { color: #4a5568; }
+    .expense-row-value { font-weight: 600; color: #1a202c; text-align: right; }
+    .expense-form { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .expense-form-title { font-weight: 600; font-size: 14px; margin-bottom: 1rem; color: #1a202c; }
+    .expense-form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .expense-form-row.full { grid-template-columns: 1fr; }
+    .expense-list { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .expense-list-title { font-weight: 600; font-size: 14px; margin-bottom: 1rem; color: #1a202c; }
+    .expense-item { display: grid; grid-template-columns: 100px 60px 120px 1fr 80px; gap: 1rem; align-items: center; padding: 0.75rem; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    .expense-type { font-weight: 500; color: #1a202c; }
+    .expense-amount { font-weight: 600; color: #10b981; }
+    .expense-date { color: #718096; font-size: 12px; }
+    .expense-note { color: #718096; font-size: 12px; }
+    .expense-delete { background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 500; font-size: 12px; }
+    .expense-delete:hover { color: #dc2626; }
+    .contract-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .contract-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+    .contract-name { font-weight: 600; font-size: 16px; color: #1a202c; }
+    .contract-freq { color: #718096; font-size: 12px; }
+    .status-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .status-healthy { background: #dcfce7; color: #166534; }
+    .status-watch { background: #fef3c7; color: #92400e; }
+    .status-risk { background: #fee2e2; color: #991b1b; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 3rem; }
+    .stat-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; }
+    .stat-label { color: #718096; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .stat-value { font-size: 28px; font-weight: 600; color: #1a202c; }
+    .stat-change { font-size: 12px; margin-top: 0.5rem; color: #718096; }
+    .alert-section { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 1rem; margin-top: 1rem; }
+    .alert-title { font-weight: 600; color: #92400e; margin-bottom: 0.25rem; font-size: 13px; }
+    .alert-text { color: #78350f; font-size: 12px; }
+    .danger-alert { background: #fee2e2; border-color: #fecaca; }
+    .danger-alert .alert-title, .danger-alert .alert-text { color: #7f1d1d; }
+    button.primary, button.submit { background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 500; font-size: 14px; cursor: pointer; margin-top: 1rem; }
+    button.primary:hover, button.submit:hover { background: #059669; }
+    button.primary { width: 100%; }
+    .empty-state { text-align: center; padding: 3rem 2rem; color: #718096; font-size: 14px; background: #f7fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+    footer { background: white; border-top: 1px solid #e2e8f0; padding: 2rem; text-align: center; margin-top: 3rem; color: #718096; font-size: 13px; }
+    footer a { color: #10b981; text-decoration: none; font-weight: 500; }
+    footer a:hover { color: #059669; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -868,72 +108,419 @@
 
 <main>
 
-<!-- HOME/ABOUT TAB -->
 <div id="home" class="tab-content active">
   <h2>Why we built this</h2>
-
   <div style="max-width: 800px; margin: 2rem 0;">
-    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      You're losing money on contracts. A lot of money. And you don't know it until it's too late.
-    </p>
-
     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
       You bid a job at 25% margin. Six months in, your labor is 30% over plan. Turns out the client kept adding "just one more thing" — extra restrooms, breakroom attention, bigger trash volumes. No documentation. No change order. By the time you renew, your margin is 8%. You're stuck. Can't renegotiate without losing the contract. Can't drop the price without losing money.
     </p>
-
     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
       That's the real problem. Not getting the bid wrong. <strong>Not knowing you got it wrong until way too late.</strong>
     </p>
   </div>
-
   <h3 style="font-size: 18px; margin: 3rem 0 1rem 0;">What ConeQuotes does</h3>
-
   <div style="max-width: 800px;">
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
       <h4 style="color: #1a202c; margin-bottom: 0.5rem;">1. Calculate what to actually charge</h4>
       <p style="color: #4a5568; font-size: 14px;">Plug in the facility details. The calculator tells you the minimum price to hit 25% margin. You see the math before you quote.</p>
     </div>
-
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
       <h4 style="color: #1a202c; margin-bottom: 0.5rem;">2. Document scope so clients can't claim they didn't know</h4>
       <p style="color: #4a5568; font-size: 14px;">Walk the facility, take photos, generate a professional proposal. Client signs knowing exactly what you're providing. When they ask for extras later, you have proof of what was included.</p>
     </div>
-
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
       <h4 style="color: #1a202c; margin-bottom: 0.5rem;">3. Catch scope creep in real-time</h4>
       <p style="color: #4a5568; font-size: 14px;">Your crews log hours after each job. You see actual labor vs. your plan every week. If labor is drifting up, Margin Guardian alerts you before your margin disappears. You can document the scope change, send a change order, or stop it now.</p>
     </div>
   </div>
+</div>
 
-  <h3 style="font-size: 18px; margin: 3rem 0 1rem 0;">How to use it</h3>
-
-  <div style="max-width: 800px; color: #4a5568; font-size: 14px; line-height: 1.8;">
-    <p style="margin-bottom: 1rem;"><strong>Calculator:</strong> Start here before every quote. Enter facility size, frequency, labor rate. See the price that protects your margin.</p>
-    <p style="margin-bottom: 1rem;"><strong>Proposal Builder:</strong> Walk the job. Take photos of each room. Enter the scope. Click "submit" to create a contract you can track.</p>
-    <p style="margin-bottom: 1rem;"><strong>Margin Guardian:</strong> Your contracts live here. Each week, log the hours your crews spent. Watch your real margin calculate. Get alerts if labor goes over plan.</p>
-  </div>
-
-  <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-    <h3 style="font-size: 16px; margin-bottom: 1rem;">The idea is simple:</h3>
-    <p style="color: #4a5568; font-size: 14px; line-height: 1.8;">
-      Know your costs before you quote. Document scope so disputes don't happen. Track labor so you catch problems early. That's it. No complexity. Just the tools contractors need to protect profit.
-    </p>
-  </div>
-
-  <div style="margin-top: 2rem; text-align: center;">
-    <button class="cta" onclick="switchTab('calculator')" style="margin: 0 auto; display: inline-block;">Start → Calculator</button>
+<div id="calculator" class="tab-content">
+  <h2>Build a profitable bid</h2>
+  <p class="section-intro">Adjust facility details to see how revenue, labor costs, and profit change instantly.</p>
+  <div class="calculator">
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Facility Type</label>
+        <select id="facilityType" onchange="updateCalc()">
+          <option value="office">Office</option>
+          <option value="retail">Retail</option>
+          <option value="warehouse">Warehouse</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Square Footage</label>
+        <input type="number" id="sqft" value="25000" onchange="updateCalc()">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Service Frequency</label>
+        <select id="frequency" onchange="updateCalc()">
+          <option value="daily">Daily</option>
+          <option value="3x">3x per week</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Labor Rate per Hour</label>
+        <input type="number" id="laborRate" value="24" onchange="updateCalc()">
+      </div>
+    </div>
+    <div class="output-row">
+      <div class="output-box">
+        <div class="output-label">Suggested Price</div>
+        <div class="output-value" id="quotePriceOutput">$325</div>
+        <div class="output-unit">per visit</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Monthly Revenue</div>
+        <div class="output-value" id="monthlyOutput">$1,408</div>
+        <div class="output-unit">4 weeks</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Planned Hours</div>
+        <div class="output-value" id="plannedHoursOutput">96</div>
+        <div class="output-unit">per month</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Status</div>
+        <div class="output-value" id="statusOutput" style="color: #10b981; font-size: 16px;">✓ Healthy</div>
+        <div class="output-unit">margin protected</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- REST OF THE CODE CONTINUES WITH CALCULATOR, PROPOSAL, AND MARGIN GUARDIAN TABS -->
-<!-- [The full HTML/JS code continues - copy everything from the bash output above] -->
+<div id="proposal" class="tab-content">
+  <h2>Proposal Builder</h2>
+  <p class="section-intro">Document the facility with details. Create a trackable contract.</p>
+  <div class="calculator">
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" id="clientName" placeholder="ABC Office">
+      </div>
+      <div class="form-group">
+        <label>Facility Type</label>
+        <select id="propFacilityType">
+          <option value="office">Office</option>
+          <option value="retail">Retail</option>
+          <option value="warehouse">Warehouse</option>
+        </select>
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Square Footage</label>
+        <input type="number" id="propSqft" value="25000">
+      </div>
+      <div class="form-group">
+        <label>Service Frequency</label>
+        <select id="propFrequency">
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+        </select>
+      </div>
+    </div>
+    <button class="primary" onclick="submitProposal()">✓ Create Contract</button>
+  </div>
+</div>
+
+<div id="margin" class="tab-content">
+  <h2>Margin Guardian</h2>
+  <p class="section-intro">Track contracts. Log hours. Monitor margins.</p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Active Contracts</div>
+      <div class="stat-value" id="statActive">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Healthy</div>
+      <div class="stat-value" id="statHealthy">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Watch</div>
+      <div class="stat-value" id="statWatch">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">At Risk</div>
+      <div class="stat-value" id="statRisk">0</div>
+    </div>
+  </div>
+  <div id="contractsContainer"></div>
+</div>
 
 </main>
 
 <footer>
   <p>Questions? Reach out: <a href="mailto:conequotes.service@outlook.com">conequotes.service@outlook.com</a></p>
-  <p style="margin-top: 0.5rem; font-size: 12px;">ConeQuotes — The operating system for profitable cleaning contracts</p>
 </footer>
+
+<script>
+function getContracts() {
+  const stored = localStorage.getItem('coneQuotesContracts');
+  return stored ? JSON.parse(stored) : [];
+}
+
+function saveContracts(contracts) {
+  localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  if (tabName === 'margin') renderMarginGuardian();
+}
+
+function updateCalc() {
+  const sqft = parseInt(document.getElementById('sqft').value) || 25000;
+  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
+  const price = Math.round(sqft * 0.013);
+  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
+  const freq = freqMap[document.getElementById('frequency').value] || 1;
+  const monthly = Math.round(price * freq * 4.33);
+  const hours = Math.round((sqft / 5000) * freq * 4.33);
+  
+  document.getElementById('quotePriceOutput').textContent = '$' + price;
+  document.getElementById('monthlyOutput').textContent = '$' + monthly;
+  document.getElementById('plannedHoursOutput').textContent = hours;
+}
+
+function submitProposal() {
+  const clientName = document.getElementById('clientName').value.trim();
+  if (!clientName) {
+    alert('Enter client name');
+    return;
+  }
+  
+  const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
+  const freq = document.getElementById('propFrequency').value;
+  const laborRate = parseInt(document.getElementById('propSqft').value) || 24;
+  const price = Math.round(sqft * 0.013);
+  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
+  const freqVal = freqMap[freq] || 1;
+  const hours = Math.round((sqft / 5000) * freqVal * 4.33);
+
+  const contract = {
+    id: Date.now(),
+    clientName,
+    sqft,
+    frequency: freq,
+    quotePrice: price,
+    laborRate,
+    plannedHours: hours,
+    actualHours: 0,
+    weeklylogs: [],
+    expenses: [],
+    createdAt: new Date().toISOString()
+  };
+
+  const contracts = getContracts();
+  contracts.push(contract);
+  saveContracts(contracts);
+
+  alert('✓ Contract created for ' + clientName);
+  document.getElementById('clientName').value = '';
+  renderMarginGuardian();
+}
+
+function renderMarginGuardian() {
+  const contracts = getContracts();
+  const container = document.getElementById('contractsContainer');
+
+  if (contracts.length === 0) {
+    container.innerHTML = '<div class="empty-state">No contracts yet. Submit a proposal to get started.</div>';
+    updateStats(contracts);
+    return;
+  }
+
+  container.innerHTML = contracts.map(contract => {
+    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0);
+    const efficiency = Math.round((actualHours / contract.plannedHours) * 100);
+    const laborCost = actualHours * contract.laborRate;
+    const miscExpenses = contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const totalCost = laborCost + miscExpenses;
+    const grossProfit = contract.quotePrice - totalCost;
+    const grossMargin = ((grossProfit / contract.quotePrice) * 100).toFixed(1);
+    
+    const plannedLaborCost = contract.plannedHours * contract.laborRate;
+    const laborShift = laborCost - plannedLaborCost;
+    const laborShiftPercent = ((laborShift / plannedLaborCost) * 100).toFixed(1);
+
+    let status = 'Healthy';
+    let statusClass = 'status-healthy';
+    let alertHtml = '';
+
+    if (efficiency > 120) {
+      status = 'At Risk';
+      statusClass = 'status-risk';
+      alertHtml = '<div class="alert-section danger-alert"><div class="alert-title">⚠ Over budget</div><div class="alert-text">Labor is ' + efficiency + '% of plan.</div></div>';
+    } else if (efficiency > 110) {
+      status = 'Watch';
+      statusClass = 'status-watch';
+      alertHtml = '<div class="alert-section"><div class="alert-title">⚠ Labor trending up</div><div class="alert-text">At ' + efficiency + '% of plan.</div></div>';
+    }
+
+    const expensesByType = { 'Supplies': 0, 'Equipment': 0, 'Travel': 0, 'Other': 0 };
+    contract.expenses.forEach(exp => {
+      if (expensesByType.hasOwnProperty(exp.type)) expensesByType[exp.type] += parseFloat(exp.amount);
+    });
+
+    return `
+      <div class="contract-card">
+        <div class="contract-header">
+          <div>
+            <div class="contract-name">${contract.clientName}</div>
+            <div class="contract-freq">${contract.frequency} • ${contract.sqft} sq ft</div>
+          </div>
+          <span class="status-badge ${statusClass}">${status}</span>
+        </div>
+
+        <div class="economics-section">
+          <div class="economics-table">
+            <div class="econ-row">
+              <div class="econ-label">Monthly Revenue</div>
+              <div class="econ-value">$${contract.quotePrice.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Planned Labor</div>
+              <div class="econ-value">$${plannedLaborCost.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Actual Labor</div>
+              <div class="econ-value ${laborShift > 0 ? 'negative' : 'positive'}">$${laborCost.toFixed(0)} ${laborShift !== 0 ? '('+laborShiftPercent+'%)' : ''}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Other Expenses</div>
+              <div class="econ-value">$${miscExpenses.toFixed(0)}</div>
+            </div>
+            <div class="econ-divider"></div>
+            <div class="econ-row">
+              <div class="econ-label">Actual Margin</div>
+              <div class="econ-value highlight ${grossMargin >= 25 ? 'positive' : 'negative'}">${grossMargin}%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expense-breakdown">
+          <div class="expense-breakdown-title">Expenses</div>
+          <div class="expense-row">
+            <div class="expense-row-label">Labor (${actualHours}h @ $${contract.laborRate}/h)</div>
+            <div class="expense-row-value">$${laborCost.toFixed(0)}</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Supplies</div>
+            <div class="expense-row-value">$${expensesByType['Supplies'].toFixed(0)}</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Equipment</div>
+            <div class="expense-row-value">$${expensesByType['Equipment'].toFixed(0)}</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Travel</div>
+            <div class="expense-row-value">$${expensesByType['Travel'].toFixed(0)}</div>
+          </div>
+        </div>
+
+        <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+          <div class="form-group">
+            <label>Log Hours</label>
+            <input type="number" id="hours-${contract.id}" placeholder="Hours">
+          </div>
+          <button class="submit" onclick="logHours(${contract.id})" style="width: 100%; margin-top: 0.5rem;">Log Hours</button>
+        </div>
+
+        <div class="expense-form">
+          <div class="expense-form-title">Add Expense</div>
+          <div class="expense-form-row">
+            <div class="form-group">
+              <label>Type</label>
+              <select id="expType-${contract.id}">
+                <option value="Supplies">Supplies</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Travel">Travel</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" id="expAmount-${contract.id}" placeholder="0.00">
+            </div>
+          </div>
+          <button class="submit" onclick="addExpense(${contract.id})" style="width: 100%; margin-top: 0.5rem;">Add Expense</button>
+        </div>
+
+        ${alertHtml}
+      </div>
+    `;
+  }).join('');
+
+  updateStats(contracts);
+}
+
+function logHours(contractId) {
+  const hours = parseFloat(document.getElementById('hours-' + contractId).value);
+  if (!hours || hours <= 0) {
+    alert('Enter valid hours');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  
+  if (contract) {
+    contract.weeklylogs.push({ hours, date: new Date().toISOString() });
+    contract.actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);
+    saveContracts(contracts);
+    document.getElementById('hours-' + contractId).value = '';
+    renderMarginGuardian();
+  }
+}
+
+function addExpense(contractId) {
+  const expType = document.getElementById('expType-' + contractId).value;
+  const expAmount = document.getElementById('expAmount-' + contractId).value;
+
+  if (!expAmount || parseFloat(expAmount) <= 0) {
+    alert('Enter valid amount');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+
+  if (contract) {
+    contract.expenses.push({
+      type: expType,
+      amount: parseFloat(expAmount),
+      date: new Date().toISOString()
+    });
+    saveContracts(contracts);
+    document.getElementById('expAmount-' + contractId).value = '';
+    renderMarginGuardian();
+  }
+}
+
+function updateStats(contracts) {
+  let healthy = 0, watch = 0, risk = 0;
+  contracts.forEach(contract => {
+    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);
+    const efficiency = (actualHours / contract.plannedHours) * 100;
+    if (efficiency > 120) risk++;
+    else if (efficiency > 110) watch++;
+    else healthy++;
+  });
+
+  document.getElementById('statActive').textContent = contracts.length;
+  document.getElementById('statHealthy').textContent = healthy;
+  document.getElementById('statWatch').textContent = watch;
+  document.getElementById('statRisk').textContent = risk;
+}
+
+updateCalc();
+</script>
 
 </body>
 </html>
