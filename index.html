@@ -598,6 +598,132 @@
       border: 1px solid #e2e8f0;
     }
 
+    .economics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f7fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .econ-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .econ-label {
+      font-size: 11px;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .econ-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a202c;
+    }
+
+    .econ-value.profit {
+      color: #10b981;
+    }
+
+    .econ-value.negative {
+      color: #ef4444;
+    }
+
+    .expense-form {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .expense-form-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 1rem;
+      color: #1a202c;
+    }
+
+    .expense-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .expense-form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .expense-list {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .expense-list-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 1rem;
+      color: #1a202c;
+    }
+
+    .expense-item {
+      display: grid;
+      grid-template-columns: 100px 60px 120px 1fr 80px;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
+    }
+
+    .expense-item:last-child {
+      border-bottom: none;
+    }
+
+    .expense-type {
+      font-weight: 500;
+      color: #1a202c;
+    }
+
+    .expense-amount {
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    .expense-date {
+      color: #718096;
+      font-size: 12px;
+    }
+
+    .expense-note {
+      color: #718096;
+      font-size: 12px;
+    }
+
+    .expense-delete {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .expense-delete:hover {
+      color: #dc2626;
+    }
+
     @media (max-width: 1024px) {
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -666,20 +792,20 @@
 <main>
 
 <!-- HOME/ABOUT TAB -->
-<div id="home" class="tab-content">
+<div id="home" class="tab-content active">
   <h2>Why we built this</h2>
 
   <div style="max-width: 800px; margin: 2rem 0;">
     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      Cleaning contractors manage hundreds of thousands in annual revenue, but most do it without visibility into what's actually profitable.
+      You're losing money on contracts. A lot of money. And you don't know it until it's too late.
     </p>
 
     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      You quote based on experience. You execute based on habit. And you report results based on memory. That works until it doesn't — scope grows, labor drifts, margins compress. By the time you see it on a spreadsheet, you've already lost money you didn't know was disappearing.
+      You bid a job at 25% margin. Six months in, your labor is 30% over plan. Turns out the client kept adding "just one more thing" — extra restrooms, breakroom attention, bigger trash volumes. No documentation. No change order. By the time you renew, your margin is 8%. You're stuck. Can't renegotiate without losing the contract. Can't drop the price without losing money.
     </p>
 
     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      Whether you're scaling to 50 contracts or protecting the 200 you already have, you need three things: confidence in your bids, documented scope that clients can't argue with, and real-time visibility into whether each contract is actually making money.
+      That's the real problem. Not getting the bid wrong. <strong>Not knowing you got it wrong until way too late.</strong>
     </p>
   </div>
 
@@ -687,18 +813,18 @@
 
   <div style="max-width: 800px;">
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">1. Calculate what to charge with confidence</h4>
-      <p style="color: #4a5568; font-size: 14px;">Plug in facility details. The calculator shows you the price that protects your margin target. No guessing. No surprises.</p>
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">1. Calculate what to actually charge</h4>
+      <p style="color: #4a5568; font-size: 14px;">Plug in the facility details. The calculator tells you the minimum price to hit 25% margin. You see the math before you quote.</p>
     </div>
 
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">2. Document scope so disputes never happen</h4>
-      <p style="color: #4a5568; font-size: 14px;">Walk the facility. Take photos. Generate a professional proposal. Client signs knowing exactly what they're getting. When scope questions come up, you have proof.</p>
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">2. Document scope so clients can't claim they didn't know</h4>
+      <p style="color: #4a5568; font-size: 14px;">Walk the facility, take photos, generate a professional proposal. Client signs knowing exactly what you're providing. When they ask for extras later, you have proof of what was included.</p>
     </div>
 
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">3. Track margin in real-time</h4>
-      <p style="color: #4a5568; font-size: 14px;">Your crews log hours after each job. You see actual labor vs. plan every week. Catch drift before it becomes a problem. Stay in control.</p>
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">3. Catch scope creep in real-time</h4>
+      <p style="color: #4a5568; font-size: 14px;">Your crews log hours after each job. You see actual labor vs. your plan every week. If labor is drifting up, Margin Guardian alerts you before your margin disappears. You can document the scope change, send a change order, or stop it now.</p>
     </div>
   </div>
 
@@ -711,9 +837,9 @@
   </div>
 
   <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-    <h3 style="font-size: 16px; margin-bottom: 1rem;">Built for contractors who scale.</h3>
+    <h3 style="font-size: 16px; margin-bottom: 1rem;">The idea is simple:</h3>
     <p style="color: #4a5568; font-size: 14px; line-height: 1.8;">
-      Whether you're bidding your first contract or your 500th, ConeQuotes gives you the same tools: solid math on your bids, documented proof of scope, and real-time visibility into profit. That's how you scale confidently.
+      Know your costs before you quote. Document scope so disputes don't happen. Track labor so you catch problems early. That's it. No complexity. Just the tools contractors need to protect profit.
     </p>
   </div>
 
@@ -723,7 +849,7 @@
 </div>
 
 <!-- CALCULATOR TAB -->
-<div id="calculator" class="tab-content active">
+<div id="calculator" class="tab-content">
   <h2>Build a profitable bid—see your margin in real-time</h2>
   <p class="section-intro">Adjust facility details to see how revenue, labor costs, and profit change instantly.</p>
 
@@ -1111,6 +1237,7 @@ function submitProposal() {
     plannedHours,
     actualHours: 0,
     weeklylogs: [],
+    expenses: [],
     createdAt: new Date().toISOString()
   };
 
@@ -1145,9 +1272,13 @@ function renderMarginGuardian() {
     const efficiency = Math.round((actualHours / contract.plannedHours) * 100);
     
     const laborCost = actualHours * contract.laborRate;
-    const suppliesCost = (contract.quotePrice * contract.suppliesPercent) / 100;
-    const monthlyRevenue = contract.quotePrice;
-    const currentMargin = ((monthlyRevenue - laborCost - suppliesCost) / monthlyRevenue * 100).toFixed(1);
+    const miscExpenses = contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const totalCost = laborCost + miscExpenses;
+    const estimatedRevenue = contract.quotePrice;
+    const grossProfit = estimatedRevenue - totalCost;
+    const grossMargin = ((grossProfit / estimatedRevenue) * 100).toFixed(1);
+    const estimatedMargin = 25;
+    const variance = (grossMargin - estimatedMargin).toFixed(1);
     
     let status = 'Healthy';
     let statusClass = 'status-healthy';
@@ -1164,6 +1295,21 @@ function renderMarginGuardian() {
     }
 
     const freqDisplay = contract.frequency.charAt(0).toUpperCase() + contract.frequency.slice(1);
+
+    const expenseListHtml = contract.expenses.length > 0 ? `
+      <div class="expense-list">
+        <div class="expense-list-title">Expenses Logged (${contract.expenses.length})</div>
+        ${contract.expenses.map((exp, expIdx) => `
+          <div class="expense-item">
+            <div class="expense-type">${exp.type}</div>
+            <div class="expense-amount">$${parseFloat(exp.amount).toFixed(2)}</div>
+            <div class="expense-date">${new Date(exp.date).toLocaleDateString()}</div>
+            <div class="expense-note">${exp.note || '—'}</div>
+            <button class="expense-delete" onclick="deleteExpense(${contract.id}, ${expIdx})">Delete</button>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
 
     return `
       <div class="contract-card">
@@ -1191,8 +1337,8 @@ function renderMarginGuardian() {
             <div class="metric-value">${actualHours}</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Current Margin</div>
-            <div class="metric-value" style="color: ${currentMargin >= 25 ? '#10b981' : currentMargin >= 15 ? '#f59e0b' : '#ef4444'};\">${currentMargin}%</div>
+            <div class="metric-label">Labor Cost</div>
+            <div class="metric-value">$${laborCost.toFixed(2)}</div>
           </div>
         </div>
 
@@ -1213,6 +1359,74 @@ function renderMarginGuardian() {
           </div>
           <button class="submit" onclick="logHours(${contract.id})">Log Hours</button>
         </div>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Contract Economics</h3>
+        <div class="economics-grid">
+          <div class="econ-item">
+            <div class="econ-label">Estimated Revenue</div>
+            <div class="econ-value">$${estimatedRevenue.toFixed(2)}</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Labor Cost</div>
+            <div class="econ-value">$${laborCost.toFixed(2)}</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Misc. Expenses</div>
+            <div class="econ-value">$${miscExpenses.toFixed(2)}</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Total Cost</div>
+            <div class="econ-value">$${totalCost.toFixed(2)}</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Gross Profit</div>
+            <div class="econ-value ${grossProfit >= 0 ? 'profit' : 'negative'}\">$${grossProfit.toFixed(2)}</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Gross Margin</div>
+            <div class="econ-value ${grossMargin >= 25 ? 'profit' : 'negative'}\">${grossMargin}%</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Est. Margin</div>
+            <div class="econ-value\">25%</div>
+          </div>
+          <div class="econ-item">
+            <div class="econ-label">Variance</div>
+            <div class="econ-value ${variance >= 0 ? 'profit' : 'negative'}\">${variance >= 0 ? '+' : ''}${variance}%</div>
+          </div>
+        </div>
+
+        <div class="expense-form">
+          <div class="expense-form-title">+ Add Expense</div>
+          <div class="expense-form-row">
+            <div class="form-group">
+              <label>Expense Type</label>
+              <select id="expType-${contract.id}">
+                <option value="Travel">Travel</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Supplies">Supplies</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" id="expAmount-${contract.id}" placeholder="0.00" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="expDate-${contract.id}" value="${new Date().toISOString().split('T')[0]}">
+            </div>
+          </div>
+          <div class="expense-form-row full">
+            <div class="form-group">
+              <label>Optional Note</label>
+              <input type="text" id="expNote-${contract.id}" placeholder="e.g., Extra equipment rental">
+            </div>
+          </div>
+          <button class="submit" onclick="addExpense(${contract.id})">Add Expense</button>
+        </div>
+
+        ${expenseListHtml}
 
         ${alertHtml}
       </div>
@@ -1265,6 +1479,50 @@ function updateStats(contracts) {
   document.getElementById('statWatchChange').textContent = watch > 0 ? 'Needs attention' : 'None';
   document.getElementById('statRisk').textContent = risk;
   document.getElementById('statRiskChange').textContent = risk > 0 ? 'Action needed' : 'None';
+}
+
+function addExpense(contractId) {
+  const expType = document.getElementById('expType-' + contractId).value;
+  const expAmount = document.getElementById('expAmount-' + contractId).value;
+  const expDate = document.getElementById('expDate-' + contractId).value;
+  const expNote = document.getElementById('expNote-' + contractId).value;
+
+  if (!expAmount || parseFloat(expAmount) <= 0) {
+    alert('Please enter a valid amount');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+
+  if (contract) {
+    contract.expenses = contract.expenses || [];
+    contract.expenses.push({
+      type: expType,
+      amount: parseFloat(expAmount),
+      date: expDate,
+      note: expNote
+    });
+    saveContracts(contracts);
+    
+    // Reset form
+    document.getElementById('expAmount-' + contractId).value = '';
+    document.getElementById('expNote-' + contractId).value = '';
+    document.getElementById('expDate-' + contractId).value = new Date().toISOString().split('T')[0];
+    
+    renderMarginGuardian();
+  }
+}
+
+function deleteExpense(contractId, expIdx) {
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+
+  if (contract && contract.expenses) {
+    contract.expenses.splice(expIdx, 1);
+    saveContracts(contracts);
+    renderMarginGuardian();
+  }
 }
 
 updateCalc();
