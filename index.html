@@ -448,30 +448,98 @@
       color: #991b1b;
     }
 
-    .contract-metrics {
+    .economics-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .economics-table {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .econ-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 1fr 150px;
       gap: 1rem;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+    }
+
+    .econ-row:last-child {
+      border-bottom: none;
+    }
+
+    .econ-label {
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .econ-value {
+      font-weight: 600;
+      color: #1a202c;
+      text-align: right;
+    }
+
+    .econ-value.positive {
+      color: #10b981;
+    }
+
+    .econ-value.negative {
+      color: #ef4444;
+    }
+
+    .econ-value.highlight {
+      font-size: 18px;
+      padding: 0.5rem;
+      background: #f7fafc;
+      border-radius: 6px;
+    }
+
+    .econ-divider {
+      height: 2px;
+      background: #e2e8f0;
+      margin: 1rem 0;
+    }
+
+    .expense-breakdown {
+      background: #f7fafc;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .expense-breakdown-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #2d3748;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 1rem;
     }
 
-    .metric {
-      background: #f7fafc;
-      padding: 1rem;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
+    .expense-row {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 13px;
     }
 
-    .metric-label {
-      color: #718096;
-      font-size: 12px;
-      margin-bottom: 0.25rem;
+    .expense-row-label {
+      color: #4a5568;
     }
 
-    .metric-value {
+    .expense-row-value {
       font-weight: 600;
-      font-size: 18px;
       color: #1a202c;
+      text-align: right;
     }
 
     .progress-bar {
@@ -494,22 +562,6 @@
 
     .progress-fill.danger {
       background: #ef4444;
-    }
-
-    .labor-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 0.5rem;
-    }
-
-    .labor-label {
-      color: #718096;
-    }
-
-    .labor-value {
-      font-weight: 500;
-      color: #1a202c;
     }
 
     .alert-section {
@@ -596,44 +648,6 @@
       background: #f7fafc;
       border-radius: 8px;
       border: 1px solid #e2e8f0;
-    }
-
-    .economics-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: #f7fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .econ-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .econ-label {
-      font-size: 11px;
-      color: #718096;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.25rem;
-    }
-
-    .econ-value {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1a202c;
-    }
-
-    .econ-value.profit {
-      color: #10b981;
-    }
-
-    .econ-value.negative {
-      color: #ef4444;
     }
 
     .expense-form {
@@ -726,10 +740,6 @@
 
     @media (max-width: 1024px) {
       .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contract-metrics {
         grid-template-columns: repeat(2, 1fr);
       }
 
@@ -1277,8 +1287,13 @@ function renderMarginGuardian() {
     const estimatedRevenue = contract.quotePrice;
     const grossProfit = estimatedRevenue - totalCost;
     const grossMargin = ((grossProfit / estimatedRevenue) * 100).toFixed(1);
-    const estimatedMargin = 25;
-    const variance = (grossMargin - estimatedMargin).toFixed(1);
+
+    const expensesByType = { 'Supplies': 0, 'Equipment': 0, 'Travel': 0, 'Other': 0 };
+    contract.expenses.forEach(exp => {
+      if (expensesByType.hasOwnProperty(exp.type)) {
+        expensesByType[exp.type] += parseFloat(exp.amount);
+      }
+    });
     
     let status = 'Healthy';
     let statusClass = 'status-healthy';
@@ -1311,6 +1326,10 @@ function renderMarginGuardian() {
       </div>
     ` : '';
 
+    const plannedLaborCost = contract.plannedHours * contract.laborRate;
+    const laborShift = laborCost - plannedLaborCost;
+    const laborShiftPercent = ((laborShift / plannedLaborCost) * 100).toFixed(1);
+
     return `
       <div class="contract-card">
         <div class="contract-header">
@@ -1323,32 +1342,61 @@ function renderMarginGuardian() {
           </span>
         </div>
 
-        <div class="contract-metrics">
-          <div class="metric">
-            <div class="metric-label">Quote Price/Visit</div>
-            <div class="metric-value">$${contract.quotePrice}</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Planned Hours/Month</div>
-            <div class="metric-value">${contract.plannedHours}</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Actual Hours (YTD)</div>
-            <div class="metric-value">${actualHours}</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Labor Cost</div>
-            <div class="metric-value">$${laborCost.toFixed(2)}</div>
+        <div class="economics-section">
+          <div class="economics-table">
+            <div class="econ-row">
+              <div class="econ-label">Monthly Revenue</div>
+              <div class="econ-value">$${estimatedRevenue.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Planned Labor Cost</div>
+              <div class="econ-value">$${plannedLaborCost.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Actual Labor Cost</div>
+              <div class="econ-value ${laborShift > 0 ? 'negative' : 'positive'}">$${laborCost.toFixed(0)} ${laborShift !== 0 ? '('+(laborShift > 0 ? '+' : '')+(laborShiftPercent)+'%)' : ''}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Other Expenses</div>
+              <div class="econ-value">$${miscExpenses.toFixed(0)}</div>
+            </div>
+            <div class="econ-divider"></div>
+            <div class="econ-row">
+              <div class="econ-label">Actual Cost</div>
+              <div class="econ-value">$${totalCost.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label">Actual Profit</div>
+              <div class="econ-value ${grossProfit >= 0 ? 'positive' : 'negative'}">$${grossProfit.toFixed(0)}</div>
+            </div>
+            <div class="econ-row">
+              <div class="econ-label" style="font-weight: 700; font-size: 15px;">Actual Margin</div>
+              <div class="econ-value highlight ${grossMargin >= 25 ? 'positive' : 'negative'}">${grossMargin}%</div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <div class="labor-row">
-            <span class="labor-label">Labor Efficiency</span>
-            <span class="labor-value">${efficiency}% of plan ${efficiency <= 100 ? '(on budget)' : efficiency <= 110 ? '(slight overage)' : efficiency <= 120 ? '(over budget)' : '(way over budget)'}</span>
+        <div class="expense-breakdown">
+          <div class="expense-breakdown-title">Expense Breakdown</div>
+          <div class="expense-row">
+            <div class="expense-row-label">Labor (${actualHours}h @ $${contract.laborRate}/h)</div>
+            <div class="expense-row-value">$${laborCost.toFixed(0)}</div>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill ${efficiency > 120 ? 'danger' : efficiency > 110 ? 'warning' : ''}\" style=\"width: ${Math.min(efficiency, 130)}%;\"></div>
+          <div class="expense-row">
+            <div class="expense-row-label">Supplies</div>
+            <div class="expense-row-value" id="suppliesTotal-${contract.id}">$0</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Equipment</div>
+            <div class="expense-row-value" id="equipmentTotal-${contract.id}">$0</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Travel</div>
+            <div class="expense-row-value" id="travelTotal-${contract.id}">$0</div>
+          </div>
+          <div class="expense-row">
+            <div class="expense-row-label">Other</div>
+            <div class="expense-row-value" id="otherTotal-${contract.id}">$0</div>
           </div>
         </div>
 
@@ -1360,51 +1408,15 @@ function renderMarginGuardian() {
           <button class="submit" onclick="logHours(${contract.id})">Log Hours</button>
         </div>
 
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Contract Economics</h3>
-        <div class="economics-grid">
-          <div class="econ-item">
-            <div class="econ-label">Estimated Revenue</div>
-            <div class="econ-value">$${estimatedRevenue.toFixed(2)}</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Labor Cost</div>
-            <div class="econ-value">$${laborCost.toFixed(2)}</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Misc. Expenses</div>
-            <div class="econ-value">$${miscExpenses.toFixed(2)}</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Total Cost</div>
-            <div class="econ-value">$${totalCost.toFixed(2)}</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Gross Profit</div>
-            <div class="econ-value ${grossProfit >= 0 ? 'profit' : 'negative'}\">$${grossProfit.toFixed(2)}</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Gross Margin</div>
-            <div class="econ-value ${grossMargin >= 25 ? 'profit' : 'negative'}\">${grossMargin}%</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Est. Margin</div>
-            <div class="econ-value\">25%</div>
-          </div>
-          <div class="econ-item">
-            <div class="econ-label">Variance</div>
-            <div class="econ-value ${variance >= 0 ? 'profit' : 'negative'}\">${variance >= 0 ? '+' : ''}${variance}%</div>
-          </div>
-        </div>
-
         <div class="expense-form">
           <div class="expense-form-title">+ Add Expense</div>
           <div class="expense-form-row">
             <div class="form-group">
               <label>Expense Type</label>
               <select id="expType-${contract.id}">
-                <option value="Travel">Travel</option>
-                <option value="Equipment">Equipment</option>
                 <option value="Supplies">Supplies</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Travel">Travel</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -1420,7 +1432,7 @@ function renderMarginGuardian() {
           <div class="expense-form-row full">
             <div class="form-group">
               <label>Optional Note</label>
-              <input type="text" id="expNote-${contract.id}" placeholder="e.g., Extra equipment rental">
+              <input type="text" id="expNote-${contract.id}" placeholder="e.g., Equipment rental">
             </div>
           </div>
           <button class="submit" onclick="addExpense(${contract.id})">Add Expense</button>
@@ -1432,6 +1444,20 @@ function renderMarginGuardian() {
       </div>
     `;
   }).join('');
+
+  contracts.forEach(contract => {
+    const expensesByType = { 'Supplies': 0, 'Equipment': 0, 'Travel': 0, 'Other': 0 };
+    contract.expenses.forEach(exp => {
+      if (expensesByType.hasOwnProperty(exp.type)) {
+        expensesByType[exp.type] += parseFloat(exp.amount);
+      }
+    });
+
+    document.getElementById('suppliesTotal-' + contract.id).textContent = '$' + expensesByType['Supplies'].toFixed(0);
+    document.getElementById('equipmentTotal-' + contract.id).textContent = '$' + expensesByType['Equipment'].toFixed(0);
+    document.getElementById('travelTotal-' + contract.id).textContent = '$' + expensesByType['Travel'].toFixed(0);
+    document.getElementById('otherTotal-' + contract.id).textContent = '$' + expensesByType['Other'].toFixed(0);
+  });
 
   updateStats(contracts);
 }
@@ -1505,7 +1531,6 @@ function addExpense(contractId) {
     });
     saveContracts(contracts);
     
-    // Reset form
     document.getElementById('expAmount-' + contractId).value = '';
     document.getElementById('expNote-' + contractId).value = '';
     document.getElementById('expDate-' + contractId).value = new Date().toISOString().split('T')[0];
