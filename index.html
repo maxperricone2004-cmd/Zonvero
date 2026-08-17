@@ -996,137 +996,100 @@
 
 <!-- PROPOSAL BUILDER TAB -->
 <div id="proposal" class="tab-content">
-  <h2>Proposal Builder</h2>
-  <p class="section-intro">Document the facility with photos. Submit to create a trackable contract in Margin Guardian.</p>
+  <h2>Create Professional Proposal</h2>
+  <p class="section-intro">Build a proposal a contractor would actually send to a customer.</p>
 
+  <!-- STEP 1: CLIENT & FACILITY INFO -->
   <div class="calculator">
-    <h3>Project Details</h3>
+    <h3 style="margin-bottom: 1.5rem;">Step 1: Client & Facility Information</h3>
     
     <div class="calc-row">
       <div class="form-group">
         <label>Client Name</label>
-        <input type="text" id="clientName" placeholder="ABC Office Building" value="">
+        <input type="text" id="propClientName" placeholder="ABC Office Building">
       </div>
       <div class="form-group">
+        <label>Client Email</label>
+        <input type="email" id="propClientEmail" placeholder="contact@abcoffice.com">
+      </div>
+    </div>
+
+    <div class="calc-row">
+      <div class="form-group">
         <label>Facility Type</label>
-        <select id="propFacilityType" onchange="updateProposal()">
+        <select id="propFacilityType">
           <option value="office">Office</option>
           <option value="retail">Retail</option>
           <option value="warehouse">Warehouse</option>
         </select>
       </div>
-    </div>
-
-    <div class="calc-row">
       <div class="form-group">
         <label>Square Footage</label>
-        <input type="number" id="propSqft" value="25000" onchange="updateProposal()">
-      </div>
-      <div class="form-group">
-        <label>Service Frequency</label>
-        <select id="propFrequency" onchange="updateProposal()">
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Bi-weekly</option>
-          <option value="daily">Daily</option>
-          <option value="3x">3x per week</option>
-        </select>
+        <input type="number" id="propSqft" value="25000">
       </div>
     </div>
+  </div>
 
+  <!-- STEP 2: SCOPE OF WORK (STRUCTURED) -->
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 2: Scope of Work (What You'll Clean)</h3>
+    <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Define specific areas and tasks. This becomes your contract baseline.</p>
+    
+    <div id="scopeItems"></div>
+    
+    <button class="submit" onclick="addScopeItem()" style="width: 100%; margin-top: 1rem;">+ Add Area/Task</button>
+  </div>
+
+  <!-- STEP 3: FREQUENCY & PRICING -->
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 3: Service Frequency & Pricing</h3>
+    
     <div class="calc-row">
       <div class="form-group">
-        <label>Labor Rate per Hour</label>
-        <input type="number" id="propLaborRate" value="24" onchange="updateProposal()">
+        <label>Service Frequency</label>
+        <select id="propFrequency">
+          <option value="daily">Daily (5x/week)</option>
+          <option value="3x">3x per week</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+        </select>
       </div>
       <div class="form-group">
-        <label>Supplies % of Revenue</label>
-        <input type="number" id="propSuppliesPercent" value="8" onchange="updateProposal()">
+        <label>Labor Rate per Hour</label>
+        <input type="number" id="propLaborRate" value="24">
       </div>
+    </div>
+
+    <div class="form-group">
+      <label>Monthly Price Quote</label>
+      <input type="number" id="propPrice" value="1300" placeholder="Auto-calculated from Calculator">
     </div>
   </div>
 
-  <div style="margin-top: 2rem;">
-    <h3>Add Photos for Each Room</h3>
-    <div class="room-tabs">
-      <button class="room-tab active" onclick="switchRoom('entryway')">🚪 Entryway</button>
-      <button class="room-tab" onclick="switchRoom('restrooms')">🚽 Restrooms</button>
-      <button class="room-tab" onclick="switchRoom('office')">🖥️ Office</button>
-      <button class="room-tab" onclick="switchRoom('breakroom')">☕ Break Room</button>
-      <button class="room-tab" onclick="switchRoom('hallways')">🛤️ Hallways</button>
-      <button class="room-tab" onclick="switchRoom('other')">📸 Other</button>
+  <!-- STEP 4: TERMS & CONDITIONS -->
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 4: Terms & Conditions</h3>
+    
+    <div class="form-group">
+      <label>Included (checkmark list)</label>
+      <textarea id="propInclusions" placeholder="- Regular cleaning as per scope&#10;- Supplies provided&#10;- Weekly service schedule&#10;- 48-hour cancellation notice" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-family: inherit; min-height: 100px;"></textarea>
     </div>
 
-    <div id="entryway" class="room-content active">
-      <div class="upload-box" onclick="triggerUpload('entryway')">📷 Add Photos</div>
-      <input type="file" id="entryway-input" accept="image/*" onchange="handlePhotoUpload(this, 'entryway')">
-      <div class="photo-grid" id="entryway-grid"></div>
-    </div>
-
-    <div id="restrooms" class="room-content">
-      <div class="upload-box" onclick="triggerUpload('restrooms')">📷 Add Photos</div>
-      <input type="file" id="restrooms-input" accept="image/*" onchange="handlePhotoUpload(this, 'restrooms')">
-      <div class="photo-grid" id="restrooms-grid"></div>
-    </div>
-
-    <div id="office" class="room-content">
-      <div class="upload-box" onclick="triggerUpload('office')">📷 Add Photos</div>
-      <input type="file" id="office-input" accept="image/*" onchange="handlePhotoUpload(this, 'office')">
-      <div class="photo-grid" id="office-grid"></div>
-    </div>
-
-    <div id="breakroom" class="room-content">
-      <div class="upload-box" onclick="triggerUpload('breakroom')">📷 Add Photos</div>
-      <input type="file" id="breakroom-input" accept="image/*" onchange="handlePhotoUpload(this, 'breakroom')">
-      <div class="photo-grid" id="breakroom-grid"></div>
-    </div>
-
-    <div id="hallways" class="room-content">
-      <div class="upload-box" onclick="triggerUpload('hallways')">📷 Add Photos</div>
-      <input type="file" id="hallways-input" accept="image/*" onchange="handlePhotoUpload(this, 'hallways')">
-      <div class="photo-grid" id="hallways-grid"></div>
-    </div>
-
-    <div id="other" class="room-content">
-      <div class="upload-box" onclick="triggerUpload('other')">📷 Add Photos</div>
-      <input type="file" id="other-input" accept="image/*" onchange="handlePhotoUpload(this, 'other')">
-      <div class="photo-grid" id="other-grid"></div>
+    <div class="form-group">
+      <label>Excluded (what you won't do)</label>
+      <textarea id="propExclusions" placeholder="- Carpet shampooing&#10;- Deep exterior cleaning&#10;- Repairs or maintenance&#10;- Hazardous material removal" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-family: inherit; min-height: 100px;"></textarea>
     </div>
   </div>
 
-  <div style="margin-top: 3rem;">
-    <h3>Professional Proposal Preview</h3>
-    <div class="proposal-box">
-      <div class="proposal-header">
-        <div class="proposal-title">CLEANING SERVICES PROPOSAL</div>
-      </div>
+  <!-- PREVIEW & SEND -->
+  <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+    <h3 style="margin-bottom: 1.5rem;">Proposal Preview (What Your Customer Sees)</h3>
+    <div id="proposalPreview"></div>
+  </div>
 
-      <div class="proposal-info">
-        <div class="info-row">
-          <div class="info-label">CLIENT</div>
-          <div class="info-value" id="propClientDisplay">— Enter client name —</div>
-        </div>
-        <div class="info-row">
-          <div class="info-label">FACILITY SIZE</div>
-          <div class="info-value" id="propSizeDisplay">25,000 sq ft</div>
-        </div>
-        <div class="info-row">
-          <div class="info-label">SERVICE FREQUENCY</div>
-          <div class="info-value" id="propFreqDisplay">Weekly</div>
-        </div>
-        <div class="info-row">
-          <div class="info-label">QUOTE PRICE</div>
-          <div class="info-value" id="propPriceDisplay">$325/visit</div>
-        </div>
-      </div>
-
-      <div class="scope-section">
-        <h3>Proposed Scope</h3>
-        <ul class="scope-list" id="scopeList"></ul>
-      </div>
-    </div>
-
-    <button class="primary" onclick="submitProposal()">✓ Submit Proposal & Create Contract</button>
-    <p style="color: #718096; font-size: 12px; margin-top: 1rem;">This will create a new contract in Margin Guardian that you can track.</p>
+  <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+    <button class="primary" onclick="generateProposal()" style="flex: 1;">Preview Proposal</button>
+    <button class="primary" onclick="sendProposal()" style="flex: 1; background: #059669;">✓ Send to Customer & Create Contract</button>
   </div>
 </div>
 
@@ -1218,81 +1181,202 @@ function updateCalc() {
   document.getElementById('statusOutput').textContent = marginTarget >= 25 ? '✓ Healthy' : '⚠ Watch';
 }
 
-// Proposal Builder
-let proposalPhotos = { entryway: [], restrooms: [], office: [], breakroom: [], hallways: [], other: [] };
+// Proposal Builder - STRUCTURED SCOPE DATA
+let scopeItems = [];
 
-function triggerUpload(room) {
-  document.getElementById(room + '-input').click();
-}
-
-function handlePhotoUpload(input, room) {
-  Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      proposalPhotos[room].push({ data: e.target.result, name: file.name });
-      renderPhotos(room);
-    };
-    reader.readAsDataURL(file);
+function addScopeItem() {
+  scopeItems.push({
+    id: Date.now(),
+    area: 'Restroom',
+    task: 'Clean/Disinfect',
+    frequency: 'weekly',
+    included: true,
+    notes: ''
   });
-  input.value = '';
+  renderScopeItems();
 }
 
-function renderPhotos(room) {
-  const grid = document.getElementById(room + '-grid');
-  grid.innerHTML = proposalPhotos[room].map((photo, idx) => `
-    <div class="photo-item">
-      <img src="${photo.data}" alt="">
-      <button class="delete-photo" onclick="deletePhoto('${room}', ${idx})">✕</button>
+function renderScopeItems() {
+  const container = document.getElementById('scopeItems');
+  
+  if (scopeItems.length === 0) {
+    container.innerHTML = '<p style="color: #718096; font-size: 13px;">No scope items yet. Click "Add Area/Task" to start.</p>';
+    return;
+  }
+
+  container.innerHTML = scopeItems.map(item => `
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div class="form-group">
+          <label>Area</label>
+          <select onchange="updateScopeItem(${item.id}, 'area', this.value)">
+            <option value="Entryway" ${item.area === 'Entryway' ? 'selected' : ''}>Entryway</option>
+            <option value="Restroom" ${item.area === 'Restroom' ? 'selected' : ''}>Restroom</option>
+            <option value="Office" ${item.area === 'Office' ? 'selected' : ''}>Office</option>
+            <option value="Break Room" ${item.area === 'Break Room' ? 'selected' : ''}>Break Room</option>
+            <option value="Hallways" ${item.area === 'Hallways' ? 'selected' : ''}>Hallways</option>
+            <option value="Other" ${item.area === 'Other' ? 'selected' : ''}>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Task</label>
+          <input type="text" value="${item.task}" onchange="updateScopeItem(${item.id}, 'task', this.value)" placeholder="e.g., Clean/Disinfect">
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div class="form-group">
+          <label>Frequency</label>
+          <select onchange="updateScopeItem(${item.id}, 'frequency', this.value)">
+            <option value="daily" ${item.frequency === 'daily' ? 'selected' : ''}>Daily (5x/week)</option>
+            <option value="3x" ${item.frequency === '3x' ? 'selected' : ''}>3x per week</option>
+            <option value="weekly" ${item.frequency === 'weekly' ? 'selected' : ''}>Weekly</option>
+            <option value="biweekly" ${item.frequency === 'biweekly' ? 'selected' : ''}>Bi-weekly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" ${item.included ? 'checked' : ''} onchange="updateScopeItem(${item.id}, 'included', this.checked)">
+            Included in Quote
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" value="${item.notes}" onchange="updateScopeItem(${item.id}, 'notes', this.value)" placeholder="Optional details">
+      </div>
+      <button class="expense-delete" onclick="deleteScopeItem(${item.id})" style="margin-top: 0.5rem;">Delete this item</button>
     </div>
   `).join('');
 }
 
-function deletePhoto(room, idx) {
-  proposalPhotos[room].splice(idx, 1);
-  renderPhotos(room);
+function updateScopeItem(id, field, value) {
+  const item = scopeItems.find(i => i.id === id);
+  if (item) {
+    item[field] = value;
+  }
 }
 
-function updateProposal() {
-  const client = document.getElementById('clientName').value;
-  const sqft = document.getElementById('propSqft').value;
-  const freq = document.getElementById('propFrequency').value;
-  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 24;
-  const suppliesPercent = parseInt(document.getElementById('propSuppliesPercent').value) || 8;
-
-  const pricePerSqFt = 0.013;
-  const quotePrice = Math.round(sqft * pricePerSqFt);
-
-  document.getElementById('propClientDisplay').textContent = client || '— Enter client name —';
-  document.getElementById('propSizeDisplay').textContent = sqft.toLocaleString() + ' sq ft';
-  document.getElementById('propFreqDisplay').textContent = freq.charAt(0).toUpperCase() + freq.slice(1);
-  document.getElementById('propPriceDisplay').textContent = '$' + quotePrice + '/visit';
-
-  const scopes = {
-    office: ['Daily: Empty trash, restroom cleaning', '2x/week: Vacuum carpets', 'Weekly: Mop floors', 'Weekly: Dust surfaces', 'Monthly: Floor waxing'],
-    retail: ['Daily: Empty trash, restroom cleaning', '3x/week: Floor care', 'Weekly: Window cleaning', 'Weekly: Dust displays'],
-    warehouse: ['Daily: Sweep areas, empty trash', '2x/week: Floor care', 'Weekly: Restroom cleaning', 'Monthly: Deep clean']
-  };
-
-  const scope = scopes[document.getElementById('propFacilityType').value] || scopes.office;
-  document.getElementById('scopeList').innerHTML = scope.map(s => `<li>${s}</li>`).join('');
+function deleteScopeItem(id) {
+  scopeItems = scopeItems.filter(i => i.id !== id);
+  renderScopeItems();
 }
 
-function submitProposal() {
-  const clientName = document.getElementById('clientName').value.trim();
+function generateProposal() {
+  const clientName = document.getElementById('propClientName').value.trim();
+  const clientEmail = document.getElementById('propClientEmail').value.trim();
+  
   if (!clientName) {
-    alert('Please enter a client name');
+    alert('Please enter client name');
+    return;
+  }
+  
+  if (scopeItems.length === 0) {
+    alert('Please add at least one scope item');
     return;
   }
 
+  const sqft = document.getElementById('propSqft').value;
+  const freq = document.getElementById('propFrequency').value;
+  const price = document.getElementById('propPrice').value || 1300;
+  const inclusions = document.getElementById('propInclusions').value;
+  const exclusions = document.getElementById('propExclusions').value;
+
+  const scopeHtml = scopeItems.map(item => `
+    <div style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0;">
+      <div style="font-weight: 600; color: #1a202c;">${item.area} — ${item.task}</div>
+      <div style="font-size: 13px; color: #718096; margin-top: 0.25rem;">Frequency: ${item.frequency.charAt(0).toUpperCase() + item.frequency.slice(1)} ${item.notes ? '• ' + item.notes : ''}</div>
+    </div>
+  `).join('');
+
+  const preview = `
+    <div style="max-width: 800px; background: white; padding: 2rem; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 2rem; border-bottom: 2px solid #10b981; padding-bottom: 1rem;">
+        <div style="font-size: 24px; font-weight: 700; color: #10b981;">CLEANING SERVICES PROPOSAL</div>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem;">For: ${clientName}</div>
+        <div style="color: #718096; font-size: 13px;">${clientEmail || 'No email provided'}</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; padding: 1rem; background: #f7fafc; border-radius: 6px;">
+        <div>
+          <div style="color: #718096; font-size: 12px; text-transform: uppercase;">Facility Size</div>
+          <div style="font-weight: 600; font-size: 18px;">${sqft} sq ft</div>
+        </div>
+        <div>
+          <div style="color: #718096; font-size: 12px; text-transform: uppercase;">Service Frequency</div>
+          <div style="font-weight: 600; font-size: 18px;">${freq === 'daily' ? 'Daily' : freq === '3x' ? '3x/week' : freq === 'weekly' ? 'Weekly' : 'Bi-weekly'}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <div style="font-weight: 600; font-size: 16px; margin-bottom: 1rem; color: #1a202c;">Scope of Work</div>
+        ${scopeHtml}
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <div style="font-weight: 600; font-size: 14px; margin-bottom: 1rem; color: #1a202c;">Included</div>
+          <div style="font-size: 13px; color: #4a5568; white-space: pre-wrap;">${inclusions || '- Regular cleaning as specified\n- All supplies provided\n- Professional staff'}</div>
+        </div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px; margin-bottom: 1rem; color: #1a202c;">Excluded</div>
+          <div style="font-size: 13px; color: #4a5568; white-space: pre-wrap;">${exclusions || '- Carpet shampooing\n- Deep exterior cleaning\n- Repairs or maintenance'}</div>
+        </div>
+      </div>
+
+      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 6px; margin-bottom: 2rem; text-align: center;">
+        <div style="font-size: 12px; color: #718096; text-transform: uppercase; margin-bottom: 0.5rem;">Monthly Investment</div>
+        <div style="font-size: 32px; font-weight: 700; color: #10b981;">$${price}</div>
+        <div style="font-size: 13px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes all supplies</div>
+      </div>
+
+      <div style="border-top: 2px solid #e2e8f0; padding-top: 1.5rem;">
+        <div style="font-weight: 600; margin-bottom: 1rem; color: #1a202c;">Terms</div>
+        <div style="font-size: 13px; color: #718096; line-height: 1.8;">
+          This proposal is valid for 30 days. To accept, reply with your signature or contact us by email. Service begins upon signed agreement. 48-hour notice required for cancellations.
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+        <div>
+          <div style="font-weight: 600; margin-bottom: 3rem; color: #1a202c;">Client Signature</div>
+          <div style="border-top: 2px solid #1a202c; width: 150px;"></div>
+          <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Date: ___________</div>
+        </div>
+        <div>
+          <div style="font-weight: 600; margin-bottom: 3rem; color: #1a202c;">Authorized by</div>
+          <div style="font-size: 13px; color: #718096;">ConeQuotes<br><a href="mailto:conequotes.service@outlook.com" style="color: #10b981; text-decoration: none;">conequotes.service@outlook.com</a></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('proposalPreview').innerHTML = preview;
+}
+
+function sendProposal() {
+  const clientName = document.getElementById('propClientName').value.trim();
+  const clientEmail = document.getElementById('propClientEmail').value.trim();
+  
+  if (!clientName) {
+    alert('Please enter client name');
+    return;
+  }
+
+  if (scopeItems.length === 0) {
+    alert('Please add at least one scope item');
+    return;
+  }
+
+  // Create contract with FULL proposal data preserved
   const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
   const freq = document.getElementById('propFrequency').value;
   const laborRate = parseInt(document.getElementById('propLaborRate').value) || 24;
-  const suppliesPercent = parseInt(document.getElementById('propSuppliesPercent').value) || 8;
+  const price = parseInt(document.getElementById('propPrice').value) || 1300;
   const facilityType = document.getElementById('propFacilityType').value;
 
-  const pricePerSqFt = 0.013;
-  const quotePrice = Math.round(sqft * pricePerSqFt);
-  
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freqVal = freqMap[freq] || 1;
   const hoursPerVisit = sqft / 5000;
@@ -1301,33 +1385,42 @@ function submitProposal() {
   const contract = {
     id: Date.now(),
     clientName,
+    clientEmail,
     facilityType,
     sqft,
     frequency: freq,
-    quotePrice,
+    quotePrice: price,
     laborRate,
-    suppliesPercent,
     plannedHours,
     actualHours: 0,
     weeklylogs: [],
     expenses: [],
-    createdAt: new Date().toISOString()
+    // PRESERVE FULL PROPOSAL DATA AS BASELINE
+    proposalScope: scopeItems,
+    proposalInclusions: document.getElementById('propInclusions').value,
+    proposalExclusions: document.getElementById('propExclusions').value,
+    proposalSentAt: new Date().toISOString(),
+    status: 'Proposal Sent'
   };
 
   const contracts = getContracts();
   contracts.push(contract);
   saveContracts(contracts);
 
-  alert('✓ Contract created for ' + clientName + '! Check Margin Guardian to track it.');
+  alert('✓ Proposal sent to ' + clientName + ' and contract created! Track in Margin Guardian.');
   
   // Reset form
-  document.getElementById('clientName').value = '';
-  proposalPhotos = { entryway: [], restrooms: [], office: [], breakroom: [], hallways: [], other: [] };
-  Object.keys(proposalPhotos).forEach(room => {
-    document.getElementById(room + '-grid').innerHTML = '';
-  });
-  updateProposal();
+  document.getElementById('propClientName').value = '';
+  document.getElementById('propClientEmail').value = '';
+  scopeItems = [];
+  renderScopeItems();
+  document.getElementById('proposalPreview').innerHTML = '';
 }
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  renderScopeItems();
+});
 
 // Margin Guardian
 function renderMarginGuardian() {
