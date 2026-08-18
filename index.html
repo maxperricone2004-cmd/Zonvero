@@ -1,3 +1,5 @@
+Output
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -540,13 +542,60 @@
 
 <!-- Navigation Tabs -->
 <nav class="tabs-nav">
-  <button class="tab-button active" onclick="switchTab('calculator')">Calculator</button>
+  <button class="tab-button active" onclick="switchTab('home')">Home</button>
+  <button class="tab-button" onclick="switchTab('calculator')">Calculator</button>
   <button class="tab-button" onclick="switchTab('proposal')">Proposal Builder</button>
   <button class="tab-button" onclick="switchTab('margin')">Margin Guardian</button>
 </nav>
 
 <!-- Main Content -->
 <main>
+
+  <!-- HOME TAB -->
+  <div id="home" class="tab-content active">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center; padding: 3rem 2rem;">
+      <div style="font-size: 48px; margin-bottom: 1rem;">✓</div>
+      <h2 style="font-size: 36px; margin-bottom: 1rem; color: #10b981;">ConeQuotes</h2>
+      <p style="font-size: 18px; color: #4a5568; margin-bottom: 2rem; line-height: 1.8;">
+        <strong>The operating system for profitable cleaning contracts.</strong>
+      </p>
+      
+      <div style="background: #f7fafc; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+        <h3 style="font-size: 18px; margin-bottom: 1.5rem; color: #1a202c;">What You Get</h3>
+        <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">\n            <div style="font-size: 24px; color: #10b981;">📋</div>
+            <div>
+              <div style="font-weight: 600; color: #1a202c; margin-bottom: 0.25rem;">Professional Proposals</div>
+              <div style="color: #718096; font-size: 14px;">Build detailed scopes, assumptions, and pricing in minutes. Send to clients instantly.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 24px; color: #10b981;">📊</div>
+            <div>
+              <div style="font-weight: 600; color: #1a202c; margin-bottom: 0.25rem;">Margin Protection</div>
+              <div style="color: #718096; font-size: 14px;">Log actual hours. Spot labor overruns before month 9. Know exactly which jobs are unprofitable.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <div style="font-size: 24px; color: #10b981;">⚡</div>
+            <div>
+              <div style="font-weight: 600; color: #1a202c; margin-bottom: 0.25rem;">Zero Setup</div>
+              <div style="color: #718096; font-size: 14px;">No login. No database. All your data stays in your browser. Start now, upgrade later.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="switchTab('proposal'); showToast('Time to build your first proposal!');" style="font-size: 16px; padding: 0.75rem 2rem;">
+        Create Your First Proposal
+      </button>
+
+      <p style="color: #718096; font-size: 13px; margin-top: 2rem;">
+        Free to use. For commercial cleaning contractors.<br>
+        <a href="mailto:test@conequotes.com?subject=ConeQuotes%20Feedback" style="color: #10b981; text-decoration: none; font-weight: 500;">Send feedback</a> to help us improve.
+      </p>
+    </div>
+  </div>
 
   <!-- CALCULATOR TAB -->
   <div id="calculator" class="tab-content active">
@@ -828,7 +877,14 @@
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
 
     document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
+    
+    // Find and activate the correct tab button
+    const buttons = Array.from(document.querySelectorAll('.tab-button'));
+    const buttonMap = { home: 0, calculator: 1, proposal: 2, margin: 3 };
+    const buttonIndex = buttonMap[tabName];
+    if (buttons[buttonIndex]) {
+      buttons[buttonIndex].classList.add('active');
+    }
 
     if (tabName === 'margin') {
       renderMarginGuardian();
@@ -868,7 +924,14 @@
     setCurrentProposal(id);
     clearAllFields();
     refreshProposalDropdown();
-    showToast('New proposal created!');
+    
+    // Auto-switch to Proposal Builder
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('proposal').classList.add('active');
+    document.querySelectorAll('.tab-button')[2].classList.add('active'); // Proposal Builder is index 2
+    
+    showToast('✓ New proposal created. Fill in the details below.');
   }
 
   function saveProposal() {
