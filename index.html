@@ -1,5 +1,869 @@
-{
-  "returncode" : 0,
-  "stdout" : "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ConeQuotes — The Operating System for Profitable Cleaning Contracts<\/title>\n  <style>\n    * { margin: 0; padding: 0; box-sizing: border-box; }\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #1a202c; line-height: 1.6; }\n    header { background: white; border-bottom: 1px solid #e2e8f0; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }\n    .logo { font-weight: 600; font-size: 18px; color: #10b981; background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }\n    .logo:hover { color: #059669; }\n    nav { display: flex; gap: 2rem; align-items: center; }\n    nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }\n    nav button:hover { color: #10b981; }\n    nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }\n    .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }\n    .cta:hover { background: #059669; }\n    .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }\n    .hero h1 { font-size: 42px; line-height: 1.2; margin-bottom: 1rem; color: #1a202c; }\n    .hero .subtitle { font-size: 16px; color: #4a5568; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }\n    main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; min-height: 80vh; }\n    .tab-content { display: none !important; }\n    .tab-content.active { display: block !important; }\n    h2 { font-size: 28px; margin-bottom: 1rem; color: #1a202c; }\n    h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; color: #1a202c; }\n    .section-intro { color: #4a5568; margin-bottom: 2rem; font-size: 14px; }\n    .calculator { background: white; border-radius: 8px; padding: 2rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }\n    .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }\n    .form-group { display: flex; flex-direction: column; }\n    .form-group label { font-weight: 500; font-size: 13px; color: #2d3748; margin-bottom: 0.5rem; }\n    .form-group input, .form-group select, .form-group textarea { padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; font-family: inherit; }\n    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }\n    .output-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }\n    .output-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }\n    .output-label { color: #718096; font-size: 12px; margin-bottom: 0.5rem; }\n    .output-value { font-size: 24px; font-weight: 600; color: #10b981; }\n    .output-unit { color: #718096; font-size: 12px; margin-top: 0.25rem; }\n    \n    \/* Scope Builder Styles *\/\n    .scope-room { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }\n    .scope-room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer; }\n    .scope-room-title { font-weight: 600; font-size: 15px; color: #1a202c; }\n    .scope-room-toggle { font-size: 18px; color: #718096; }\n    .scope-room-content { display: none; }\n    .scope-room-content.expanded { display: block; }\n    .scope-tasks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }\n    .scope-task { display: flex; align-items: center; gap: 0.5rem; }\n    .scope-task input { width: 18px; height: 18px; cursor: pointer; }\n    .scope-task label { font-size: 13px; color: #4a5568; cursor: pointer; }\n    .scope-frequency { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 13px; color: #718096; }\n    \n    \/* Margin Guardian Styles *\/\n    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 3rem; }\n    .stat-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; }\n    .stat-label { color: #718096; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }\n    .stat-value { font-size: 28px; font-weight: 600; color: #1a202c; }\n    .stat-change { font-size: 12px; margin-top: 0.5rem; color: #718096; }\n    \n    .contract-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }\n    .contract-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; }\n    .contract-name { font-weight: 600; font-size: 18px; color: #1a202c; }\n    .contract-freq { color: #718096; font-size: 12px; margin-top: 0.25rem; }\n    .status-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 12px; font-weight: 500; }\n    .status-healthy { background: #dcfce7; color: #166534; }\n    .status-watch { background: #fef3c7; color: #92400e; }\n    .status-risk { background: #fee2e2; color: #991b1b; }\n    \n    .margin-metric { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }\n    .metric-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }\n    .metric-label { font-size: 12px; color: #718096; text-transform: uppercase; margin-bottom: 0.5rem; }\n    .metric-value { font-size: 22px; font-weight: 600; color: #1a202c; }\n    .metric-variance { font-size: 13px; margin-top: 0.5rem; }\n    .variance-positive { color: #10b981; }\n    .variance-negative { color: #ef4444; }\n    \n    .alert-section { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; }\n    .alert-title { font-weight: 600; color: #92400e; margin-bottom: 0.25rem; font-size: 13px; }\n    .alert-text { color: #78350f; font-size: 12px; line-height: 1.5; }\n    .danger-alert { background: #fee2e2; border-color: #fecaca; }\n    .danger-alert .alert-title { color: #7f1d1d; }\n    .danger-alert .alert-text { color: #7f1d1d; }\n    \n    .action-button { background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 500; font-size: 14px; cursor: pointer; margin-top: 1rem; }\n    .action-button:hover { background: #059669; }\n    \n    \/* Proposal Preview *\/\n    .proposal-preview { background: white; padding: 2.5rem; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 900px; margin: 0 auto; }\n    .proposal-header { text-align: center; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 2px solid #10b981; }\n    .proposal-title { font-size: 28px; font-weight: 700; color: #10b981; margin-bottom: 1rem; letter-spacing: 1px; }\n    .proposal-client { font-size: 18px; font-weight: 600; color: #1a202c; margin-bottom: 0.5rem; }\n    .proposal-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 6px; }\n    .proposal-detail { text-align: center; }\n    .proposal-detail-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }\n    .proposal-detail-value { font-size: 18px; font-weight: 600; color: #1a202c; }\n    .proposal-section { margin-bottom: 2rem; }\n    .proposal-section-title { font-size: 14px; font-weight: 700; color: #1a202c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }\n    .proposal-scope-item { margin-bottom: 1.5rem; }\n    .proposal-scope-room { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 0.5rem; }\n    .proposal-scope-tasks { font-size: 13px; color: #4a5568; margin-left: 1rem; line-height: 1.6; }\n    .proposal-price { text-align: center; padding: 2rem; background: #f7fafc; border-radius: 6px; margin-bottom: 2rem; }\n    .proposal-price-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }\n    .proposal-price-value { font-size: 38px; font-weight: 700; color: #10b981; }\n    .proposal-terms { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; font-size: 13px; line-height: 1.6; }\n    .proposal-terms-section { }\n    .proposal-terms-title { font-weight: 600; color: #1a202c; margin-bottom: 0.75rem; }\n    .proposal-terms-list { color: #4a5568; }\n    .proposal-signature { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e2e8f0; }\n    .proposal-signature-block { }\n    .proposal-signature-label { font-weight: 600; font-size: 12px; color: #1a202c; margin-bottom: 2.5rem; }\n    .proposal-signature-line { border-top: 2px solid #1a202c; width: 100%; margin-bottom: 0.5rem; }\n    .proposal-signature-date { font-size: 11px; color: #718096; }\n    \n    .empty-state { text-align: center; padding: 3rem 2rem; color: #718096; font-size: 14px; background: #f7fafc; border-radius: 8px; border: 1px solid #e2e8f0; }\n    \n    footer { background: white; border-top: 1px solid #e2e8f0; padding: 2rem; text-align: center; margin-top: 3rem; color: #718096; font-size: 13px; }\n    footer a { color: #10b981; text-decoration: none; font-weight: 500; }\n    footer a:hover { color: #059669; text-decoration: underline; }\n    \n    @media (max-width: 1024px) {\n      .stats-grid { grid-template-columns: repeat(2, 1fr); }\n      .margin-metric { grid-template-columns: 1fr; }\n      .proposal-details { grid-template-columns: repeat(2, 1fr); }\n    }\n    \n    @media (max-width: 768px) {\n      header { flex-direction: column; gap: 1rem; text-align: center; }\n      nav { flex-direction: column; gap: 0.5rem; }\n      .hero h1 { font-size: 28px; }\n      main { padding: 1.5rem; }\n      .calc-row { grid-template-columns: 1fr; }\n      .output-row { grid-template-columns: 1fr; }\n    }\n  <\/style>\n<\/head>\n<body>\n\n<header>\n  <button class=\"logo\" onclick=\"switchTab('home')\">✓ ConeQuotes<\/button>\n  <nav>\n    <button class=\"tab-btn\" onclick=\"switchTab('calculator')\">Calculator<\/button>\n    <button class=\"tab-btn\" onclick=\"switchTab('proposal')\">Proposal Builder<\/button>\n    <button class=\"tab-btn\" onclick=\"switchTab('margin')\">Margin Guardian<\/button>\n    <a href=\"#\" class=\"cta\">Join pilot<\/a>\n  <\/nav>\n<\/header>\n\n<section class=\"hero\">\n  <h1>The operating system for profitable cleaning contracts.<\/h1>\n  <p class=\"subtitle\">Bid with confidence. Prove every shift. Catch scope creep before it kills your margin.<\/p>\n<\/section>\n\n<main>\n\n<!-- HOME\/ABOUT TAB -->\n<div id=\"home\" class=\"tab-content active\">\n  <h2>Why we built this<\/h2>\n\n  <div style=\"max-width: 800px; margin: 2rem 0;\">\n    <p style=\"color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;\">\n      You bid a job at 25% margin. Six months in, your labor is 30% over plan. Turns out the client kept adding \"just one more thing\" — extra restrooms, breakroom attention, bigger trash volumes. No documentation. No change order. By the time you renew, your margin is 8%. You're stuck. Can't renegotiate without losing the contract. Can't drop the price without losing money.\n    <\/p>\n\n    <p style=\"color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;\">\n      That's the real problem. Not getting the bid wrong. <strong>Not knowing you got it wrong until way too late.<\/strong>\n    <\/p>\n  <\/div>\n\n  <h3 style=\"font-size: 18px; margin: 3rem 0 1rem 0;\">The workflow is simple<\/h3>\n\n  <div style=\"max-width: 800px;\">\n    <div style=\"background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;\">\n      <h4 style=\"color: #1a202c; margin-bottom: 0.5rem;\">1. Quote profitably<\/h4>\n      <p style=\"color: #4a5568; font-size: 14px;\">Use the calculator to see what price protects your margin before you quote.<\/p>\n    <\/div>\n\n    <div style=\"background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;\">\n      <h4 style=\"color: #1a202c; margin-bottom: 0.5rem;\">2. Document the scope<\/h4>\n      <p style=\"color: #4a5568; font-size: 14px;\">Generate a professional proposal the client signs. When they ask for extras later, you have proof of what was included.<\/p>\n    <\/div>\n\n    <div style=\"background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;\">\n      <h4 style=\"color: #1a202c; margin-bottom: 0.5rem;\">3. Protect the margin<\/h4>\n      <p style=\"color: #4a5568; font-size: 14px;\">Track actual hours as your crews work. See labor drift in real time. Catch scope creep before it kills profit.<\/p>\n    <\/div>\n  <\/div>\n\n  <div style=\"margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;\">\n    <p style=\"color: #4a5568; font-size: 14px; line-height: 1.8;\">\n      <strong>Simple tools for contractors who want to protect every contract's profit.<\/strong>\n    <\/p>\n  <\/div>\n\n  <div style=\"margin-top: 2rem; text-align: center;\">\n    <button class=\"cta\" onclick=\"switchTab('calculator')\" style=\"margin: 0 auto; display: inline-block;\">Start → Calculator<\/button>\n  <\/div>\n<\/div>\n\n<!-- CALCULATOR TAB -->\n<div id=\"calculator\" class=\"tab-content\">\n  <h2>Build a profitable bid<\/h2>\n  <p class=\"section-intro\">Adjust facility details to see how revenue and profit change instantly.<\/p>\n\n  <div class=\"calculator\">\n    <div class=\"calc-row\">\n      <div class=\"form-group\">\n        <label>Facility Type<\/label>\n        <select id=\"facilityType\" onchange=\"updateCalc()\">\n          <option value=\"office\">Office<\/option>\n          <option value=\"retail\">Retail<\/option>\n          <option value=\"warehouse\">Warehouse<\/option>\n        <\/select>\n      <\/div>\n      <div class=\"form-group\">\n        <label>Square Footage<\/label>\n        <input type=\"number\" id=\"sqft\" value=\"25000\" onchange=\"updateCalc()\">\n      <\/div>\n    <\/div>\n\n    <div class=\"calc-row\">\n      <div class=\"form-group\">\n        <label>Service Frequency<\/label>\n        <select id=\"frequency\" onchange=\"updateCalc()\">\n          <option value=\"daily\">Daily (5x\/week)<\/option>\n          <option value=\"3x\">3x per week<\/option>\n          <option value=\"weekly\" selected>Weekly<\/option>\n          <option value=\"biweekly\">Bi-weekly<\/option>\n        <\/select>\n      <\/div>\n      <div class=\"form-group\">\n        <label>Labor Rate per Hour<\/label>\n        <input type=\"number\" id=\"laborRate\" value=\"24\" onchange=\"updateCalc()\">\n      <\/div>\n    <\/div>\n\n    <div class=\"output-row\">\n      <div class=\"output-box\">\n        <div class=\"output-label\">Suggested Price<\/div>\n        <div class=\"output-value\" id=\"quotePriceOutput\">$325<\/div>\n        <div class=\"output-unit\">per visit<\/div>\n      <\/div>\n      <div class=\"output-box\">\n        <div class=\"output-label\">Monthly Revenue<\/div>\n        <div class=\"output-value\" id=\"monthlyOutput\">$1,408<\/div>\n        <div class=\"output-unit\">4 weeks<\/div>\n      <\/div>\n      <div class=\"output-box\">\n        <div class=\"output-label\">Planned Hours<\/div>\n        <div class=\"output-value\" id=\"plannedHoursOutput\">96<\/div>\n        <div class=\"output-unit\">per month<\/div>\n      <\/div>\n      <div class=\"output-box\">\n        <div class=\"output-label\">Your Margin<\/div>\n        <div class=\"output-value\" style=\"color: #10b981; font-size: 20px;\">25%<\/div>\n        <div class=\"output-unit\">protected<\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>\n\n<!-- PROPOSAL BUILDER TAB -->\n<div id=\"proposal\" class=\"tab-content\">\n  <h2>Create Professional Proposal<\/h2>\n  <p class=\"section-intro\">Build a proposal your clients will take seriously.<\/p>\n\n  <div class=\"calculator\">\n    <h3 style=\"margin-bottom: 1.5rem;\">Step 1: Client & Facility Information<\/h3>\n    \n    <div class=\"calc-row\">\n      <div class=\"form-group\">\n        <label>Client Name<\/label>\n        <input type=\"text\" id=\"propClientName\" placeholder=\"ABC Office Building\">\n      <\/div>\n      <div class=\"form-group\">\n        <label>Client Email<\/label>\n        <input type=\"email\" id=\"propClientEmail\" placeholder=\"contact@abcoffice.com\">\n      <\/div>\n    <\/div>\n\n    <div class=\"calc-row\">\n      <div class=\"form-group\">\n        <label>Square Footage<\/label>\n        <input type=\"number\" id=\"propSqft\" value=\"25000\">\n      <\/div>\n      <div class=\"form-group\">\n        <label>Facility Type<\/label>\n        <select id=\"propFacilityType\">\n          <option value=\"office\">Office<\/option>\n          <option value=\"retail\">Retail<\/option>\n          <option value=\"warehouse\">Warehouse<\/option>\n          <option value=\"medical\">Medical\/Healthcare<\/option>\n          <option value=\"hospitality\">Hospitality\/Hotel<\/option>\n          <option value=\"industrial\">Industrial<\/option>\n          <option value=\"other\">Other<\/option>\n        <\/select>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <div class=\"calculator\" style=\"margin-top: 2rem;\">\n    <h3 style=\"margin-bottom: 1.5rem;\">Step 2: Scope of Work<\/h3>\n    <p style=\"color: #718096; font-size: 13px; margin-bottom: 1.5rem;\">Click each room to expand and select tasks.<\/p>\n    \n    <div id=\"scopeBuilder\"><\/div>\n    \n    <button class=\"action-button\" onclick=\"addScopeRoom()\" style=\"width: 100%; margin-top: 1rem;\">+ Add Another Room<\/button>\n  <\/div>\n\n  <div class=\"calculator\" style=\"margin-top: 2rem;\">\n    <h3 style=\"margin-bottom: 1.5rem;\">Step 3: Service Frequency & Pricing<\/h3>\n    \n    <div class=\"calc-row\">\n      <div class=\"form-group\">\n        <label>Service Frequency<\/label>\n        <select id=\"propFrequency\">\n          <option value=\"daily\">Daily (5x\/week)<\/option>\n          <option value=\"3x\">3x per week<\/option>\n          <option value=\"weekly\" selected>Weekly<\/option>\n          <option value=\"biweekly\">Bi-weekly<\/option>\n        <\/select>\n      <\/div>\n      <div class=\"form-group\">\n        <label>Labor Rate per Hour<\/label>\n        <input type=\"number\" id=\"propLaborRate\" value=\"24\">\n      <\/div>\n    <\/div>\n\n    <div class=\"form-group\">\n      <label>Monthly Investment (What you'll charge the client)<\/label>\n      <input type=\"number\" id=\"propPrice\" value=\"1300\" placeholder=\"e.g., 1300\">\n    <\/div>\n  <\/div>\n\n  <div class=\"calculator\" style=\"margin-top: 2rem;\">\n    <h3 style=\"margin-bottom: 1.5rem;\">Step 4: Terms & Conditions<\/h3>\n    \n    <div class=\"form-group\">\n      <label>What's Included<\/label>\n      <textarea id=\"propInclusions\" placeholder=\"- Regular cleaning as per scope&#10;- All supplies provided&#10;- Professional staff&#10;- 48-hour cancellation notice\" style=\"min-height: 100px;\"><\/textarea>\n    <\/div>\n\n    <div class=\"form-group\">\n      <label>What's Excluded<\/label>\n      <textarea id=\"propExclusions\" placeholder=\"- Carpet shampooing&#10;- Deep exterior cleaning&#10;- Repairs or maintenance&#10;- Hazardous material removal\" style=\"min-height: 100px;\"><\/textarea>\n    <\/div>\n  <\/div>\n\n  <div style=\"margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;\">\n    <h3 style=\"margin-bottom: 1.5rem;\">Proposal Preview<\/h3>\n    <div id=\"proposalPreview\"><\/div>\n  <\/div>\n\n  <div style=\"margin-top: 2rem; display: flex; gap: 1rem;\">\n    <button class=\"action-button\" onclick=\"generateProposal()\" style=\"flex: 1;\">Preview Proposal<\/button>\n    <button class=\"action-button\" onclick=\"sendProposal()\" style=\"flex: 1; background: #059669;\">✓ Send to Client & Create Contract<\/button>\n  <\/div>\n<\/div>\n\n<!-- MARGIN GUARDIAN TAB -->\n<div id=\"margin\" class=\"tab-content\">\n  <h2>Margin Guardian Dashboard<\/h2>\n  <p class=\"section-intro\">Track labor. Catch scope creep. Protect profit.<\/p>\n\n  <div class=\"stats-grid\">\n    <div class=\"stat-card\">\n      <div class=\"stat-label\">Active Contracts<\/div>\n      <div class=\"stat-value\" id=\"statActiveContracts\">0<\/div>\n    <\/div>\n    <div class=\"stat-card\">\n      <div class=\"stat-label\">Healthy<\/div>\n      <div class=\"stat-value\" id=\"statHealthy\">0<\/div>\n    <\/div>\n    <div class=\"stat-card\">\n      <div class=\"stat-label\">Watch List<\/div>\n      <div class=\"stat-value\" id=\"statWatch\">0<\/div>\n    <\/div>\n    <div class=\"stat-card\">\n      <div class=\"stat-label\">At Risk<\/div>\n      <div class=\"stat-value\" id=\"statRisk\">0<\/div>\n    <\/div>\n  <\/div>\n\n  <div id=\"contractsContainer\"><\/div>\n<\/div>\n\n<\/main>\n\n<footer>\n  <p>Questions? Reach out: <a href=\"mailto:conequotes.service@outlook.com\">conequotes.service@outlook.com<\/a><\/p>\n  <p style=\"margin-top: 0.5rem; font-size: 12px;\">ConeQuotes — The operating system for profitable cleaning contracts<\/p>\n<\/footer>\n\n<script>\n\/\/ Storage\nfunction getContracts() {\n  const stored = localStorage.getItem('coneQuotesContracts');\n  return stored ? JSON.parse(stored) : [];\n}\n\nfunction saveContracts(contracts) {\n  localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));\n}\n\n\/\/ Tabs\nfunction switchTab(tabName) {\n  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));\n  document.getElementById(tabName).classList.add('active');\n  if (tabName === 'margin') renderMarginGuardian();\n}\n\n\/\/ Calculator\nfunction updateCalc() {\n  const sqft = parseInt(document.getElementById('sqft').value) || 25000;\n  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;\n  const pricePerSqFt = 0.013;\n  const quotePrice = Math.round(sqft * pricePerSqFt);\n  \n  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };\n  const freq = freqMap[document.getElementById('frequency').value] || 1;\n  \n  const hoursPerVisit = sqft \/ 5000;\n  const plannedHours = Math.round(hoursPerVisit * freq * 4.33);\n  const monthly = Math.round(quotePrice * freq * 4.33);\n  \n  document.getElementById('quotePriceOutput').textContent = '$' + quotePrice;\n  document.getElementById('monthlyOutput').textContent = '$' + monthly.toLocaleString();\n  document.getElementById('plannedHoursOutput').textContent = plannedHours;\n}\n\n\/\/ Scope Builder\nconst DEFAULT_ROOMS = {\n  'Restrooms': ['Toilets', 'Sinks', 'Mirrors', 'Floors', 'Garbage', 'Restocking'],\n  'Offices': ['Vacuuming', 'Dusting', 'Garbage', 'Desk surfaces'],\n  'Break Room': ['Refrigerator', 'Microwave', 'Tables', 'Floors', 'Garbage'],\n  'Hallways': ['Vacuuming', 'Mopping', 'Dust surfaces', 'Garbage'],\n};\n\nlet scopeItems = {};\n\nfunction initializeScopes() {\n  scopeItems = {};\n  for (const [room, tasks] of Object.entries(DEFAULT_ROOMS)) {\n    scopeItems[room] = { expanded: false, tasks: {} };\n    tasks.forEach(task => {\n      scopeItems[room].tasks[task] = true;\n    });\n  }\n  renderScopeBuilder();\n}\n\nfunction renderScopeBuilder() {\n  const container = document.getElementById('scopeBuilder');\n  container.innerHTML = Object.entries(scopeItems).map(([room, data]) => {\n    const tasksHtml = Object.entries(data.tasks).map(([task, checked]) => `\n      <div class=\"scope-task\">\n        <input type=\"checkbox\" ${checked ? 'checked' : ''} onchange=\"updateScopeTask('${room}', '${task}', this.checked)\">\n        <label>${task}<\/label>\n      <\/div>\n    `).join('');\n\n    return `\n      <div class=\"scope-room\">\n        <div class=\"scope-room-header\" onclick=\"toggleScopeRoom('${room}')\">\n          <span class=\"scope-room-title\">${room}<\/span>\n          <span class=\"scope-room-toggle\">${data.expanded ? '▼' : '▶'}<\/span>\n        <\/div>\n        <div class=\"scope-room-content ${data.expanded ? 'expanded' : ''}\">\n          <div class=\"scope-tasks\">${tasksHtml}<\/div>\n          <div class=\"scope-frequency\">Frequency: <select onchange=\"updateScopeFrequency('${room}', this.value)\">\n            <option value=\"daily\">Daily (5x\/week)<\/option>\n            <option value=\"3x\">3x per week<\/option>\n            <option value=\"weekly\" selected>Weekly<\/option>\n            <option value=\"biweekly\">Bi-weekly<\/option>\n          <\/select><\/div>\n        <\/div>\n      <\/div>\n    `;\n  }).join('');\n}\n\nfunction toggleScopeRoom(room) {\n  scopeItems[room].expanded = !scopeItems[room].expanded;\n  renderScopeBuilder();\n}\n\nfunction updateScopeTask(room, task, checked) {\n  scopeItems[room].tasks[task] = checked;\n}\n\nfunction updateScopeFrequency(room, freq) {\n  scopeItems[room].frequency = freq;\n}\n\nfunction addScopeRoom() {\n  const newRoom = prompt('Room name (e.g., \"Storage\", \"Loading Area\"):');\n  if (newRoom) {\n    scopeItems[newRoom] = { expanded: true, tasks: { 'Cleaning': true }, frequency: 'weekly' };\n    renderScopeBuilder();\n  }\n}\n\n\/\/ Proposal Generation\nfunction generateProposal() {\n  const clientName = document.getElementById('propClientName').value.trim();\n  if (!clientName) {\n    alert('Please enter client name');\n    return;\n  }\n\n  const sqft = document.getElementById('propSqft').value;\n  const freq = document.getElementById('propFrequency').value;\n  const price = document.getElementById('propPrice').value || 1300;\n  const inclusions = document.getElementById('propInclusions').value;\n  const exclusions = document.getElementById('propExclusions').value;\n\n  const freqDisplay = { 'daily': 'Daily (5x\/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];\n\n  const scopeHtml = Object.entries(scopeItems).map(([room, data]) => {\n    const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);\n    if (tasks.length === 0) return '';\n    return `\n      <div class=\"proposal-scope-item\">\n        <div class=\"proposal-scope-room\">${room}<\/div>\n        <div class=\"proposal-scope-tasks\">\n          ${tasks.map(task => `• ${task}`).join('<br>')}\n        <\/div>\n      <\/div>\n    `;\n  }).join('');\n\n  const proposal = `\n    <div class=\"proposal-preview\">\n      <div class=\"proposal-header\">\n        <div class=\"proposal-title\">CLEANING SERVICES PROPOSAL<\/div>\n      <\/div>\n\n      <div style=\"text-align: center; margin-bottom: 2rem;\">\n        <div class=\"proposal-client\">${clientName}<\/div>\n      <\/div>\n\n      <div class=\"proposal-details\">\n        <div class=\"proposal-detail\">\n          <div class=\"proposal-detail-label\">Facility Size<\/div>\n          <div class=\"proposal-detail-value\">${sqft} sq ft<\/div>\n        <\/div>\n        <div class=\"proposal-detail\">\n          <div class=\"proposal-detail-label\">Service Frequency<\/div>\n          <div class=\"proposal-detail-value\">${freqDisplay}<\/div>\n        <\/div>\n        <div class=\"proposal-detail\">\n          <div class=\"proposal-detail-label\">Monthly Investment<\/div>\n          <div class=\"proposal-detail-value\">$${price}<\/div>\n        <\/div>\n        <div class=\"proposal-detail\">\n          <div class=\"proposal-detail-label\">Email<\/div>\n          <div class=\"proposal-detail-value\" style=\"font-size: 12px;\">${document.getElementById('propClientEmail').value || 'TBD'}<\/div>\n        <\/div>\n      <\/div>\n\n      <div class=\"proposal-section\">\n        <div class=\"proposal-section-title\">Scope of Work<\/div>\n        ${scopeHtml || '<p style=\"color: #718096;\">No tasks selected<\/p>'}\n      <\/div>\n\n      <div class=\"proposal-section\">\n        <div class=\"proposal-section-title\">Included<\/div>\n        <div style=\"color: #4a5568; font-size: 13px; white-space: pre-wrap;\">${inclusions || '- Regular cleaning as specified\\n- All supplies provided\\n- Professional staff'}<\/div>\n      <\/div>\n\n      <div class=\"proposal-section\">\n        <div class=\"proposal-section-title\">Excluded<\/div>\n        <div style=\"color: #4a5568; font-size: 13px; white-space: pre-wrap;\">${exclusions || '- Carpet shampooing\\n- Deep exterior cleaning\\n- Repairs or maintenance'}<\/div>\n      <\/div>\n\n      <div class=\"proposal-price\">\n        <div class=\"proposal-price-label\">Monthly Investment<\/div>\n        <div class=\"proposal-price-value\">$${price}<\/div>\n        <div style=\"font-size: 12px; color: #718096; margin-top: 0.5rem;\">Billed monthly • Includes all supplies<\/div>\n      <\/div>\n\n      <div class=\"proposal-section\">\n        <div class=\"proposal-section-title\">Terms<\/div>\n        <div style=\"color: #4a5568; font-size: 13px; line-height: 1.6;\">\n          This proposal is valid for 30 days. Service begins upon signed agreement. Changes to scope require written amendments. 48-hour notice required for cancellations.\n        <\/div>\n      <\/div>\n\n      <div class=\"proposal-signature\">\n        <div class=\"proposal-signature-block\">\n          <div class=\"proposal-signature-label\">Client Signature<\/div>\n          <div class=\"proposal-signature-line\"><\/div>\n          <div class=\"proposal-signature-date\">Date: _______________<\/div>\n        <\/div>\n        <div class=\"proposal-signature-block\">\n          <div class=\"proposal-signature-label\">Your Company<\/div>\n          <div style=\"font-size: 13px; color: #718096;\">Authorized by<br><a href=\"mailto:conequotes.service@outlook.com\" style=\"color: #10b981; text-decoration: none;\">conequotes.service@outlook.com<\/a><\/div>\n        <\/div>\n      <\/div>\n    <\/div>\n  `;\n\n  document.getElementById('proposalPreview').innerHTML = proposal;\n}\n\nfunction sendProposal() {\n  const clientName = document.getElementById('propClientName').value.trim();\n  const clientEmail = document.getElementById('propClientEmail').value.trim();\n  \n  if (!clientName) {\n    alert('Please enter client name');\n    return;\n  }\n\n  const sqft = parseInt(document.getElementById('propSqft').value) || 25000;\n  const freq = document.getElementById('propFrequency').value;\n  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 24;\n  const price = parseInt(document.getElementById('propPrice').value) || 1300;\n\n  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };\n  const freqVal = freqMap[freq] || 1;\n  const hoursPerVisit = sqft \/ 5000;\n  const plannedHours = Math.round(hoursPerVisit * freqVal * 4.33);\n\n  const contract = {\n    id: Date.now(),\n    clientName,\n    clientEmail,\n    sqft,\n    frequency: freq,\n    quotePrice: price,\n    laborRate,\n    plannedHours,\n    actualHours: 0,\n    weeklylogs: [],\n    expenses: [],\n    proposalScope: scopeItems,\n    proposalInclusions: document.getElementById('propInclusions').value,\n    proposalExclusions: document.getElementById('propExclusions').value,\n    proposalSentAt: new Date().toISOString(),\n    status: 'Proposal Sent'\n  };\n\n  const contracts = getContracts();\n  contracts.push(contract);\n  saveContracts(contracts);\n\n  \/\/ Send email if client email provided\n  if (clientEmail) {\n    const scopeText = Object.entries(scopeItems).map(([room, data]) => {\n      const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);\n      return tasks.length > 0 ? room + ': ' + tasks.join(', ') : '';\n    }).filter(Boolean).join('\\n');\n\n    const emailData = {\n      email: clientEmail,\n      subject: 'Cleaning Services Proposal - ' + clientName,\n      message: `Hello ${clientName},\\n\\nPlease find attached your cleaning services proposal.\\n\\nFacility: ${sqft} sq ft\\nFrequency: ${freq}\\nMonthly Investment: $${price}\\n\\nScope:\\n${scopeText}\\n\\nBest regards,\\nConeQuotes`\n    };\n\n    \/\/ Send via Formspree\n    fetch('https:\/\/formspree.io\/f\/xdenlden', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application\/json' },\n      body: JSON.stringify(emailData)\n    }).catch(err => console.log('Email delivery note: Check your email client'));\n  }\n\n  alert('✓ Proposal saved for ' + clientName + '! Track in Margin Guardian.\\n\\nClient email note: Send proposal link or print from browser.');\n  \n  \/\/ Keep form data for now (don't reset)\n}\n\n\/\/ Margin Guardian\nfunction renderMarginGuardian() {\n  const contracts = getContracts();\n  const container = document.getElementById('contractsContainer');\n\n  if (contracts.length === 0) {\n    container.innerHTML = '<div class=\"empty-state\">No contracts yet. Create one in Proposal Builder to get started.<\/div>';\n    updateStats(contracts);\n    return;\n  }\n\n  container.innerHTML = contracts.map(contract => {\n    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0);\n    const efficiency = (actualHours \/ contract.plannedHours) * 100;\n    \n    const laborCost = actualHours * contract.laborRate;\n    const miscExpenses = contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);\n    const totalCost = laborCost + miscExpenses;\n    const grossProfit = contract.quotePrice - totalCost;\n    const currentMargin = ((grossProfit \/ contract.quotePrice) * 100).toFixed(1);\n    const laborShift = laborCost - (contract.plannedHours * contract.laborRate);\n    const laborShiftPercent = ((laborShift \/ (contract.plannedHours * contract.laborRate)) * 100).toFixed(1);\n\n    let status = 'Healthy';\n    let statusClass = 'status-healthy';\n    let alert = '';\n\n    if (efficiency > 120) {\n      status = 'At Risk';\n      statusClass = 'status-risk';\n      alert = `\n        <div class=\"alert-section danger-alert\">\n          <div class=\"alert-title\">🔴 Margin deterioration detected<\/div>\n          <div class=\"alert-text\">Labor has exceeded baseline by ${Math.round(efficiency - 100)}%. Review ${Object.keys(contract.proposalScope).join(', ')} scope. <strong>Action:<\/strong> Submit change order or adjust scope agreement.<\/div>\n        <\/div>\n      `;\n    } else if (efficiency > 110) {\n      status = 'Watch';\n      statusClass = 'status-watch';\n      alert = `\n        <div class=\"alert-section\">\n          <div class=\"alert-title\">⚠️ Labor trending up<\/div>\n          <div class=\"alert-text\">Labor is at ${Math.round(efficiency)}% of plan. Monitor closely for next 2 weeks.<\/div>\n        <\/div>\n      `;\n    }\n\n    return `\n      <div class=\"contract-card\">\n        <div class=\"contract-header\">\n          <div>\n            <div class=\"contract-name\">${contract.clientName}<\/div>\n            <div class=\"contract-freq\">${contract.frequency.charAt(0).toUpperCase() + contract.frequency.slice(1)} • ${contract.sqft} sq ft<\/div>\n          <\/div>\n          <span class=\"status-badge ${statusClass}\">\n            ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : '🔴'} ${status}\n          <\/span>\n        <\/div>\n\n        <div class=\"margin-metric\">\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Contract Revenue<\/div>\n            <div class=\"metric-value\">$${contract.quotePrice}<\/div>\n            <div class=\"metric-variance\">per month<\/div>\n          <\/div>\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Expected Labour<\/div>\n            <div class=\"metric-value\">${contract.plannedHours}h<\/div>\n            <div class=\"metric-variance\">${contract.laborRate}\/hr<\/div>\n          <\/div>\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Actual Labour<\/div>\n            <div class=\"metric-value\">${actualHours}h<\/div>\n            <div class=\"metric-variance ${laborShiftPercent > 0 ? 'variance-negative' : 'variance-positive'}\">${laborShiftPercent > 0 ? '+' : ''}${laborShiftPercent}%<\/div>\n          <\/div>\n        <\/div>\n\n        <div class=\"margin-metric\">\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Expected Margin<\/div>\n            <div class=\"metric-value\">25.0%<\/div>\n          <\/div>\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Current Margin<\/div>\n            <div class=\"metric-value ${currentMargin >= 25 ? '' : 'variance-negative'}\">${currentMargin}%<\/div>\n            ${currentMargin >= 25 ? '<div class=\"metric-variance variance-positive\">protected<\/div>' : '<div class=\"metric-variance variance-negative\">at risk<\/div>'}\n          <\/div>\n          <div class=\"metric-box\">\n            <div class=\"metric-label\">Profit \/ Month<\/div>\n            <div class=\"metric-value ${grossProfit >= 0 ? '' : 'variance-negative'}>$${Math.round(grossProfit)}<\/div>\n          <\/div>\n        <\/div>\n\n        ${alert}\n\n        <div style=\"margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;\">\n          <div style=\"margin-bottom: 1rem;\">\n            <label style=\"font-size: 13px; font-weight: 600; color: #1a202c;\">Log Hours This Week<\/label>\n            <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;\">\n              <input type=\"number\" id=\"hours-${contract.id}\" placeholder=\"Hours\" min=\"0\" step=\"0.5\" style=\"padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;\">\n              <button class=\"action-button\" onclick=\"logHours(${contract.id})\">Log Hours<\/button>\n            <\/div>\n          <\/div>\n\n          <div style=\"margin-bottom: 1rem;\">\n            <label style=\"font-size: 13px; font-weight: 600; color: #1a202c;\">Add Expense<\/label>\n            <div style=\"display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;\">\n              <select id=\"expType-${contract.id}\" style=\"padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;\">\n                <option value=\"Supplies\">Supplies<\/option>\n                <option value=\"Equipment\">Equipment<\/option>\n                <option value=\"Travel\">Travel<\/option>\n                <option value=\"Other\">Other<\/option>\n              <\/select>\n              <input type=\"number\" id=\"expAmount-${contract.id}\" placeholder=\"$0.00\" min=\"0\" step=\"0.01\" style=\"padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;\">\n              <button class=\"action-button\" onclick=\"addExpense(${contract.id})\">Add<\/button>\n            <\/div>\n          <\/div>\n        <\/div>\n      <\/div>\n    `;\n  }).join('');\n\n  updateStats(contracts);\n}\n\nfunction logHours(contractId) {\n  const hoursInput = document.getElementById('hours-' + contractId);\n  const hours = parseFloat(hoursInput.value);\n  \n  if (!hours || hours <= 0) {\n    alert('Please enter valid hours');\n    return;\n  }\n\n  const contracts = getContracts();\n  const contract = contracts.find(c => c.id === contractId);\n  \n  if (contract) {\n    contract.weeklylogs.push({ hours, date: new Date().toISOString() });\n    contract.actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);\n    saveContracts(contracts);\n    hoursInput.value = '';\n    renderMarginGuardian();\n  }\n}\n\nfunction addExpense(contractId) {\n  const expType = document.getElementById('expType-' + contractId).value;\n  const expAmount = document.getElementById('expAmount-' + contractId).value;\n\n  if (!expAmount || parseFloat(expAmount) <= 0) {\n    alert('Please enter a valid amount');\n    return;\n  }\n\n  const contracts = getContracts();\n  const contract = contracts.find(c => c.id === contractId);\n\n  if (contract) {\n    contract.expenses.push({\n      type: expType,\n      amount: parseFloat(expAmount),\n      date: new Date().toISOString()\n    });\n    saveContracts(contracts);\n    document.getElementById('expAmount-' + contractId).value = '';\n    renderMarginGuardian();\n  }\n}\n\nfunction updateStats(contracts) {\n  let healthy = 0, watch = 0, risk = 0;\n\n  contracts.forEach(contract => {\n    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0);\n    const efficiency = (actualHours \/ contract.plannedHours) * 100;\n    \n    if (efficiency > 120) risk++;\n    else if (efficiency > 110) watch++;\n    else healthy++;\n  });\n\n  document.getElementById('statActiveContracts').textContent = contracts.length;\n  document.getElementById('statHealthy').textContent = healthy;\n  document.getElementById('statWatch').textContent = watch;\n  document.getElementById('statRisk').textContent = risk;\n}\n\n\/\/ Initialize\ndocument.addEventListener('DOMContentLoaded', function() {\n  initializeScopes();\n  updateCalc();\n});\n<\/script>\n\n<\/body>\n<\/html>\n",
-  "stderr" : ""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConeQuotes — The Operating System for Profitable Cleaning Contracts</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #1a202c; line-height: 1.6; }
+    header { background: white; border-bottom: 1px solid #e2e8f0; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-weight: 600; font-size: 18px; color: #10b981; background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
+    .logo:hover { color: #059669; }
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
+    nav button:hover { color: #10b981; }
+    nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
+    .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }
+    .cta:hover { background: #059669; }
+    .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
+    .hero h1 { font-size: 42px; line-height: 1.2; margin-bottom: 1rem; color: #1a202c; }
+    .hero .subtitle { font-size: 16px; color: #4a5568; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+    main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; min-height: 80vh; }
+    .tab-content { display: none !important; }
+    .tab-content.active { display: block !important; }
+    h2 { font-size: 28px; margin-bottom: 1rem; color: #1a202c; }
+    h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; color: #1a202c; }
+    .section-intro { color: #4a5568; margin-bottom: 2rem; font-size: 14px; }
+    .calculator { background: white; border-radius: 8px; padding: 2rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-weight: 500; font-size: 13px; color: #2d3748; margin-bottom: 0.5rem; }
+    .form-group input, .form-group select, .form-group textarea { padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; font-family: inherit; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+    .output-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .output-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .output-label { color: #718096; font-size: 12px; margin-bottom: 0.5rem; }
+    .output-value { font-size: 24px; font-weight: 600; color: #10b981; }
+    .output-unit { color: #718096; font-size: 12px; margin-top: 0.25rem; }
+    
+    /* Scope Builder Styles */
+    .scope-room { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }
+    .scope-room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer; }
+    .scope-room-title { font-weight: 600; font-size: 15px; color: #1a202c; }
+    .scope-room-toggle { font-size: 18px; color: #718096; }
+    .scope-room-content { display: none; }
+    .scope-room-content.expanded { display: block; }
+    .scope-tasks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .scope-task { display: flex; align-items: center; gap: 0.5rem; }
+    .scope-task input { width: 18px; height: 18px; cursor: pointer; }
+    .scope-task label { font-size: 13px; color: #4a5568; cursor: pointer; }
+    .scope-frequency { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 13px; color: #718096; }
+    
+    /* Margin Guardian Styles */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 3rem; }
+    .stat-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; }
+    .stat-label { color: #718096; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .stat-value { font-size: 28px; font-weight: 600; color: #1a202c; }
+    .stat-change { font-size: 12px; margin-top: 0.5rem; color: #718096; }
+    
+    .contract-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+    .contract-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; }
+    .contract-name { font-weight: 600; font-size: 18px; color: #1a202c; }
+    .contract-freq { color: #718096; font-size: 12px; margin-top: 0.25rem; }
+    .status-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .status-healthy { background: #dcfce7; color: #166534; }
+    .status-watch { background: #fef3c7; color: #92400e; }
+    .status-risk { background: #fee2e2; color: #991b1b; }
+    
+    .margin-metric { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .metric-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .metric-label { font-size: 12px; color: #718096; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .metric-value { font-size: 22px; font-weight: 600; color: #1a202c; }
+    .metric-variance { font-size: 13px; margin-top: 0.5rem; }
+    .variance-positive { color: #10b981; }
+    .variance-negative { color: #ef4444; }
+    
+    .alert-section { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; }
+    .alert-title { font-weight: 600; color: #92400e; margin-bottom: 0.25rem; font-size: 13px; }
+    .alert-text { color: #78350f; font-size: 12px; line-height: 1.5; }
+    .danger-alert { background: #fee2e2; border-color: #fecaca; }
+    .danger-alert .alert-title { color: #7f1d1d; }
+    .danger-alert .alert-text { color: #7f1d1d; }
+    
+    .action-button { background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 500; font-size: 14px; cursor: pointer; margin-top: 1rem; }
+    .action-button:hover { background: #059669; }
+    
+    /* Proposal Preview */
+    .proposal-preview { background: white; padding: 2.5rem; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 900px; margin: 0 auto; }
+    .proposal-header { text-align: center; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 2px solid #10b981; }
+    .proposal-title { font-size: 28px; font-weight: 700; color: #10b981; margin-bottom: 1rem; letter-spacing: 1px; }
+    .proposal-client { font-size: 18px; font-weight: 600; color: #1a202c; margin-bottom: 0.5rem; }
+    .proposal-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 2rem; padding: 1.5rem; background: #f7fafc; border-radius: 6px; }
+    .proposal-detail { text-align: center; }
+    .proposal-detail-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .proposal-detail-value { font-size: 18px; font-weight: 600; color: #1a202c; }
+    .proposal-section { margin-bottom: 2rem; }
+    .proposal-section-title { font-size: 14px; font-weight: 700; color: #1a202c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
+    .proposal-scope-item { margin-bottom: 1.5rem; }
+    .proposal-scope-room { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 0.5rem; }
+    .proposal-scope-tasks { font-size: 13px; color: #4a5568; margin-left: 1rem; line-height: 1.6; }
+    .proposal-price { text-align: center; padding: 2rem; background: #f7fafc; border-radius: 6px; margin-bottom: 2rem; }
+    .proposal-price-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .proposal-price-value { font-size: 38px; font-weight: 700; color: #10b981; }
+    .proposal-terms { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; font-size: 13px; line-height: 1.6; }
+    .proposal-terms-section { }
+    .proposal-terms-title { font-weight: 600; color: #1a202c; margin-bottom: 0.75rem; }
+    .proposal-terms-list { color: #4a5568; }
+    .proposal-signature { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e2e8f0; }
+    .proposal-signature-block { }
+    .proposal-signature-label { font-weight: 600; font-size: 12px; color: #1a202c; margin-bottom: 2.5rem; }
+    .proposal-signature-line { border-top: 2px solid #1a202c; width: 100%; margin-bottom: 0.5rem; }
+    .proposal-signature-date { font-size: 11px; color: #718096; }
+    
+    .empty-state { text-align: center; padding: 3rem 2rem; color: #718096; font-size: 14px; background: #f7fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+    
+    footer { background: white; border-top: 1px solid #e2e8f0; padding: 2rem; text-align: center; margin-top: 3rem; color: #718096; font-size: 13px; }
+    footer a { color: #10b981; text-decoration: none; font-weight: 500; }
+    footer a:hover { color: #059669; text-decoration: underline; }
+    
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .margin-metric { grid-template-columns: 1fr; }
+      .proposal-details { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 768px) {
+      header { flex-direction: column; gap: 1rem; text-align: center; }
+      nav { flex-direction: column; gap: 0.5rem; }
+      .hero h1 { font-size: 28px; }
+      main { padding: 1.5rem; }
+      .calc-row { grid-template-columns: 1fr; }
+      .output-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="logo" onclick="switchTab('home')">✓ ConeQuotes</button>
+  <nav>
+    <button class="tab-btn" onclick="switchTab('calculator')">Calculator</button>
+    <button class="tab-btn" onclick="switchTab('proposal')">Proposal Builder</button>
+    <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
+    <a href="#" class="cta">Join pilot</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>The operating system for profitable cleaning contracts.</h1>
+  <p class="subtitle">Bid with confidence. Prove every shift. Catch scope creep before it kills your margin.</p>
+</section>
+
+<main>
+
+<!-- HOME/ABOUT TAB -->
+<div id="home" class="tab-content active">
+  <h2>Why we built this</h2>
+
+  <div style="max-width: 800px; margin: 2rem 0;">
+    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
+      You bid a job at 25% margin. Six months in, your labor is 30% over plan. Turns out the client kept adding "just one more thing" — extra restrooms, breakroom attention, bigger trash volumes. No documentation. No change order. By the time you renew, your margin is 8%. You're stuck. Can't renegotiate without losing the contract. Can't drop the price without losing money.
+    </p>
+
+    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
+      That's the real problem. Not getting the bid wrong. <strong>Not knowing you got it wrong until way too late.</strong>
+    </p>
+  </div>
+
+  <h3 style="font-size: 18px; margin: 3rem 0 1rem 0;">The workflow is simple</h3>
+
+  <div style="max-width: 800px;">
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">1. Quote profitably</h4>
+      <p style="color: #4a5568; font-size: 14px;">Use the calculator to see what price protects your margin before you quote.</p>
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">2. Document the scope</h4>
+      <p style="color: #4a5568; font-size: 14px;">Generate a professional proposal the client signs. When they ask for extras later, you have proof of what was included.</p>
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">3. Protect the margin</h4>
+      <p style="color: #4a5568; font-size: 14px;">Track actual hours as your crews work. See labor drift in real time. Catch scope creep before it kills profit.</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+    <p style="color: #4a5568; font-size: 14px; line-height: 1.8;">
+      <strong>Simple tools for contractors who want to protect every contract's profit.</strong>
+    </p>
+  </div>
+
+  <div style="margin-top: 2rem; text-align: center;">
+    <button class="cta" onclick="switchTab('calculator')" style="margin: 0 auto; display: inline-block;">Start → Calculator</button>
+  </div>
+</div>
+
+<!-- CALCULATOR TAB -->
+<div id="calculator" class="tab-content">
+  <h2>Build a profitable bid</h2>
+  <p class="section-intro">Adjust facility details to see how revenue and profit change instantly.</p>
+
+  <div class="calculator">
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Facility Type</label>
+        <select id="facilityType" onchange="updateCalc()">
+          <option value="office">Office</option>
+          <option value="retail">Retail</option>
+          <option value="warehouse">Warehouse</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Square Footage</label>
+        <input type="number" id="sqft" value="25000" onchange="updateCalc()">
+      </div>
+    </div>
+
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Service Frequency</label>
+        <select id="frequency" onchange="updateCalc()">
+          <option value="daily">Daily (5x/week)</option>
+          <option value="3x">3x per week</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Labor Rate per Hour</label>
+        <input type="number" id="laborRate" value="24" onchange="updateCalc()">
+      </div>
+    </div>
+
+    <div class="output-row">
+      <div class="output-box">
+        <div class="output-label">Suggested Price</div>
+        <div class="output-value" id="quotePriceOutput">$325</div>
+        <div class="output-unit">per visit</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Monthly Revenue</div>
+        <div class="output-value" id="monthlyOutput">$1,408</div>
+        <div class="output-unit">4 weeks</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Planned Hours</div>
+        <div class="output-value" id="plannedHoursOutput">96</div>
+        <div class="output-unit">per month</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Your Margin</div>
+        <div class="output-value" style="color: #10b981; font-size: 20px;">25%</div>
+        <div class="output-unit">protected</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROPOSAL BUILDER TAB -->
+<div id="proposal" class="tab-content">
+  <h2>Create Professional Proposal</h2>
+  <p class="section-intro">Build a proposal your clients will take seriously.</p>
+
+  <div class="calculator">
+    <h3 style="margin-bottom: 1.5rem;">Step 1: Client & Facility Information</h3>
+    
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" id="propClientName" placeholder="ABC Office Building">
+      </div>
+      <div class="form-group">
+        <label>Client Email</label>
+        <input type="email" id="propClientEmail" placeholder="contact@abcoffice.com">
+      </div>
+    </div>
+
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Square Footage</label>
+        <input type="number" id="propSqft" value="25000">
+      </div>
+      <div class="form-group">
+        <label>Facility Type</label>
+        <select id="propFacilityType">
+          <option value="office">Office</option>
+          <option value="retail">Retail</option>
+          <option value="warehouse">Warehouse</option>
+          <option value="medical">Medical/Healthcare</option>
+          <option value="hospitality">Hospitality/Hotel</option>
+          <option value="industrial">Industrial</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 2: Scope of Work</h3>
+    <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Click each room to expand and select tasks.</p>
+    
+    <div id="scopeBuilder"></div>
+    
+    <button class="action-button" onclick="addScopeRoom()" style="width: 100%; margin-top: 1rem;">+ Add Another Room</button>
+  </div>
+
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 3: Service Frequency & Pricing</h3>
+    
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Service Frequency</label>
+        <select id="propFrequency">
+          <option value="daily">Daily (5x/week)</option>
+          <option value="3x">3x per week</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="biweekly">Bi-weekly</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Labor Rate per Hour</label>
+        <input type="number" id="propLaborRate" value="24">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Monthly Investment (What you'll charge the client)</label>
+      <input type="number" id="propPrice" value="1300" placeholder="e.g., 1300">
+    </div>
+  </div>
+
+  <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Step 4: Terms & Conditions</h3>
+    
+    <div class="form-group">
+      <label>What's Included</label>
+      <textarea id="propInclusions" placeholder="- Regular cleaning as per scope&#10;- All supplies provided&#10;- Professional staff&#10;- 48-hour cancellation notice" style="min-height: 100px;"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>What's Excluded</label>
+      <textarea id="propExclusions" placeholder="- Carpet shampooing&#10;- Deep exterior cleaning&#10;- Repairs or maintenance&#10;- Hazardous material removal" style="min-height: 100px;"></textarea>
+    </div>
+  </div>
+
+  <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+    <h3 style="margin-bottom: 1.5rem;">Proposal Preview</h3>
+    <div id="proposalPreview"></div>
+  </div>
+
+  <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+    <button class="action-button" onclick="generateProposal()" style="flex: 1;">Preview Proposal</button>
+    <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">✓ Send to Client & Create Contract</button>
+  </div>
+</div>
+
+<!-- MARGIN GUARDIAN TAB -->
+<div id="margin" class="tab-content">
+  <h2>Margin Guardian Dashboard</h2>
+  <p class="section-intro">Track labor. Catch scope creep. Protect profit.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Active Contracts</div>
+      <div class="stat-value" id="statActiveContracts">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Healthy</div>
+      <div class="stat-value" id="statHealthy">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Watch List</div>
+      <div class="stat-value" id="statWatch">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">At Risk</div>
+      <div class="stat-value" id="statRisk">0</div>
+    </div>
+  </div>
+
+  <div id="contractsContainer"></div>
+</div>
+
+</main>
+
+<footer>
+  <p>Questions? Reach out: <a href="mailto:conequotes.service@outlook.com">conequotes.service@outlook.com</a></p>
+  <p style="margin-top: 0.5rem; font-size: 12px;">ConeQuotes — The operating system for profitable cleaning contracts</p>
+</footer>
+
+<script>
+// Storage
+function getContracts() {
+  const stored = localStorage.getItem('coneQuotesContracts');
+  return stored ? JSON.parse(stored) : [];
 }
+
+function saveContracts(contracts) {
+  localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
+}
+
+// Tabs
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  if (tabName === 'margin') renderMarginGuardian();
+}
+
+// Calculator
+function updateCalc() {
+  const sqft = parseInt(document.getElementById('sqft').value) || 25000;
+  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
+  const pricePerSqFt = 0.013;
+  const quotePrice = Math.round(sqft * pricePerSqFt);
+  
+  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
+  const freq = freqMap[document.getElementById('frequency').value] || 1;
+  
+  const hoursPerVisit = sqft / 5000;
+  const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
+  const monthly = Math.round(quotePrice * freq * 4.33);
+  
+  document.getElementById('quotePriceOutput').textContent = '$' + quotePrice;
+  document.getElementById('monthlyOutput').textContent = '$' + monthly.toLocaleString();
+  document.getElementById('plannedHoursOutput').textContent = plannedHours;
+}
+
+// Scope Builder
+const DEFAULT_ROOMS = {
+  'Restrooms': ['Toilets', 'Sinks', 'Mirrors', 'Floors', 'Garbage', 'Restocking'],
+  'Offices': ['Vacuuming', 'Dusting', 'Garbage', 'Desk surfaces'],
+  'Break Room': ['Refrigerator', 'Microwave', 'Tables', 'Floors', 'Garbage'],
+  'Hallways': ['Vacuuming', 'Mopping', 'Dust surfaces', 'Garbage'],
+};
+
+let scopeItems = {};
+
+function initializeScopes() {
+  scopeItems = {};
+  for (const [room, tasks] of Object.entries(DEFAULT_ROOMS)) {
+    scopeItems[room] = { expanded: false, tasks: {} };
+    tasks.forEach(task => {
+      scopeItems[room].tasks[task] = true;
+    });
+  }
+  renderScopeBuilder();
+}
+
+function renderScopeBuilder() {
+  const container = document.getElementById('scopeBuilder');
+  container.innerHTML = Object.entries(scopeItems).map(([room, data]) => {
+    const tasksHtml = Object.entries(data.tasks).map(([task, checked]) => `
+      <div class="scope-task">
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="updateScopeTask('${room}', '${task}', this.checked)">
+        <label>${task}</label>
+      </div>
+    `).join('');
+
+    return `
+      <div class="scope-room">
+        <div class="scope-room-header" onclick="toggleScopeRoom('${room}')">
+          <span class="scope-room-title">${room}</span>
+          <span class="scope-room-toggle">${data.expanded ? '▼' : '▶'}</span>
+        </div>
+        <div class="scope-room-content ${data.expanded ? 'expanded' : ''}">
+          <div class="scope-tasks">${tasksHtml}</div>
+          <div class="scope-frequency">Frequency: <select onchange="updateScopeFrequency('${room}', this.value)">
+            <option value="daily">Daily (5x/week)</option>
+            <option value="3x">3x per week</option>
+            <option value="weekly" selected>Weekly</option>
+            <option value="biweekly">Bi-weekly</option>
+          </select></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleScopeRoom(room) {
+  scopeItems[room].expanded = !scopeItems[room].expanded;
+  renderScopeBuilder();
+}
+
+function updateScopeTask(room, task, checked) {
+  scopeItems[room].tasks[task] = checked;
+}
+
+function updateScopeFrequency(room, freq) {
+  scopeItems[room].frequency = freq;
+}
+
+function addScopeRoom() {
+  const newRoom = prompt('Room name (e.g., "Storage", "Loading Area"):');
+  if (newRoom) {
+    scopeItems[newRoom] = { expanded: true, tasks: { 'Cleaning': true }, frequency: 'weekly' };
+    renderScopeBuilder();
+  }
+}
+
+// Proposal Generation
+function generateProposal() {
+  const clientName = document.getElementById('propClientName').value.trim();
+  if (!clientName) {
+    alert('Please enter client name');
+    return;
+  }
+
+  const sqft = document.getElementById('propSqft').value;
+  const freq = document.getElementById('propFrequency').value;
+  const price = document.getElementById('propPrice').value || 1300;
+  const inclusions = document.getElementById('propInclusions').value;
+  const exclusions = document.getElementById('propExclusions').value;
+
+  const freqDisplay = { 'daily': 'Daily (5x/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];
+
+  const scopeHtml = Object.entries(scopeItems).map(([room, data]) => {
+    const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
+    if (tasks.length === 0) return '';
+    return `
+      <div class="proposal-scope-item">
+        <div class="proposal-scope-room">${room}</div>
+        <div class="proposal-scope-tasks">
+          ${tasks.map(task => `• ${task}`).join('<br>')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const proposal = `
+    <div class="proposal-preview">
+      <div class="proposal-header">
+        <div class="proposal-title">CLEANING SERVICES PROPOSAL</div>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="proposal-client">${clientName}</div>
+      </div>
+
+      <div class="proposal-details">
+        <div class="proposal-detail">
+          <div class="proposal-detail-label">Facility Size</div>
+          <div class="proposal-detail-value">${sqft} sq ft</div>
+        </div>
+        <div class="proposal-detail">
+          <div class="proposal-detail-label">Service Frequency</div>
+          <div class="proposal-detail-value">${freqDisplay}</div>
+        </div>
+        <div class="proposal-detail">
+          <div class="proposal-detail-label">Monthly Investment</div>
+          <div class="proposal-detail-value">$${price}</div>
+        </div>
+        <div class="proposal-detail">
+          <div class="proposal-detail-label">Email</div>
+          <div class="proposal-detail-value" style="font-size: 12px;">${document.getElementById('propClientEmail').value || 'TBD'}</div>
+        </div>
+      </div>
+
+      <div class="proposal-section">
+        <div class="proposal-section-title">Scope of Work</div>
+        ${scopeHtml || '<p style="color: #718096;">No tasks selected</p>'}
+      </div>
+
+      <div class="proposal-section">
+        <div class="proposal-section-title">Included</div>
+        <div style="color: #4a5568; font-size: 13px; white-space: pre-wrap;">${inclusions || '- Regular cleaning as specified\n- All supplies provided\n- Professional staff'}</div>
+      </div>
+
+      <div class="proposal-section">
+        <div class="proposal-section-title">Excluded</div>
+        <div style="color: #4a5568; font-size: 13px; white-space: pre-wrap;">${exclusions || '- Carpet shampooing\n- Deep exterior cleaning\n- Repairs or maintenance'}</div>
+      </div>
+
+      <div class="proposal-price">
+        <div class="proposal-price-label">Monthly Investment</div>
+        <div class="proposal-price-value">$${price}</div>
+        <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes all supplies</div>
+      </div>
+
+      <div class="proposal-section">
+        <div class="proposal-section-title">Terms</div>
+        <div style="color: #4a5568; font-size: 13px; line-height: 1.6;">
+          This proposal is valid for 30 days. Service begins upon signed agreement. Changes to scope require written amendments. 48-hour notice required for cancellations.
+        </div>
+      </div>
+
+      <div class="proposal-signature">
+        <div class="proposal-signature-block">
+          <div class="proposal-signature-label">Client Signature</div>
+          <div class="proposal-signature-line"></div>
+          <div class="proposal-signature-date">Date: _______________</div>
+        </div>
+        <div class="proposal-signature-block">
+          <div class="proposal-signature-label">Your Company</div>
+          <div style="font-size: 13px; color: #718096;">Authorized by<br><a href="mailto:conequotes.service@outlook.com" style="color: #10b981; text-decoration: none;">conequotes.service@outlook.com</a></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('proposalPreview').innerHTML = proposal;
+}
+
+function sendProposal() {
+  const clientName = document.getElementById('propClientName').value.trim();
+  const clientEmail = document.getElementById('propClientEmail').value.trim();
+  
+  if (!clientName) {
+    alert('Please enter client name');
+    return;
+  }
+
+  const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
+  const freq = document.getElementById('propFrequency').value;
+  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 24;
+  const price = parseInt(document.getElementById('propPrice').value) || 1300;
+
+  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
+  const freqVal = freqMap[freq] || 1;
+  const hoursPerVisit = sqft / 5000;
+  const plannedHours = Math.round(hoursPerVisit * freqVal * 4.33);
+
+  const contract = {
+    id: Date.now(),
+    clientName,
+    clientEmail,
+    sqft,
+    frequency: freq,
+    quotePrice: price,
+    laborRate,
+    plannedHours,
+    actualHours: 0,
+    weeklylogs: [],
+    expenses: [],
+    proposalScope: scopeItems,
+    proposalInclusions: document.getElementById('propInclusions').value,
+    proposalExclusions: document.getElementById('propExclusions').value,
+    proposalSentAt: new Date().toISOString(),
+    status: 'Proposal Sent'
+  };
+
+  const contracts = getContracts();
+  contracts.push(contract);
+  saveContracts(contracts);
+
+  // Send email if client email provided
+  if (clientEmail) {
+    const scopeText = Object.entries(scopeItems).map(([room, data]) => {
+      const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
+      return tasks.length > 0 ? room + ': ' + tasks.join(', ') : '';
+    }).filter(Boolean).join('\n');
+
+    const emailData = {
+      email: clientEmail,
+      subject: 'Cleaning Services Proposal - ' + clientName,
+      message: `Hello ${clientName},\n\nPlease find attached your cleaning services proposal.\n\nFacility: ${sqft} sq ft\nFrequency: ${freq}\nMonthly Investment: $${price}\n\nScope:\n${scopeText}\n\nBest regards,\nConeQuotes`
+    };
+
+    // Send via Formspree
+    fetch('https://formspree.io/f/xdenlden', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(emailData)
+    }).catch(err => console.log('Email delivery note: Check your email client'));
+  }
+
+  alert('✓ Proposal saved for ' + clientName + '! Track in Margin Guardian.\n\nClient email note: Send proposal link or print from browser.');
+  
+  // Keep form data for now (don't reset)
+}
+
+// Margin Guardian
+function renderMarginGuardian() {
+  const contracts = getContracts();
+  const container = document.getElementById('contractsContainer');
+
+  if (contracts.length === 0) {
+    container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>';
+    updateStats(contracts);
+    return;
+  }
+
+  container.innerHTML = contracts.map(contract => {
+    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0);
+    const efficiency = (actualHours / contract.plannedHours) * 100;
+    
+    const laborCost = actualHours * contract.laborRate;
+    const miscExpenses = contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
+    const totalCost = laborCost + miscExpenses;
+    const grossProfit = contract.quotePrice - totalCost;
+    const currentMargin = ((grossProfit / contract.quotePrice) * 100).toFixed(1);
+    const laborShift = laborCost - (contract.plannedHours * contract.laborRate);
+    const laborShiftPercent = ((laborShift / (contract.plannedHours * contract.laborRate)) * 100).toFixed(1);
+
+    let status = 'Healthy';
+    let statusClass = 'status-healthy';
+    let alert = '';
+
+    if (efficiency > 120) {
+      status = 'At Risk';
+      statusClass = 'status-risk';
+      alert = `
+        <div class="alert-section danger-alert">
+          <div class="alert-title">🔴 Margin deterioration detected</div>
+          <div class="alert-text">Labor has exceeded baseline by ${Math.round(efficiency - 100)}%. Review ${Object.keys(contract.proposalScope).join(', ')} scope. <strong>Action:</strong> Submit change order or adjust scope agreement.</div>
+        </div>
+      `;
+    } else if (efficiency > 110) {
+      status = 'Watch';
+      statusClass = 'status-watch';
+      alert = `
+        <div class="alert-section">
+          <div class="alert-title">⚠️ Labor trending up</div>
+          <div class="alert-text">Labor is at ${Math.round(efficiency)}% of plan. Monitor closely for next 2 weeks.</div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="contract-card">
+        <div class="contract-header">
+          <div>
+            <div class="contract-name">${contract.clientName}</div>
+            <div class="contract-freq">${contract.frequency.charAt(0).toUpperCase() + contract.frequency.slice(1)} • ${contract.sqft} sq ft</div>
+          </div>
+          <span class="status-badge ${statusClass}">
+            ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : '🔴'} ${status}
+          </span>
+        </div>
+
+        <div class="margin-metric">
+          <div class="metric-box">
+            <div class="metric-label">Contract Revenue</div>
+            <div class="metric-value">$${contract.quotePrice}</div>
+            <div class="metric-variance">per month</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Expected Labour</div>
+            <div class="metric-value">${contract.plannedHours}h</div>
+            <div class="metric-variance">${contract.laborRate}/hr</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Actual Labour</div>
+            <div class="metric-value">${actualHours}h</div>
+            <div class="metric-variance ${laborShiftPercent > 0 ? 'variance-negative' : 'variance-positive'}">${laborShiftPercent > 0 ? '+' : ''}${laborShiftPercent}%</div>
+          </div>
+        </div>
+
+        <div class="margin-metric">
+          <div class="metric-box">
+            <div class="metric-label">Expected Margin</div>
+            <div class="metric-value">25.0%</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Current Margin</div>
+            <div class="metric-value ${currentMargin >= 25 ? '' : 'variance-negative'}">${currentMargin}%</div>
+            ${currentMargin >= 25 ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>'}
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Profit / Month</div>
+            <div class="metric-value ${grossProfit >= 0 ? '' : 'variance-negative'}>$${Math.round(grossProfit)}</div>
+          </div>
+        </div>
+
+        ${alert}
+
+        <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Log Hours This Week</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+              <input type="number" id="hours-${contract.id}" placeholder="Hours" min="0" step="0.5" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;">
+              <button class="action-button" onclick="logHours(${contract.id})">Log Hours</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Add Expense</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
+              <select id="expType-${contract.id}" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;">
+                <option value="Supplies">Supplies</option>
+                <option value="Equipment">Equipment</option>
+                <option value="Travel">Travel</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="number" id="expAmount-${contract.id}" placeholder="$0.00" min="0" step="0.01" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;">
+              <button class="action-button" onclick="addExpense(${contract.id})">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  updateStats(contracts);
+}
+
+function logHours(contractId) {
+  const hoursInput = document.getElementById('hours-' + contractId);
+  const hours = parseFloat(hoursInput.value);
+  
+  if (!hours || hours <= 0) {
+    alert('Please enter valid hours');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  
+  if (contract) {
+    contract.weeklylogs.push({ hours, date: new Date().toISOString() });
+    contract.actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);
+    saveContracts(contracts);
+    hoursInput.value = '';
+    renderMarginGuardian();
+  }
+}
+
+function addExpense(contractId) {
+  const expType = document.getElementById('expType-' + contractId).value;
+  const expAmount = document.getElementById('expAmount-' + contractId).value;
+
+  if (!expAmount || parseFloat(expAmount) <= 0) {
+    alert('Please enter a valid amount');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+
+  if (contract) {
+    contract.expenses.push({
+      type: expType,
+      amount: parseFloat(expAmount),
+      date: new Date().toISOString()
+    });
+    saveContracts(contracts);
+    document.getElementById('expAmount-' + contractId).value = '';
+    renderMarginGuardian();
+  }
+}
+
+function updateStats(contracts) {
+  let healthy = 0, watch = 0, risk = 0;
+
+  contracts.forEach(contract => {
+    const actualHours = contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0);
+    const efficiency = (actualHours / contract.plannedHours) * 100;
+    
+    if (efficiency > 120) risk++;
+    else if (efficiency > 110) watch++;
+    else healthy++;
+  });
+
+  document.getElementById('statActiveContracts').textContent = contracts.length;
+  document.getElementById('statHealthy').textContent = healthy;
+  document.getElementById('statWatch').textContent = watch;
+  document.getElementById('statRisk').textContent = risk;
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  initializeScopes();
+  updateCalc();
+});
+</script>
+
+</body>
+</html>
