@@ -122,11 +122,33 @@
     footer a { color: #10b981; text-decoration: none; font-weight: 500; }
     footer a:hover { color: #059669; text-decoration: underline; }
     
+    .benefit-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; }
+    .benefit-card h3 { font-size: 18px; margin-bottom: 1rem; }
+    .benefit-card p { color: #4a5568; font-size: 15px; line-height: 1.7; }
+    
+    .workflow-step { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem; }
+    .workflow-step-number { display: inline-block; background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 700; margin-bottom: 1rem; font-size: 14px; }
+    .workflow-step h3 { font-size: 18px; margin-bottom: 0.5rem; }
+    .workflow-step p { color: #4a5568; font-size: 14px; line-height: 1.6; }
+    
+    .value-example { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; }
+    .value-example h3 { font-size: 16px; margin-bottom: 1.5rem; }
+    .example-section { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .example-box { background: white; padding: 1.5rem; border-radius: 6px; }
+    .example-box h4 { font-size: 14px; font-weight: 700; color: #1a202c; margin-bottom: 0.75rem; }
+    .example-box p { font-size: 13px; color: #4a5568; line-height: 1.6; }
+    .example-number { font-size: 12px; color: #718096; margin-bottom: 0.5rem; }
+    
+    .tagline-box { background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 2px solid #10b981; border-radius: 8px; padding: 2.5rem; text-align: center; margin: 3rem 0; }
+    .tagline-box h2 { font-size: 24px; margin-bottom: 1rem; }
+    .tagline-box p { color: #4a5568; font-size: 15px; line-height: 1.7; margin-bottom: 2rem; }
+    
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .margin-metric { grid-template-columns: 1fr; }
       .proposal-details { grid-template-columns: repeat(2, 1fr); }
       .assumptions-grid { grid-template-columns: 1fr; }
+      .example-section { grid-template-columns: 1fr; }
     }
     
     @media (max-width: 768px) {
@@ -149,50 +171,136 @@
     <button class="tab-btn" onclick="switchTab('calculator')">Calculator</button>
     <button class="tab-btn" onclick="switchTab('proposal')">Proposal Builder</button>
     <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
-    <a href="#" class="cta">Join pilot</a>
   </nav>
 </header>
 
 <section class="hero">
   <h1>The operating system for profitable cleaning contracts.</h1>
-  <p class="subtitle">Bid with confidence. Prove every shift. Catch scope creep before it kills your margin.</p>
+  <p class="subtitle">Quote faster. Protect your margins. Make more money on every job.</p>
 </section>
 
 <main>
 
 <!-- HOME TAB -->
 <div id="home" class="tab-content active">
-  <h2>Why we built this</h2>
-  <div style="max-width: 800px; margin: 2rem 0;">
-    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      You bid a job at 25% margin. Six months in, your labor is 30% over plan. Turns out the client kept adding "just one more thing" — extra restrooms, breakroom attention, bigger trash volumes. No documentation. No change order. By the time you renew, your margin is 8%. You're stuck.
-    </p>
-    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 1.5rem;">
-      That's the real problem. <strong>Not knowing you got it wrong until way too late.</strong>
-    </p>
-  </div>
-  <h3 style="font-size: 18px; margin: 3rem 0 1rem 0;">The workflow is simple</h3>
-  <div style="max-width: 800px;">
-    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">1. Quote profitably</h4>
-      <p style="color: #4a5568; font-size: 14px;">Use the calculator to see what price protects your margin before you quote.</p>
+  <div style="max-width: 900px; margin: 0 auto;">
+    <div style="padding: 2rem; background: #f7fafc; border-radius: 8px; margin-bottom: 3rem; text-align: center;">
+      <p style="font-size: 16px; color: #4a5568; line-height: 1.8; margin-bottom: 1.5rem;">
+        ConeQuotes helps growing cleaning contractors calculate profitable prices, build professional proposals, document exactly what was sold, and protect their margins from the moment they bid to the moment the job is completed.
+      </p>
+      <p style="font-size: 14px; color: #10b981; font-weight: 600;">No credit card required.</p>
     </div>
-    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">2. Document the scope</h4>
-      <p style="color: #4a5568; font-size: 14px;">Generate a professional proposal the client signs. When they ask for extras later, you have proof of what was included.</p>
+
+    <h2 style="margin-top: 3rem; margin-bottom: 1.5rem;">THE PROBLEM</h2>
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 3rem;">
+      <h3 style="font-size: 18px; margin-bottom: 1rem;">Winning the job doesn't mean making money.</h3>
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
+        A job can look profitable when you bid it and become unprofitable once the work begins.
+      </p>
+      <ul style="color: #4a5568; font-size: 14px; line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li>Labour runs over.</li>
+        <li>Scope expands.</li>
+        <li>Extra work gets done for free.</li>
+        <li>Small cost increases eat away at your margin.</li>
+      </ul>
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8;">
+        <strong>ConeQuotes helps you see and control the numbers before they become a problem.</strong>
+      </p>
     </div>
-    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <h4 style="color: #1a202c; margin-bottom: 0.5rem;">3. Protect the margin</h4>
-      <p style="color: #4a5568; font-size: 14px;">Track actual hours as your crews work. See labor drift in real time. Catch scope creep before it kills profit.</p>
+
+    <h2 style="margin-bottom: 1.5rem;">THREE CORE BENEFITS</h2>
+    <div class="benefit-card">
+      <div style="display: flex; gap: 1rem; align-items: start;">
+        <div style="font-size: 32px;">💰</div>
+        <div>
+          <h3>Protect Your Margins</h3>
+          <p>Know the minimum price you need to charge to hit your target profit before you submit a bid.</p>
+        </div>
+      </div>
     </div>
-  </div>
-  <div style="margin-top: 3rem; padding: 2rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-    <p style="color: #4a5568; font-size: 14px; line-height: 1.8;">
-      <strong>Simple tools for contractors who want to protect every contract's profit.</strong>
-    </p>
-  </div>
-  <div style="margin-top: 2rem; text-align: center;">
-    <button class="cta" onclick="switchTab('calculator')" style="margin: 0 auto; display: inline-block;">Start → Calculator</button>
+    <div class="benefit-card">
+      <div style="display: flex; gap: 1rem; align-items: start;">
+        <div style="font-size: 32px;">⏱️</div>
+        <div>
+          <h3>Save Time</h3>
+          <p>Calculate quotes and create professional client proposals without rebuilding everything from scratch.</p>
+        </div>
+      </div>
+    </div>
+    <div class="benefit-card">
+      <div style="display: flex; gap: 1rem; align-items: start;">
+        <div style="font-size: 32px;">📋</div>
+        <div>
+          <h3>Control Your Scope</h3>
+          <p>Clearly document what is included and excluded in every job so additional work doesn't quietly eat into your profit.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 3rem; margin-bottom: 1.5rem;">THE CONEQUOTES WORKFLOW</h2>
+    <p style="color: #718096; font-size: 14px; margin-bottom: 2rem;">From quote to profit protection.</p>
+    
+    <div class="workflow-step">
+      <div class="workflow-step-number">01 — Calculate</div>
+      <h3>Enter your facility details, costs, labour rate and target margin.</h3>
+      <p>Know what you need to charge before you bid.</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-step-number">02 — Build Your Proposal</div>
+      <h3>Create a professional proposal with detailed scope, inclusions, exclusions, pricing and terms.</h3>
+      <p>Know exactly what you're selling.</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-step-number">03 — Create Your Contract</div>
+      <h3>Turn the accepted proposal into a trackable contract with the original pricing and scope preserved.</h3>
+      <p>Create a clear baseline for the job.</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-step-number">04 — Protect Your Margin</div>
+      <h3>Track actual performance against what you originally planned.</h3>
+      <p>Know when labour, scope or costs are putting your profit at risk.</p>
+    </div>
+
+    <h2 style="margin-top: 3rem; margin-bottom: 1.5rem;">THE VALUE EXAMPLE</h2>
+    <div class="value-example">
+      <h3>A profitable job can become an unprofitable job without you noticing.</h3>
+      <div class="example-section">
+        <div class="example-box" style="border: 1px solid #fee2e2; background: #fff5f5;">
+          <h4>Without ConeQuotes</h4>
+          <div class="example-number">Quoted revenue: $8,500/month</div>
+          <div class="example-number">Planned labour: 320 hours</div>
+          <div class="example-number" style="color: #ef4444;">Actual labour: 370 hours</div>
+          <p style="color: #7f1d1d; font-weight: 600;">50 extra labour hours can quietly destroy your expected margin.</p>
+        </div>
+        <div class="example-box" style="border: 1px solid #dcfce7; background: #f0fdf4;">
+          <h4>With ConeQuotes</h4>
+          <div class="example-number">✓ Target margin: 25%</div>
+          <div class="example-number">✓ Scope: Documented</div>
+          <div class="example-number">✓ Labour: Tracked</div>
+          <div class="example-number" style="color: #166534;">✓ Margin: Monitored</div>
+          <p style="color: #166534; font-weight: 600;">Know when your job starts drifting away from the numbers you bid.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom: 1.5rem;">BUILT FOR GROWING CONTRACTORS</h2>
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 3rem;">
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
+        Built for contractors who are ready to grow without giving away their margins.
+      </p>
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8;">
+        Whether you're quoting your 10th job or managing 100 contracts, ConeQuotes is built around one goal:
+      </p>
+      <p style="color: #1a202c; font-size: 16px; font-weight: 600; margin-top: 1rem;">
+        Save time. Protect margins. Make more money.
+      </p>
+    </div>
+
+    <div class="tagline-box">
+      <h2>Stop guessing what a job is worth.</h2>
+      <p>Know what to charge.<br>Know what you sold.<br>Know what you're making.</p>
+      <button class="cta" onclick="switchTab('calculator')" style="font-size: 16px; padding: 1rem 2rem;">Start free.</button>
+    </div>
   </div>
 </div>
 
