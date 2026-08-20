@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConeQuotes — The Operating System for Profitable Cleaning Contracts</title>
+  <title>ConeQuotes — Margin Protection for Cleaning Contractors</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #1a202c; line-height: 1.6; }
@@ -151,8 +151,8 @@
 </header>
 
 <section class="hero">
-  <h1>The operating system for profitable cleaning contracts.</h1>
-  <p class="subtitle">Quote faster. Protect your margins. Make more money on every job.</p>
+  <h1>Lock your scope. Protect your margins.</h1>
+  <p class="subtitle">Price profitable bids. Document what you sold. Track actual labor against plan.</p>
 </section>
 
 <main>
@@ -162,29 +162,35 @@
   <div style="max-width: 900px; margin: 0 auto;">
     <div style="padding: 2rem; background: #f7fafc; border-radius: 8px; margin-bottom: 3rem; text-align: center;">
       <p style="font-size: 16px; color: #4a5568; line-height: 1.8; margin-bottom: 1.5rem;">
-        ConeQuotes helps growing cleaning contractors calculate profitable prices, build professional proposals, document exactly what was sold, and protect their margins from the moment they bid to the moment the job is completed.
+        ConeQuotes helps cleaning contractors calculate accurate bids, lock in scope, and track actual labor performance. Catch margin erosion before it starts.
       </p>
       <p style="font-size: 14px; color: #10b981; font-weight: 600;">No credit card required.</p>
     </div>
 
     <h2 style="margin-top: 3rem; margin-bottom: 1.5rem;">THE PROBLEM</h2>
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 3rem;">
-      <h3 style="font-size: 18px; margin-bottom: 1rem;">Winning the job doesn't mean making money.</h3>
+      <h3 style="font-size: 18px; margin-bottom: 1rem;">You bid it. You do it. You lose money on it.</h3>
       <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
-        A job can look profitable when you bid it and become unprofitable once the work begins.
+        A job can look profitable when you quote it and become unprofitable by week 3.
       </p>
       <ul style="color: #4a5568; font-size: 14px; line-height: 1.8; margin-left: 1.5rem;">
-        <li>Labour runs over.</li>
-        <li>Scope expands.</li>
-        <li>Extra work gets done for free.</li>
-        <li>Small cost increases eat away at your margin.</li>
+        <li>Labour runs over your estimate.</li>
+        <li>Scope creeps without price adjustments.</li>
+        <li>Extra work gets absorbed for free.</li>
+        <li>Small cost overruns compound month-to-month.</li>
       </ul>
     </div>
 
-    <h2 style="margin-bottom: 1.5rem;">START HERE</h2>
+    <h2 style="margin-bottom: 1.5rem;">HOW IT WORKS</h2>
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 3rem;">
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
+        <strong>1. Calculate</strong> — Use the Calculator to build a realistic bid based on facility type, size, and frequency.
+      </p>
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
+        <strong>2. Propose</strong> — Build a professional scope document that becomes your contract baseline.
+      </p>
       <p style="color: #4a5568; font-size: 15px; line-height: 1.8;">
-        Use the <strong>Calculator</strong> to figure out what to charge. Then use <strong>Proposal Builder</strong> to create a professional scope document. Once the client accepts, your contract baseline is locked in. <strong>Margin Guardian</strong> tracks actual performance against what you bid.
+        <strong>3. Track</strong> — Log actual labor hours and expenses. <strong>Margin Guardian</strong> alerts you if you're running over plan.
       </p>
     </div>
   </div>
@@ -193,7 +199,7 @@
 <!-- CALCULATOR TAB -->
 <div id="calculator" class="tab-content">
   <h2>Build a profitable bid</h2>
-  <p class="section-intro">Adjust facility details to see how revenue and profit change instantly.</p>
+  <p class="section-intro">Market-accurate pricing by facility type. See revenue and labor hours instantly.</p>
   <div class="calculator">
     <div class="calc-row">
       <div class="form-group">
@@ -202,6 +208,7 @@
           <option value="office">Office</option>
           <option value="retail">Retail</option>
           <option value="warehouse">Warehouse</option>
+          <option value="medical">Medical/Healthcare</option>
         </select>
       </div>
       <div class="form-group">
@@ -221,23 +228,23 @@
       </div>
       <div class="form-group">
         <label>Labor Rate per Hour</label>
-        <input type="number" id="laborRate" value="24" onchange="updateCalc()">
+        <input type="number" id="laborRate" value="33" onchange="updateCalc()">
       </div>
     </div>
     <div class="output-row">
       <div class="output-box">
-        <div class="output-label">Suggested Price</div>
-        <div class="output-value" id="quotePriceOutput">$325</div>
-        <div class="output-unit">per visit</div>
+        <div class="output-label">Price per Visit</div>
+        <div class="output-value" id="quotePriceOutput">$2,750</div>
+        <div class="output-unit">market rate</div>
       </div>
       <div class="output-box">
         <div class="output-label">Monthly Revenue</div>
-        <div class="output-value" id="monthlyOutput">$1,408</div>
+        <div class="output-value" id="monthlyOutput">$11,000</div>
         <div class="output-unit">4 weeks</div>
       </div>
       <div class="output-box">
         <div class="output-label">Planned Hours</div>
-        <div class="output-value" id="plannedHoursOutput">96</div>
+        <div class="output-value" id="plannedHoursOutput">75</div>
         <div class="output-unit">per month</div>
       </div>
       <div class="output-box">
@@ -279,9 +286,6 @@
           <option value="retail">Retail</option>
           <option value="warehouse">Warehouse</option>
           <option value="medical">Medical/Healthcare</option>
-          <option value="hospitality">Hospitality/Hotel</option>
-          <option value="industrial">Industrial</option>
-          <option value="other">Other</option>
         </select>
       </div>
     </div>
@@ -423,12 +427,12 @@
       </div>
       <div class="form-group">
         <label>Labor Rate per Hour</label>
-        <input type="number" id="propLaborRate" value="24">
+        <input type="number" id="propLaborRate" value="33">
       </div>
     </div>
     <div class="form-group">
       <label>Monthly Investment (What you'll charge the client)</label>
-      <input type="number" id="propPrice" value="1300" placeholder="e.g., 1300">
+      <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
     </div>
   </div>
 
@@ -491,7 +495,7 @@
 
 <footer>
   <p>Questions? Reach out: <a href="mailto:conequotes.service@outlook.com">conequotes.service@outlook.com</a></p>
-  <p style="margin-top: 0.5rem; font-size: 12px;">ConeQuotes — The operating system for profitable cleaning contracts</p>
+  <p style="margin-top: 0.5rem; font-size: 12px;">ConeQuotes — Margin protection for cleaning contractors</p>
 </footer>
 
 <script>
@@ -519,21 +523,33 @@ function switchTab(tabName) {
   if (tabName === 'contracts') renderContractsList();
 }
 
-// Calculator
+// Calculator - MARKET-ACCURATE PRICING
 function updateCalc() {
   const sqft = parseInt(document.getElementById('sqft').value) || 25000;
-  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
-  const pricePerSqFt = 0.013;
+  const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
+  const facilityType = document.getElementById('facilityType').value;
+  
+  // Market-accurate pricing per sqft by facility type (based on HomeAdvisor 2024-2025 data)
+  const pricingMap = {
+    'warehouse': 0.046,
+    'retail': 0.10,
+    'office': 0.11,
+    'medical': 0.133
+  };
+  
+  const pricePerSqFt = pricingMap[facilityType] || 0.11;
   const quotePrice = Math.round(sqft * pricePerSqFt);
   
+  // Frequency multiplier
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[document.getElementById('frequency').value] || 1;
   
-  const hoursPerVisit = sqft / 5000;
+  // Market-accurate labor hours: 2,000 sqft office = 6 hours (0.003 hours per sqft)
+  const hoursPerVisit = sqft * 0.003;
   const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
   const monthly = Math.round(quotePrice * freq * 4.33);
   
-  document.getElementById('quotePriceOutput').textContent = '$' + quotePrice;
+  document.getElementById('quotePriceOutput').textContent = '$' + quotePrice.toLocaleString();
   document.getElementById('monthlyOutput').textContent = '$' + monthly.toLocaleString();
   document.getElementById('plannedHoursOutput').textContent = plannedHours;
 }
@@ -542,14 +558,21 @@ function useThisQuote() {
   const sqft = parseInt(document.getElementById('sqft').value) || 25000;
   const facilityType = document.getElementById('facilityType').value;
   const frequency = document.getElementById('frequency').value;
-  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
+  const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
   
   // Calculate the monthly price from the quote
-  const pricePerSqFt = 0.013;
+  const pricingMap = {
+    'warehouse': 0.046,
+    'retail': 0.10,
+    'office': 0.11,
+    'medical': 0.133
+  };
+  
+  const pricePerSqFt = pricingMap[facilityType] || 0.11;
   const quotePrice = Math.round(sqft * pricePerSqFt);
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[frequency] || 1;
-  const hoursPerVisit = sqft / 5000;
+  const hoursPerVisit = sqft * 0.003;
   const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
   const monthlyPrice = Math.round(quotePrice * freq * 4.33);
   
@@ -658,7 +681,7 @@ function generateProposal() {
 
   const sqft = document.getElementById('propSqft').value;
   const freq = document.getElementById('propFrequency').value;
-  const price = document.getElementById('propPrice').value || 1300;
+  const price = document.getElementById('propPrice').value || 11000;
   const crewSize = document.getElementById('propCrewSize').value || 1;
   const hoursPerVisit = document.getElementById('propHoursPerVisit').value || 2;
   const serviceDays = document.getElementById('propServiceDays').value;
@@ -820,8 +843,8 @@ function sendProposal() {
   const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
   const facilityType = document.getElementById('propFacilityType').value;
   const freq = document.getElementById('propFrequency').value;
-  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 24;
-  const price = parseInt(document.getElementById('propPrice').value) || 1300;
+  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 33;
+  const price = parseInt(document.getElementById('propPrice').value) || 11000;
   const crewSize = document.getElementById('propCrewSize').value;
   const hoursPerVisit = parseFloat(document.getElementById('propHoursPerVisit').value);
 
@@ -943,7 +966,7 @@ function sendProposal() {
   alert('✓ Contract ' + proposalId + ' created for ' + clientName + '!\n\nView in Contracts tab.');
   document.getElementById('propClientName').value = '';
   document.getElementById('propClientEmail').value = '';
-  document.getElementById('propPrice').value = '1300';
+  document.getElementById('propPrice').value = '11000';
 }
 
 // CONTRACTS LIST VIEW
