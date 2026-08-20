@@ -120,6 +120,13 @@
     footer a { color: #10b981; text-decoration: none; font-weight: 500; }
     footer a:hover { color: #059669; text-decoration: underline; }
     .scope-note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin-bottom: 1.5rem; border-radius: 4px; font-size: 13px; color: #78350f; }
+    .crew-breakdown { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1.5rem; margin: 1.5rem 0; }
+    .crew-breakdown-title { font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.5px; }
+    .crew-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .crew-item { background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; }
+    .crew-item-name { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 0.25rem; }
+    .crew-item-hours { font-size: 18px; font-weight: 600; color: #10b981; }
+    .crew-item-hours-label { font-size: 11px; color: #718096; margin-top: 0.25rem; }
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .margin-metric { grid-template-columns: 1fr; }
@@ -152,8 +159,8 @@
 </header>
 
 <section class="hero">
-  <h1>Lock your scope. Protect your margins.</h1>
-  <p class="subtitle">Price profitable bids. Document what you sold. Track actual labor against plan.</p>
+  <h1>Know Which Contracts Are Actually Profitable.</h1>
+  <p class="subtitle">ConeQuotes helps growing commercial cleaning companies price contracts, document scope, track labour, and protect the margins they worked for.</p>
 </section>
 
 <main>
@@ -182,17 +189,25 @@
       </ul>
     </div>
 
-    <h2 style="margin-bottom: 1.5rem;">HOW IT WORKS</h2>
+    <h2 style="margin-bottom: 1.5rem;">FROM QUOTE TO CONTRACT PROFITABILITY</h2>
     <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 3rem;">
-      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
-        <strong>1. Calculate</strong> — Use the Calculator to build a realistic bid based on facility type, size, and frequency.
+      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 2rem;">
+        Start with what you expected to make. Then compare it with what actually happened.
       </p>
-      <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 1.5rem;">
-        <strong>2. Propose</strong> — Build a professional scope document that becomes your contract baseline.
-      </p>
-      <p style="color: #4a5568; font-size: 15px; line-height: 1.8;">
-        <strong>3. Track</strong> — Log actual labor hours and expenses. <strong>Margin Guardian</strong> alerts you if you're running over plan.
-      </p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: #10b981; margin-bottom: 0.75rem; text-transform: uppercase;">1. Quote</h4>
+          <p style="color: #4a5568; font-size: 14px; line-height: 1.6;">Set your expected price, labour, costs, and target margin.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: #10b981; margin-bottom: 0.75rem; text-transform: uppercase;">2. Contract</h4>
+          <p style="color: #4a5568; font-size: 14px; line-height: 1.6;">Preserve the original scope and financial assumptions as your baseline.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; color: #10b981; margin-bottom: 0.75rem; text-transform: uppercase;">3. Track</h4>
+          <p style="color: #4a5568; font-size: 14px; line-height: 1.6;">Compare actual labour against what you estimated.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -938,6 +953,7 @@ function sendProposal() {
     frequency: freq,
     weeklylogs: [],
     expenses: [],
+    crews: [],
     proposalSentAt: new Date().toISOString(),
   };
 
@@ -1145,7 +1161,7 @@ function renderMarginGuardian() {
     
     if (!baseline) return ''; // Skip old contracts without baseline
 
-    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0) : 0;
+    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
     const plannedHours = baseline.labour.plannedHours;
     const efficiency = (actualHours / plannedHours) * 100;
     
@@ -1236,12 +1252,17 @@ function renderMarginGuardian() {
 
         ${alert}
 
+        <div id="crewBreakdown-${contract.id}"></div>
+
         <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
           <div style="margin-bottom: 1rem;">
             <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Log Hours This Week</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+              <select id="crew-${contract.id}" onchange="handleCrewSelect(${contract.id})" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
+                <option value="">Select Crew (optional)</option>
+              </select>
               <input type="number" id="hours-${contract.id}" placeholder="Hours" min="0" step="0.5" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;">
-              <button class="action-button" onclick="logHours(${contract.id})">Log Hours</button>
+              <button class="action-button" onclick="logHours(${contract.id})" style="margin-top: 0;">Log Hours</button>
             </div>
           </div>
 
@@ -1263,12 +1284,95 @@ function renderMarginGuardian() {
     `;
   }).join('');
 
+  // Populate crew dropdowns and render crew breakdowns
+  contracts.forEach(contract => {
+    if (!contract.original_baseline) return;
+    
+    const crewSelect = document.getElementById('crew-' + contract.id);
+    if (crewSelect) {
+      // Add existing crews to dropdown
+      const crews = contract.crews || [];
+      crews.forEach(crew => {
+        const option = document.createElement('option');
+        option.value = crew.name;
+        option.textContent = crew.name;
+        crewSelect.appendChild(option);
+      });
+      
+      // Add "Create New" option
+      const newOption = document.createElement('option');
+      newOption.value = 'new-crew';
+      newOption.textContent = '+ Create New Crew';
+      crewSelect.appendChild(newOption);
+    }
+    
+    // Render crew breakdown
+    renderCrewBreakdown(contract);
+  });
+
   updateStats(contracts);
 }
 
+function renderCrewBreakdown(contract) {
+  const breakdownContainer = document.getElementById('crewBreakdown-' + contract.id);
+  if (!breakdownContainer) return;
+  
+  if (!contract.weeklylogs || contract.weeklylogs.length === 0) {
+    breakdownContainer.innerHTML = '';
+    return;
+  }
+  
+  // Calculate hours by crew
+  const crewHours = {};
+  contract.weeklylogs.forEach(log => {
+    const crew = log.crew || 'Unassigned';
+    crewHours[crew] = (crewHours[crew] || 0) + parseFloat(log.hours);
+  });
+  
+  const crewList = Object.entries(crewHours).map(([crew, hours]) => `
+    <div class="crew-item">
+      <div class="crew-item-name">${crew}</div>
+      <div class="crew-item-hours">${hours.toFixed(1)}h</div>
+      <div class="crew-item-hours-label">hours logged</div>
+    </div>
+  `).join('');
+  
+  breakdownContainer.innerHTML = `
+    <div class="crew-breakdown">
+      <div class="crew-breakdown-title">Labour by Crew</div>
+      <div class="crew-list">${crewList}</div>
+    </div>
+  `;
+}
+
+function handleCrewSelect(contractId) {
+  const crewSelect = document.getElementById('crew-' + contractId);
+  if (crewSelect.value === 'new-crew') {
+    const newCrewName = prompt('Enter crew name (e.g., "Crew A", "Morning Shift"):');
+    if (newCrewName && newCrewName.trim()) {
+      const contracts = getContracts();
+      const contract = contracts.find(c => c.id === contractId);
+      if (contract) {
+        if (!contract.crews) contract.crews = [];
+        if (!contract.crews.find(c => c.name === newCrewName.trim())) {
+          contract.crews.push({ name: newCrewName.trim() });
+          saveContracts(contracts);
+          // Reset and re-render
+          crewSelect.value = '';
+          renderMarginGuardian();
+        }
+      }
+    } else {
+      crewSelect.value = '';
+    }
+  }
+}
+
 function logHours(contractId) {
+  const crewSelect = document.getElementById('crew-' + contractId);
   const hoursInput = document.getElementById('hours-' + contractId);
   const hours = parseFloat(hoursInput.value);
+  const crew = crewSelect ? crewSelect.value : '';
   
   if (!hours || hours <= 0) {
     alert('Please enter valid hours');
@@ -1280,10 +1384,24 @@ function logHours(contractId) {
   
   if (contract) {
     if (!contract.weeklylogs) contract.weeklylogs = [];
-    contract.weeklylogs.push({ hours, date: new Date().toISOString() });
+    if (!contract.crews) contract.crews = [];
+    
+    // Add crew if new and not empty
+    if (crew && !contract.crews.find(c => c.name === crew)) {
+      contract.crews.push({ name: crew });
+    }
+    
+    // Log hours with crew (crew can be empty/"Unassigned")
+    contract.weeklylogs.push({ 
+      hours, 
+      crew: crew || 'Unassigned',
+      date: new Date().toISOString() 
+    });
+    
     contract.actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);
     saveContracts(contracts);
     hoursInput.value = '';
+    if (crewSelect) crewSelect.value = '';
     renderMarginGuardian();
   }
 }
@@ -1319,7 +1437,7 @@ function updateStats(contracts) {
   contracts.forEach(contract => {
     if (!contract.original_baseline) return; // Skip old contracts
     
-    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0) : 0;
+    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
     const plannedHours = contract.original_baseline.labour.plannedHours;
     const efficiency = (actualHours / plannedHours) * 100;
     
