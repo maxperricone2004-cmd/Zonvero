@@ -102,6 +102,7 @@
     .proposal-price-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
     .proposal-price-value { font-size: 38px; font-weight: 700; color: #10b981; }
     .proposal-signature { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e2e8f0; }
+    .proposal-signature-block { }
     .proposal-signature-label { font-weight: 600; font-size: 12px; color: #1a202c; margin-bottom: 2.5rem; }
     .proposal-signature-line { border-top: 2px solid #1a202c; width: 100%; margin-bottom: 0.5rem; }
     .proposal-signature-date { font-size: 11px; color: #718096; }
@@ -245,6 +246,7 @@
         <div class="output-unit">protected</div>
       </div>
     </div>
+    <button class="action-button" onclick="useThisQuote()" style="width: 100%; margin-top: 2rem; background: #059669; font-size: 16px; padding: 1rem;">→ Use This Quote in Proposal</button>
   </div>
 </div>
 
@@ -493,10 +495,12 @@
 </footer>
 
 <script>
+// Generate Proposal ID
 function generateProposalId() {
   return 'CQ-' + Math.floor(Math.random() * 10000).toString().padStart(5, '0');
 }
 
+// Storage
 function getContracts() {
   const stored = localStorage.getItem('coneQuotesContracts');
   return stored ? JSON.parse(stored) : [];
@@ -506,28 +510,62 @@ function saveContracts(contracts) {
   localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
 }
 
+// Tabs
 function switchTab(tabName) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabName).classList.add('active');
+  
   if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
 }
 
+// Calculator
 function updateCalc() {
   const sqft = parseInt(document.getElementById('sqft').value) || 25000;
   const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
   const pricePerSqFt = 0.013;
   const quotePrice = Math.round(sqft * pricePerSqFt);
+  
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[document.getElementById('frequency').value] || 1;
+  
   const hoursPerVisit = sqft / 5000;
   const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
   const monthly = Math.round(quotePrice * freq * 4.33);
+  
   document.getElementById('quotePriceOutput').textContent = '$' + quotePrice;
   document.getElementById('monthlyOutput').textContent = '$' + monthly.toLocaleString();
   document.getElementById('plannedHoursOutput').textContent = plannedHours;
 }
 
+function useThisQuote() {
+  const sqft = parseInt(document.getElementById('sqft').value) || 25000;
+  const facilityType = document.getElementById('facilityType').value;
+  const frequency = document.getElementById('frequency').value;
+  const laborRate = parseInt(document.getElementById('laborRate').value) || 24;
+  
+  // Calculate the monthly price from the quote
+  const pricePerSqFt = 0.013;
+  const quotePrice = Math.round(sqft * pricePerSqFt);
+  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
+  const freq = freqMap[frequency] || 1;
+  const hoursPerVisit = sqft / 5000;
+  const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
+  const monthlyPrice = Math.round(quotePrice * freq * 4.33);
+  
+  // Pre-fill the Proposal Builder fields
+  document.getElementById('propSqft').value = sqft;
+  document.getElementById('propFacilityType').value = facilityType;
+  document.getElementById('propFrequency').value = frequency;
+  document.getElementById('propLaborRate').value = laborRate;
+  document.getElementById('propPrice').value = monthlyPrice;
+  
+  // Scroll to top and switch tab
+  window.scrollTo(0, 0);
+  switchTab('proposal');
+}
+
+// Scope Builder
 const DEFAULT_ROOMS = {
   'Restrooms': ['Toilets', 'Sinks', 'Mirrors', 'Floors', 'Garbage', 'Restocking'],
   'Offices': ['Vacuuming', 'Dusting', 'Garbage', 'Desk surfaces'],
@@ -558,6 +596,7 @@ function renderScopeBuilder() {
         <label>${task}</label>
       </div>
     `).join('');
+
     return `
       <div class="scope-room">
         <div class="scope-room-header" onclick="toggleScopeRoom('${room}')">
@@ -575,6 +614,7 @@ function renderScopeBuilder() {
 function renderFrequencyMatrix() {
   const table = document.getElementById('freqMatrix');
   let html = '<tr><th>Area</th><th>Task</th><th style="width: 60px;">Daily</th><th style="width: 60px;">Weekly</th><th style="width: 60px;">Monthly</th><th style="width: 70px;">Quarterly</th></tr>';
+  
   Object.entries(scopeItems).forEach(([room, data]) => {
     Object.entries(data.tasks).filter(([, checked]) => checked).forEach(([task]) => {
       html += `<tr><td>${room}</td><td>${task}</td>
@@ -585,6 +625,7 @@ function renderFrequencyMatrix() {
       </tr>`;
     });
   });
+  
   table.innerHTML = html;
 }
 
@@ -607,12 +648,14 @@ function addScopeRoom() {
   }
 }
 
+// Proposal Generation
 function generateProposal() {
   const clientName = document.getElementById('propClientName').value.trim();
   if (!clientName) {
     alert('Please enter client name');
     return;
   }
+
   const sqft = document.getElementById('propSqft').value;
   const freq = document.getElementById('propFrequency').value;
   const price = document.getElementById('propPrice').value || 1300;
@@ -622,10 +665,13 @@ function generateProposal() {
   const serviceWindow = document.getElementById('propServiceWindow').value;
   const suppliesBy = document.getElementById('propSuppliesBy').value;
   const equipmentBy = document.getElementById('propEquipmentBy').value;
+
   const inclusions = document.getElementById('propInclusions').value;
   const exclusions = document.getElementById('propExclusions').value;
+
   const freqDisplay = { 'daily': 'Daily (5x/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];
   const proposalId = generateProposalId();
+
   const scopeHtml = Object.entries(scopeItems).map(([room, data]) => {
     const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
     if (tasks.length === 0) return '';
@@ -638,6 +684,7 @@ function generateProposal() {
       </div>
     `;
   }).join('');
+
   const outOfScope = [
     document.getElementById('outAdditionalRooms').checked ? 'Additional rooms/areas' : '',
     document.getElementById('outFrequency').checked ? 'Increased service frequency' : '',
@@ -646,15 +693,18 @@ function generateProposal() {
     document.getElementById('outPostEvent').checked ? 'Post-event cleanup' : '',
     document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
   ].filter(Boolean).map(item => `• ${item}`).join('<br>');
+
   const proposal = `
     <div class="proposal-preview">
       <div class="proposal-header">
         <div class="proposal-title">CLEANING SERVICES PROPOSAL</div>
         <div class="proposal-subtitle">Proposal ID: ${proposalId} | Scope Version: v1.0</div>
       </div>
+
       <div style="text-align: center; margin-bottom: 2rem;">
         <div class="proposal-client">${clientName}</div>
       </div>
+
       <div class="proposal-details">
         <div class="proposal-detail">
           <div class="proposal-detail-label">Facility Size</div>
@@ -673,10 +723,12 @@ function generateProposal() {
           <div class="proposal-detail-value" style="font-size: 12px;">${document.getElementById('propClientEmail').value || 'TBD'}</div>
         </div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Scope of Work</div>
         <div class="proposal-section-content">${scopeHtml || 'No tasks selected'}</div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Service Schedule</div>
         <div class="proposal-section-content">
@@ -686,6 +738,7 @@ function generateProposal() {
           Estimated Duration per Visit: ${hoursPerVisit} hours
         </div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Supplies & Equipment Responsibility</div>
         <div class="proposal-section-content">
@@ -693,6 +746,7 @@ function generateProposal() {
           Equipment: ${equipmentBy.charAt(0).toUpperCase() + equipmentBy.slice(1)}
         </div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Client Responsibilities</div>
         <div class="proposal-section-content">
@@ -702,10 +756,12 @@ function generateProposal() {
           • Notify contractor of hazardous conditions
         </div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Included</div>
         <div class="proposal-section-content" style="white-space: pre-wrap;">${inclusions || '- Regular cleaning as specified\n- All supplies provided\n- Professional staff'}</div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Out of Scope / Change Orders</div>
         <div class="proposal-section-content">
@@ -713,21 +769,25 @@ function generateProposal() {
           ${outOfScope || 'Additional work as required'}
         </div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Excluded</div>
         <div class="proposal-section-content" style="white-space: pre-wrap;">${exclusions || '- Carpet shampooing\n- Deep exterior cleaning\n- Repairs or maintenance'}</div>
       </div>
+
       <div class="proposal-price">
         <div class="proposal-price-label">Monthly Investment</div>
         <div class="proposal-price-value">$${price}</div>
         <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes specified supplies</div>
       </div>
+
       <div class="proposal-section">
         <div class="proposal-section-title">Terms</div>
         <div class="proposal-section-content">
           This proposal is valid for 30 days. Service begins upon signed agreement. Changes to scope require written amendments and approval before work begins. 48-hour notice required for cancellations.
         </div>
       </div>
+
       <div class="proposal-signature">
         <div class="proposal-signature-block">
           <div class="proposal-signature-label">Client Signature</div>
@@ -744,16 +804,19 @@ function generateProposal() {
       </div>
     </div>
   `;
+
   document.getElementById('proposalPreview').innerHTML = proposal;
 }
 
 function sendProposal() {
   const clientName = document.getElementById('propClientName').value.trim();
   const clientEmail = document.getElementById('propClientEmail').value.trim();
+  
   if (!clientName) {
     alert('Please enter client name');
     return;
   }
+
   const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
   const facilityType = document.getElementById('propFacilityType').value;
   const freq = document.getElementById('propFrequency').value;
@@ -761,10 +824,13 @@ function sendProposal() {
   const price = parseInt(document.getElementById('propPrice').value) || 1300;
   const crewSize = document.getElementById('propCrewSize').value;
   const hoursPerVisit = parseFloat(document.getElementById('propHoursPerVisit').value);
+
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freqVal = freqMap[freq] || 1;
   const plannedHours = Math.round(hoursPerVisit * freqVal * 4.33);
   const proposalId = generateProposalId();
+
+  // Get change order triggers
   const changeOrderTriggers = [
     document.getElementById('outAdditionalRooms').checked ? 'Additional rooms/areas' : '',
     document.getElementById('outFrequency').checked ? 'Increased service frequency' : '',
@@ -774,6 +840,7 @@ function sendProposal() {
     document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
   ].filter(Boolean);
 
+  // ORIGINAL CONTRACT BASELINE (immutable)
   const original_baseline = {
     client: {
       name: clientName,
@@ -798,7 +865,7 @@ function sendProposal() {
       hoursPerVisit: hoursPerVisit,
       plannedHours: plannedHours,
     },
-    scope: JSON.parse(JSON.stringify(scopeItems)),
+    scope: JSON.parse(JSON.stringify(scopeItems)), // Deep copy
     inclusions: document.getElementById('propInclusions').value,
     exclusions: document.getElementById('propExclusions').value,
     changeOrderTriggers: changeOrderTriggers,
@@ -813,24 +880,33 @@ function sendProposal() {
     scopeVersion: 'v1.0',
   };
 
+  // CONTRACT OBJECT with baseline and tracking
   const contract = {
     id: Date.now(),
     proposalId,
     clientName,
     clientEmail,
     status: 'Proposal Sent',
+    
+    // IMMUTABLE ORIGINAL BASELINE
     original_baseline: original_baseline,
+    
+    // CURRENT STATE (can evolve later)
     current_state: {
       status: 'Proposal Sent',
       currentPrice: price,
       lastModified: new Date().toISOString(),
     },
+    
+    // ACTUALS (tracking)
     actuals: {
       labourHours: [],
       expenses: [],
       completedTasks: [],
       additionalScopeItems: [],
     },
+    
+    // Keep for backward compatibility with Margin Guardian
     quotePrice: price,
     laborRate: laborRate,
     plannedHours: plannedHours,
@@ -850,35 +926,45 @@ function sendProposal() {
       const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
       return tasks.length > 0 ? room + ': ' + tasks.join(', ') : '';
     }).filter(Boolean).join('\n');
+
     const emailData = {
       email: clientEmail,
       subject: 'Cleaning Services Proposal - ' + clientName + ' [' + proposalId + ']',
       message: `Hello ${clientName},\n\nThank you for the opportunity to provide a cleaning proposal for your facility.\n\nAttached is your customized cleaning services proposal outlining the agreed service areas, tasks, frequency, pricing, inclusions and exclusions.\n\nPlease review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written scope change.\n\nProposal ID: ${proposalId}\n\nScope:\n${scopeText}\n\nMonthly Investment: $${price}\n\nBest regards,\nConeQuotes Team`
     };
+
     fetch('https://formspree.io/f/xdenlden', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(emailData)
     }).catch(err => console.log('Email delivery note: Check your email client'));
   }
+
   alert('✓ Contract ' + proposalId + ' created for ' + clientName + '!\n\nView in Contracts tab.');
   document.getElementById('propClientName').value = '';
   document.getElementById('propClientEmail').value = '';
   document.getElementById('propPrice').value = '1300';
 }
 
+// CONTRACTS LIST VIEW
 function renderContractsList() {
   const contracts = getContracts();
   const container = document.getElementById('contractsList');
+
   if (contracts.length === 0) {
     container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder.</div>';
     return;
   }
+
   container.innerHTML = contracts.map(contract => {
+    // Handle both old and new contract formats
     const baseline = contract.original_baseline;
+    
     if (!baseline) {
+      // Old contract format - skip
       return '';
     }
+
     const scopeHtml = Object.entries(baseline.scope).map(([room, data]) => {
       const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
       if (tasks.length === 0) return '';
@@ -889,9 +975,11 @@ function renderContractsList() {
         </div>
       `;
     }).join('');
+
     const changeOrdersHtml = baseline.changeOrderTriggers && baseline.changeOrderTriggers.length > 0
       ? baseline.changeOrderTriggers.map(item => `• ${item}`).join('<br>')
       : '(None specified)';
+
     return `
       <div class="contract-card">
         <div class="contract-header">
@@ -901,9 +989,12 @@ function renderContractsList() {
           </div>
           <span class="status-badge status-healthy">${contract.current_state.status}</span>
         </div>
+
         <div class="baseline-notice">
           <strong>Original Contract Baseline</strong> — The scope and pricing below were locked in when this contract was created.
         </div>
+
+        <!-- CONTRACT OVERVIEW -->
         <div class="contract-section">
           <h3>Contract Overview</h3>
           <div class="contract-info-grid">
@@ -945,10 +1036,14 @@ function renderContractsList() {
             </div>
           </div>
         </div>
+
+        <!-- ORIGINAL SCOPE -->
         <div class="contract-section">
           <h3>Original Scope</h3>
           <div>${scopeHtml || '<span style="color: #718096;">No scope defined</span>'}</div>
         </div>
+
+        <!-- FINANCIAL BASELINE -->
         <div class="contract-section">
           <h3>Financial Baseline</h3>
           <div class="contract-info-grid">
@@ -982,18 +1077,24 @@ function renderContractsList() {
             </div>
           </div>
         </div>
+
+        <!-- INCLUSIONS & EXCLUSIONS -->
         <div class="contract-section">
           <h3>Inclusions</h3>
           <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${baseline.inclusions || 'Not specified'}</div>
         </div>
+
         <div class="contract-section">
           <h3>Exclusions</h3>
           <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${baseline.exclusions || 'Not specified'}</div>
         </div>
+
+        <!-- CHANGE ORDER TRIGGERS -->
         <div class="contract-section">
           <h3>Change Order Triggers</h3>
           <div style="font-size: 13px; color: #4a5568;">${changeOrdersHtml}</div>
         </div>
+
         <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
           <p style="font-size: 12px; color: #718096;">
             Contract ID: ${contract.id} | Proposal: ${contract.proposalId} | Created: ${new Date(contract.proposalSentAt).toLocaleDateString()}
@@ -1004,20 +1105,26 @@ function renderContractsList() {
   }).join('');
 }
 
+// MARGIN GUARDIAN (updated to read baseline)
 function renderMarginGuardian() {
   const contracts = getContracts();
   const container = document.getElementById('contractsContainer');
+
   if (contracts.length === 0) {
     container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>';
     updateStats(contracts);
     return;
   }
+
   container.innerHTML = contracts.map(contract => {
     const baseline = contract.original_baseline;
-    if (!baseline) return '';
+    
+    if (!baseline) return ''; // Skip old contracts without baseline
+
     const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0) : 0;
     const plannedHours = baseline.labour.plannedHours;
     const efficiency = (actualHours / plannedHours) * 100;
+    
     const laborCost = actualHours * baseline.pricing.laborRate;
     const miscExpenses = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) : 0;
     const totalCost = laborCost + miscExpenses;
@@ -1025,9 +1132,11 @@ function renderMarginGuardian() {
     const currentMargin = ((grossProfit / baseline.pricing.monthlyPrice) * 100).toFixed(1);
     const laborShift = laborCost - (plannedHours * baseline.pricing.laborRate);
     const laborShiftPercent = ((laborShift / (plannedHours * baseline.pricing.laborRate)) * 100).toFixed(1);
+
     let status = 'Healthy';
     let statusClass = 'status-healthy';
     let alert = '';
+
     if (actualHours === 0) {
       alert = `
         <div class="alert-section">
@@ -1054,6 +1163,7 @@ function renderMarginGuardian() {
         </div>
       `;
     }
+
     return `
       <div class="contract-card">
         <div class="contract-header">
@@ -1065,6 +1175,7 @@ function renderMarginGuardian() {
             ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : actualHours === 0 ? '⏳' : '🔴'} ${status}
           </span>
         </div>
+
         <div class="margin-metric">
           <div class="metric-box">
             <div class="metric-label">Contract Revenue</div>
@@ -1082,6 +1193,7 @@ function renderMarginGuardian() {
             <div class="metric-variance ${laborShiftPercent > 0 ? 'variance-negative' : 'variance-positive'}">${laborShiftPercent > 0 ? '+' : ''}${laborShiftPercent}%</div>
           </div>
         </div>
+
         <div class="margin-metric">
           <div class="metric-box">
             <div class="metric-label">Expected Margin</div>
@@ -1097,7 +1209,9 @@ function renderMarginGuardian() {
             <div class="metric-value ${grossProfit >= 0 ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : '$' + Math.round(grossProfit)}</div>
           </div>
         </div>
+
         ${alert}
+
         <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
           <div style="margin-bottom: 1rem;">
             <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Log Hours This Week</label>
@@ -1106,6 +1220,7 @@ function renderMarginGuardian() {
               <button class="action-button" onclick="logHours(${contract.id})">Log Hours</button>
             </div>
           </div>
+
           <div style="margin-bottom: 1rem;">
             <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Add Expense</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
@@ -1123,18 +1238,22 @@ function renderMarginGuardian() {
       </div>
     `;
   }).join('');
+
   updateStats(contracts);
 }
 
 function logHours(contractId) {
   const hoursInput = document.getElementById('hours-' + contractId);
   const hours = parseFloat(hoursInput.value);
+  
   if (!hours || hours <= 0) {
     alert('Please enter valid hours');
     return;
   }
+
   const contracts = getContracts();
   const contract = contracts.find(c => c.id === contractId);
+  
   if (contract) {
     if (!contract.weeklylogs) contract.weeklylogs = [];
     contract.weeklylogs.push({ hours, date: new Date().toISOString() });
@@ -1148,12 +1267,15 @@ function logHours(contractId) {
 function addExpense(contractId) {
   const expType = document.getElementById('expType-' + contractId).value;
   const expAmount = document.getElementById('expAmount-' + contractId).value;
+
   if (!expAmount || parseFloat(expAmount) <= 0) {
     alert('Please enter a valid amount');
     return;
   }
+
   const contracts = getContracts();
   const contract = contracts.find(c => c.id === contractId);
+
   if (contract) {
     if (!contract.expenses) contract.expenses = [];
     contract.expenses.push({
@@ -1169,22 +1291,27 @@ function addExpense(contractId) {
 
 function updateStats(contracts) {
   let healthy = 0, watch = 0, risk = 0;
+
   contracts.forEach(contract => {
-    if (!contract.original_baseline) return;
+    if (!contract.original_baseline) return; // Skip old contracts
+    
     const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0) : 0;
     const plannedHours = contract.original_baseline.labour.plannedHours;
     const efficiency = (actualHours / plannedHours) * 100;
-    if (actualHours === 0) return;
+    
+    if (actualHours === 0) return; // Don't count contracts without data
     if (efficiency > 120) risk++;
     else if (efficiency > 110) watch++;
     else healthy++;
   });
+
   document.getElementById('statActiveContracts').textContent = contracts.filter(c => c.original_baseline).length;
   document.getElementById('statHealthy').textContent = healthy;
   document.getElementById('statWatch').textContent = watch;
   document.getElementById('statRisk').textContent = risk;
 }
 
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
   initializeScopes();
   updateCalc();
