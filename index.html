@@ -31,11 +31,16 @@
     .form-group label { font-weight: 500; font-size: 13px; color: #2d3748; margin-bottom: 0.5rem; }
     .form-group input, .form-group select, .form-group textarea { padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; font-family: inherit; }
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
-    .output-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+    .output-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
     .output-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
     .output-label { color: #718096; font-size: 12px; margin-bottom: 0.5rem; }
     .output-value { font-size: 24px; font-weight: 600; color: #10b981; }
     .output-unit { color: #718096; font-size: 12px; margin-top: 0.25rem; }
+    .margin-alert { margin-top: 1.5rem; padding: 1rem; border-radius: 6px; font-size: 14px; font-weight: 500; display: none; }
+    .margin-alert.healthy { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .margin-alert.warning { display: block; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .margin-alert.danger { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     .scope-room { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }
     .scope-room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer; }
     .scope-room-title { font-weight: 600; font-size: 15px; color: #1a202c; }
@@ -137,10 +142,10 @@
     @media (max-width: 768px) {
       header { flex-direction: column; gap: 1rem; text-align: center; }
       nav { flex-direction: column; gap: 0.5rem; }
-      .hero h1 { font-size: 28px; }
       main { padding: 1.5rem; }
       .calc-row { grid-template-columns: 1fr; }
       .output-row { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
       .freq-matrix { font-size: 12px; }
       .freq-matrix th, .freq-matrix td { padding: 0.5rem; }
     }
@@ -158,19 +163,16 @@
   </nav>
 </header>
 
-<section class="hero">
-  <h1>Know Which Contracts Are Actually Profitable.</h1>
-  <p class="subtitle">ConeQuotes helps growing commercial cleaning companies price contracts, document scope, track labour, and protect the margins they worked for.</p>
-</section>
-
 <main>
 
 <!-- HOME TAB -->
 <div id="home" class="tab-content active">
   <div style="max-width: 900px; margin: 0 auto;">
-    <div style="padding: 2rem; background: #f7fafc; border-radius: 8px; margin-bottom: 3rem; text-align: center;">
-      <p style="font-size: 16px; color: #4a5568; line-height: 1.8; margin-bottom: 1.5rem;">
-        ConeQuotes helps cleaning contractors calculate accurate bids, lock in scope, and track actual labor performance. Catch margin erosion before it starts.
+    <div style="padding: 3rem 1rem 3rem; text-align: center;">
+      <div style="font-size: 12px; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 1rem;">The operating system for profitable cleaning</div>
+      <h1 style="font-size: 42px; font-weight: 700; color: #1a202c; margin-bottom: 1rem; line-height: 1.2;">A profitable quote can become an unprofitable contract.</h1>
+      <p style="font-size: 16px; color: #4a5568; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+        ConeQuotes helps cleaning contractors price the job correctly, lock in the original scope, and catch labour, cost, and scope changes before they destroy the margin.
       </p>
       <p style="font-size: 14px; color: #10b981; font-weight: 600;">No credit card required.</p>
     </div>
@@ -209,13 +211,69 @@
         </div>
       </div>
     </div>
+
+    <h2 style="margin-bottom: 0.5rem;">One visit loses $524. Repeated margin leaks can cost $157,200 a year.</h2>
+    <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 2rem;">
+      Here's what happens on a single visit when labour, supplies, travel, and overhead all run a little over the original quote.
+    </p>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+      <div class="two-col-grid">
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #1a202c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Original Quote</div>
+          <div class="contract-info-row"><span class="contract-info-label">Revenue per visit</span><span class="contract-info-value">$2,700</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Labour</span><span class="contract-info-value">20 hours</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Labour cost</span><span class="contract-info-value">$660</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Supplies and products</span><span class="contract-info-value">$100</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Travel and equipment</span><span class="contract-info-value">$0</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Overhead/admin</span><span class="contract-info-value">$150</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Total costs</span><span class="contract-info-value">$910</span></div>
+          <div class="contract-info-row" style="border-bottom: none;"><span class="contract-info-label" style="font-weight: 700; color: #1a202c;">Profit</span><span class="contract-info-value" style="color: #10b981; font-size: 16px;">$1,790</span></div>
+          <div class="contract-info-row" style="border-bottom: none;"><span class="contract-info-label" style="font-weight: 700; color: #1a202c;">Margin</span><span class="contract-info-value" style="color: #10b981; font-size: 16px;">66%</span></div>
+        </div>
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #991b1b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">What Actually Happened</div>
+          <div class="contract-info-row"><span class="contract-info-label">Revenue per visit</span><span class="contract-info-value">$2,700</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Labour</span><span class="contract-info-value">28 hours</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Labour cost</span><span class="contract-info-value">$924</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Supplies and products</span><span class="contract-info-value">$185</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Travel and equipment</span><span class="contract-info-value">$125</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Overhead/admin</span><span class="contract-info-value">$200</span></div>
+          <div class="contract-info-row"><span class="contract-info-label">Total costs</span><span class="contract-info-value">$1,434</span></div>
+          <div class="contract-info-row" style="border-bottom: none;"><span class="contract-info-label" style="font-weight: 700; color: #1a202c;">Profit</span><span class="contract-info-value" style="color: #ef4444; font-size: 16px;">$1,266</span></div>
+          <div class="contract-info-row" style="border-bottom: none;"><span class="contract-info-label" style="font-weight: 700; color: #1a202c;">Margin</span><span class="contract-info-value" style="color: #ef4444; font-size: 16px;">47%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scope-note" style="margin-bottom: 1.5rem;">
+      <strong>Four margin leaks compounded on one visit.</strong><br>
+      Labour increased by 8 hours, adding $264. Supplies added $85. Travel and equipment added $125. Overhead added $50. The combined impact was $524 less profit on one visit.
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-bottom: 0.75rem;">
+      <div style="font-size: 12px; color: #718096; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.5px;">If this pattern repeats across 25 similar visits per month</div>
+      <div class="two-col-grid">
+        <div class="stat-card" style="border: none; background: #fee2e2; padding: 1.5rem;">
+          <div class="stat-label" style="color: #991b1b;">Monthly Impact</div>
+          <div class="stat-value" style="color: #991b1b;">$13,100 less profit / month</div>
+        </div>
+        <div class="stat-card" style="border: none; background: #fee2e2; padding: 1.5rem;">
+          <div class="stat-label" style="color: #991b1b;">Annualized Impact</div>
+          <div class="stat-value" style="color: #991b1b;">$157,200 / year</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size: 12px; color: #718096; font-style: italic; margin-bottom: 3rem;">
+      Illustrative example based on 25 similar visits per month. Actual results depend on your pricing, costs, and contract volume.
+    </p>
   </div>
 </div>
 
 <!-- CALCULATOR TAB -->
 <div id="calculator" class="tab-content">
   <h2>Build a profitable bid</h2>
-  <p class="section-intro">Market-accurate pricing by facility type. See revenue and labor hours instantly.</p>
+  <p class="section-intro">Estimate your quote, labour cost, operating costs, and expected margin before you bid.</p>
   <div class="calculator">
     <div class="calc-row">
       <div class="form-group">
@@ -243,7 +301,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Labor Rate per Hour</label>
+        <label>Labour Rate per Hour</label>
         <input type="number" id="laborRate" value="33" onchange="updateCalc()" min="1" max="500">
       </div>
     </div>
@@ -273,33 +331,46 @@
         <input type="number" id="overheadPerVisit" value="25" min="0" step="5" onchange="updateCalc()">
       </div>
     </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Target Margin (%)</label>
+        <input type="number" id="targetMargin" value="40" onchange="updateCalc()" min="0" max="95" step="1">
+      </div>
+    </div>
     <div class="output-row">
       <div class="output-box">
         <div class="output-label">Price per Visit</div>
-        <div class="output-value" id="quotePriceOutput">$2,750</div>
-        <div class="output-unit">market rate</div>
+        <div class="output-value" id="quotePriceOutput">—</div>
+        <div class="output-unit">estimated quote price</div>
       </div>
       <div class="output-box">
         <div class="output-label">Monthly Revenue</div>
-        <div class="output-value" id="monthlyOutput">$11,000</div>
+        <div class="output-value" id="monthlyOutput">—</div>
         <div class="output-unit">4 weeks</div>
       </div>
       <div class="output-box">
         <div class="output-label">Planned Labour</div>
-        <div class="output-value" id="plannedHoursOutput" style="font-size: 20px;">75 hrs</div>
+        <div class="output-value" id="plannedHoursOutput" style="font-size: 20px;">—</div>
         <div class="output-unit">per month</div>
       </div>
       <div class="output-box">
         <div class="output-label">Estimated Labour Cost</div>
-        <div class="output-value" id="estimatedLaborCostOutput">$2,475</div>
+        <div class="output-value" id="estimatedLaborCostOutput">—</div>
         <div class="output-unit">per month</div>
       </div>
       <div class="output-box">
         <div class="output-label">Estimated Margin</div>
-        <div class="output-value" id="marginOutput" style="color: #10b981; font-size: 20px;">25%</div>
+        <div class="output-value" id="marginOutput" style="color: #10b981; font-size: 20px;">—</div>
         <div class="output-unit" id="marginStatus">target</div>
       </div>
+      <div class="output-box">
+        <div class="output-label">Required Price</div>
+        <div class="output-value" id="requiredPriceOutput">—</div>
+        <div class="output-unit">to hit target margin</div>
+      </div>
     </div>
+
+    <div id="marginAlert" class="margin-alert"></div>
 
     <!-- COST BREAKDOWN -->
     <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-top: 2rem; margin-bottom: 2rem;">
@@ -308,29 +379,29 @@
         <div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
             <span style="color: #718096; font-size: 13px;">Revenue</span>
-            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownRevenue">$2,750</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownRevenue">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
-            <span style="color: #718096; font-size: 13px;">Labor Cost</span>
-            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownLabor">$440</span>
+            <span style="color: #718096; font-size: 13px;">Labour Cost</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownLabor">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
             <span style="color: #718096; font-size: 13px;">Supplies</span>
-            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownSupplies">$50</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownSupplies">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 2px solid #10b981;">
             <span style="color: #718096; font-size: 13px;">Overhead</span>
-            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownOverhead">$25</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownOverhead">—</span>
           </div>
         </div>
         <div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
             <span style="color: #1a202c; font-weight: 600;">Your Profit</span>
-            <span style="color: #10b981; font-weight: 700; font-size: 18px;" id="costBreakdownProfit">$2,235</span>
+            <span style="color: #10b981; font-weight: 700; font-size: 18px;" id="costBreakdownProfit">—</span>
           </div>
           <div style="font-size: 12px; color: #718096; line-height: 1.6;">
-            <strong style="color: #1a202c;">Profit Margin:</strong> <span id="costBreakdownMarginPercent" style="color: #10b981; font-weight: 600;">81%</span><br>
-            <em style="font-size: 11px;">Includes all labor, supplies, and overhead</em>
+            <strong style="color: #1a202c;">Profit Margin:</strong> <span id="costBreakdownMarginPercent" style="color: #10b981; font-weight: 600;">—</span><br>
+            <em style="font-size: 11px;">Includes all labour, supplies, and overhead</em>
           </div>
         </div>
       </div>
@@ -340,9 +411,9 @@
     <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
       <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 1rem;">⚠️ Risk Scenario</div>
       <div style="font-size: 13px; color: #78350f; line-height: 1.6;">
-        <strong>If labor runs 20% over plan:</strong><br>
-        Your margin drops from <span id="riskBaselineMargin" style="color: #10b981; font-weight: 600;">81%</span> to <span id="riskWorstCaseMargin" style="color: #ef4444; font-weight: 600;">75%</span><br>
-        <em style="font-size: 12px;">Profit would be <span id="riskWorstCaseProfit" style="color: #ef4444; font-weight: 600;">$2,059</span> instead of <span id="riskBaselineProfit" style="color: #10b981; font-weight: 600;">$2,235</span></em>
+        <strong>If labour runs 20% over plan:</strong><br>
+        Your margin drops from <span id="riskBaselineMargin" style="color: #10b981; font-weight: 600;">—</span> to <span id="riskWorstCaseMargin" style="color: #ef4444; font-weight: 600;">—</span><br>
+        <em style="font-size: 12px;">Profit would be <span id="riskWorstCaseProfit" style="color: #ef4444; font-weight: 600;">—</span> instead of <span id="riskBaselineProfit" style="color: #10b981; font-weight: 600;">—</span></em>
       </div>
     </div>
     <button class="action-button" onclick="useThisQuote()" style="width: 100%; margin-top: 2rem; background: #059669; font-size: 16px; padding: 1rem;">→ Use This Quote in Proposal</button>
@@ -395,7 +466,7 @@
 
   <div class="calculator" style="margin-top: 2rem;">
     <h3 style="margin-bottom: 1.5rem;">Step 3: Service Assumptions</h3>
-    <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Define labor estimates, access, supplies, and responsibilities.</p>
+    <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Define labour estimates, access, supplies, and responsibilities.</p>
     <div class="assumptions-grid">
       <div class="form-group">
         <label>Estimated Crew Size</label>
@@ -518,7 +589,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Labor Rate per Hour</label>
+        <label>Labour Rate per Hour</label>
         <input type="number" id="propLaborRate" value="33">
       </div>
     </div>
@@ -561,7 +632,7 @@
 <!-- MARGIN GUARDIAN TAB -->
 <div id="margin" class="tab-content">
   <h2>Margin Guardian Dashboard</h2>
-  <p class="section-intro">Track labor. Catch scope creep. Protect profit.</p>
+  <p class="section-intro">Track labour. Catch scope creep. Protect profit.</p>
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Active Contracts</div>
@@ -608,14 +679,21 @@ function saveContracts(contracts) {
 
 // Tabs
 function switchTab(tabName) {
+  const tabEl = document.getElementById(tabName);
+  if (!tabEl) {
+    console.warn('Tab not found: ' + tabName);
+    return;
+  }
+
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabName).classList.add('active');
-  
+  tabEl.classList.add('active');
+  window.location.hash = tabName;
+
   if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
 }
 
-// Calculator - MARKET-ACCURATE PRICING
+// Calculator
 function updateCalc() {
   const sqft = parseInt(document.getElementById('sqft').value) || 25000;
   const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
@@ -624,78 +702,117 @@ function updateCalc() {
   const hoursPerPersonPerVisit = parseFloat(document.getElementById('hoursPerVisit').value) || 2.5;
   const suppliesCostPerVisit = parseFloat(document.getElementById('suppliesCostPerVisit').value) || 50;
   const overheadPerVisit = parseFloat(document.getElementById('overheadPerVisit').value) || 25;
-  
-  // Market-accurate pricing per sqft by facility type
+  const targetMarginPercent = Number(document.getElementById('targetMargin').value) || 40;
+
+  // Estimated quote price per sqft by facility type
   const pricingMap = {
     'warehouse': 0.046,
     'retail': 0.10,
     'office': 0.11,
     'medical': 0.133
   };
-  
+
   const pricePerSqFt = pricingMap[facilityType] || 0.11;
   const quotePrice = Math.round(sqft * pricePerSqFt);
-  
+
   // Frequency multiplier
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[document.getElementById('frequency').value] || 1;
-  
+
   // Revenue calculation (per visit)
   const revenuePerVisit = quotePrice;
   const monthlyRevenue = Math.round(revenuePerVisit * freq * 4.33);
-  
+
   // Labor cost per visit (crew size × hours per person × rate)
   const totalPersonHoursPerVisit = crewSize * hoursPerPersonPerVisit;
   const laborCostPerVisit = Math.round(totalPersonHoursPerVisit * laborRate);
-  const totalPersonHoursPerMonth = Math.round(totalPersonHoursPerVisit * freq * 4.33);
-  
+  const totalPersonHoursPerMonth = totalPersonHoursPerVisit * freq * 4.33;
+
   // Total costs per visit
   const totalCostPerVisit = laborCostPerVisit + suppliesCostPerVisit + overheadPerVisit;
-  const monthlyTotalCost = Math.round(totalCostPerVisit * freq * 4.33);
-  
-  // Profit calculations
-  const profitPerVisit = Math.max(0, revenuePerVisit - totalCostPerVisit);
-  const monthlyProfit = Math.max(0, monthlyRevenue - monthlyTotalCost);
-  const marginPercent = revenuePerVisit > 0 ? ((profitPerVisit / revenuePerVisit) * 100).toFixed(1) : 0;
-  
+
+  // Profit calculations — losses are shown, never clamped to zero
+  const profitPerVisit = revenuePerVisit - totalCostPerVisit;
+  const marginPercent = revenuePerVisit > 0
+    ? Number(((profitPerVisit / revenuePerVisit) * 100).toFixed(1))
+    : 0;
+
   // Risk scenario: labor runs 20% over plan
   const laborCostRiskPerVisit = Math.round(laborCostPerVisit * 1.2);
   const totalCostRiskPerVisit = laborCostRiskPerVisit + suppliesCostPerVisit + overheadPerVisit;
-  const profitPerVisitRisk = Math.max(0, revenuePerVisit - totalCostRiskPerVisit);
-  const monthlyProfitRisk = Math.max(0, monthlyRevenue - (Math.round(totalCostRiskPerVisit * freq * 4.33)));
-  const marginPercentRisk = revenuePerVisit > 0 ? ((profitPerVisitRisk / revenuePerVisit) * 100).toFixed(1) : 0;
-  
-  // Margin status
-  let marginStatus = 'target';
-  if (marginPercent < 0) marginStatus = 'not viable';
-  else if (marginPercent < 15) marginStatus = 'thin';
-  else if (marginPercent < 25) marginStatus = 'below target';
-  else marginStatus = 'target';
-  
+  const profitPerVisitRisk = revenuePerVisit - totalCostRiskPerVisit;
+  const marginPercentRisk = revenuePerVisit > 0
+    ? Number(((profitPerVisitRisk / revenuePerVisit) * 100).toFixed(1))
+    : 0;
+
+  // Required price to hit target margin, and the gap to close
+  const requiredPrice = totalCostPerVisit / (1 - targetMarginPercent / 100);
+  const priceGap = requiredPrice - quotePrice;
+
+  const actualMargin = marginPercent;
+
+  // Margin status label
+  let marginStatus = 'on target';
+  if (actualMargin < 0) marginStatus = 'not viable';
+  else if (actualMargin < targetMarginPercent - 5) marginStatus = 'below target';
+  else if (actualMargin < targetMarginPercent) marginStatus = 'near target';
+  document.getElementById('marginStatus').textContent = marginStatus;
+
   // Update main outputs
   document.getElementById('quotePriceOutput').textContent = '$' + quotePrice.toLocaleString();
   document.getElementById('monthlyOutput').textContent = '$' + monthlyRevenue.toLocaleString();
-  document.getElementById('plannedHoursOutput').textContent = totalPersonHoursPerMonth.toLocaleString() + ' hrs';
-  document.getElementById('marginOutput').textContent = marginPercent + '%';
-  document.getElementById('marginStatus').textContent = marginStatus;
-  
-  // Calculate and display estimated labour cost
-  const estimatedMonthlyLaborCost = Math.round(totalPersonHoursPerMonth * laborRate);
+  document.getElementById('plannedHoursOutput').textContent = totalPersonHoursPerMonth.toFixed(1) + ' hrs';
+  document.getElementById('requiredPriceOutput').textContent = '$' + Math.round(requiredPrice).toLocaleString();
+
+  const marginOutputEl = document.getElementById('marginOutput');
+  if (actualMargin < 0) {
+    marginOutputEl.style.color = '#ef4444';
+  } else if (actualMargin < targetMarginPercent) {
+    marginOutputEl.style.color = '#f59e0b';
+  } else {
+    marginOutputEl.style.color = '#10b981';
+  }
+  marginOutputEl.textContent = actualMargin + '%';
+
+  // Margin alert banner
+  const alertEl = document.getElementById('marginAlert');
+  alertEl.classList.remove('healthy', 'warning', 'danger');
+  if (actualMargin < 0) {
+    alertEl.classList.add('danger');
+    alertEl.textContent = '⚠️ This quote would lose money. Costs exceed revenue by $' +
+      Math.abs(Math.round(profitPerVisit)).toLocaleString() + '.';
+  } else if (actualMargin < targetMarginPercent - 5) {
+    alertEl.classList.add('danger');
+    alertEl.textContent = '⚠️ Below target. Current: ' + actualMargin +
+      '%. Target: ' + targetMarginPercent +
+      '%. Raise price by $' + Math.round(priceGap).toLocaleString() + '.';
+  } else if (actualMargin < targetMarginPercent) {
+    alertEl.classList.add('warning');
+    alertEl.textContent = '⚡ Close to target. Current: ' + actualMargin +
+      '%. Target: ' + targetMarginPercent + '%.';
+  } else {
+    alertEl.classList.add('healthy');
+    alertEl.textContent = '✓ On target. Margin: ' + actualMargin +
+      '% (Target: ' + targetMarginPercent + '%).';
+  }
+
+  // Calculate and display estimated labour cost (based on per-visit labour cost, not a re-rounded hour count)
+  const estimatedMonthlyLaborCost = Math.round(laborCostPerVisit * freq * 4.33);
   document.getElementById('estimatedLaborCostOutput').textContent = '$' + estimatedMonthlyLaborCost.toLocaleString();
-  
+
   // Update cost breakdown
   document.getElementById('costBreakdownRevenue').textContent = '$' + revenuePerVisit.toLocaleString();
   document.getElementById('costBreakdownLabor').textContent = '$' + laborCostPerVisit.toLocaleString();
   document.getElementById('costBreakdownSupplies').textContent = '$' + suppliesCostPerVisit.toLocaleString();
   document.getElementById('costBreakdownOverhead').textContent = '$' + overheadPerVisit.toLocaleString();
-  document.getElementById('costBreakdownProfit').textContent = '$' + profitPerVisit.toLocaleString();
-  document.getElementById('costBreakdownMarginPercent').textContent = marginPercent + '%';
-  
+  document.getElementById('costBreakdownProfit').textContent = '$' + Math.round(profitPerVisit).toLocaleString();
+  document.getElementById('costBreakdownMarginPercent').textContent = actualMargin + '%';
+
   // Update risk scenario
-  document.getElementById('riskBaselineMargin').textContent = marginPercent + '%';
+  document.getElementById('riskBaselineMargin').textContent = actualMargin + '%';
   document.getElementById('riskWorstCaseMargin').textContent = marginPercentRisk + '%';
-  document.getElementById('riskBaselineProfit').textContent = '$' + profitPerVisit.toLocaleString();
-  document.getElementById('riskWorstCaseProfit').textContent = '$' + profitPerVisitRisk.toLocaleString();
+  document.getElementById('riskBaselineProfit').textContent = '$' + Math.round(profitPerVisit).toLocaleString();
+  document.getElementById('riskWorstCaseProfit').textContent = '$' + Math.round(profitPerVisitRisk).toLocaleString();
 }
 
 function useThisQuote() {
@@ -767,7 +884,7 @@ function validateCalculatorInputs() {
   }
   
   if (laborRate <= 0) {
-    errors.push('Labor rate must be greater than 0');
+    errors.push('Labour rate must be greater than 0');
   }
   
   if (errors.length > 0) {
@@ -1657,6 +1774,20 @@ function updateStats(contracts) {
 document.addEventListener('DOMContentLoaded', function() {
   initializeScopes();
   updateCalc();
+
+  const tabName = window.location.hash.slice(1);
+  if (tabName && document.getElementById(tabName)) {
+    switchTab(tabName);
+  } else {
+    switchTab('home');
+  }
+});
+
+window.addEventListener('hashchange', function() {
+  const tabName = window.location.hash.slice(1) || 'home';
+  if (document.getElementById(tabName)) {
+    switchTab(tabName);
+  }
 });
 </script>
 
