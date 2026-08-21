@@ -145,8 +145,13 @@
       main { padding: 1.5rem; }
       .calc-row { grid-template-columns: 1fr; }
       .output-row { grid-template-columns: 1fr; }
-      .two-col-grid { grid-template-columns: 1fr; }
-      .freq-matrix { font-size: 12px; }
+      .two-col-grid,
+      .assumptions-grid,
+      .proposal-details,
+      .margin-metric { grid-template-columns: 1fr; }
+      .proposal-signature { grid-template-columns: 1fr; gap: 1.5rem; }
+      .proposal-preview { padding: 1.5rem; }
+      .freq-matrix { font-size: 12px; display: block; overflow-x: auto; }
       .freq-matrix th, .freq-matrix td { padding: 0.5rem; }
     }
   </style>
@@ -267,6 +272,11 @@
     <p style="font-size: 12px; color: #718096; font-style: italic; margin-bottom: 3rem;">
       Illustrative example based on 25 similar visits per month. Actual results depend on your pricing, costs, and contract volume.
     </p>
+
+    <div style="text-align: center; margin: 2rem 0 3rem;">
+      <button class="cta" onclick="switchTab('calculator')">Calculate Your Quote</button>
+      <p style="font-size: 12px; color: #718096; margin-top: 0.75rem;">See what your price, costs, and target margin look like.</p>
+    </div>
   </div>
 </div>
 
@@ -593,9 +603,15 @@
         <input type="number" id="propLaborRate" value="33">
       </div>
     </div>
-    <div class="form-group">
-      <label>Monthly Investment (What you'll charge the client)</label>
-      <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Monthly Investment (What you'll charge the client)</label>
+        <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
+      </div>
+      <div class="form-group">
+        <label>Target Margin (%)</label>
+        <input type="number" id="propTargetMargin" value="40" min="0" max="95" step="1">
+      </div>
     </div>
   </div>
 
@@ -618,7 +634,7 @@
 
   <div style="margin-top: 2rem; display: flex; gap: 1rem;">
     <button class="action-button" onclick="generateProposal()" style="flex: 1;">Preview Proposal</button>
-    <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">✓ Send to Client & Create Contract</button>
+    <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">Create Contract Baseline & Send Email</button>
   </div>
 </div>
 
@@ -626,6 +642,10 @@
 <div id="contracts" class="tab-content">
   <h2>Your Contracts</h2>
   <p class="section-intro">View contract baselines and track performance.</p>
+  <div class="scope-note">
+    Prototype mode: contracts are currently stored in this browser only.
+    Do not rely on this version for permanent business records.
+  </div>
   <div id="contractsList"></div>
 </div>
 
@@ -675,6 +695,15 @@ function getContracts() {
 
 function saveContracts(contracts) {
   localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // Tabs
@@ -747,7 +776,7 @@ function updateCalc() {
 
   // Required price to hit target margin, and the gap to close
   const requiredPrice = totalCostPerVisit / (1 - targetMarginPercent / 100);
-  const priceGap = requiredPrice - quotePrice;
+  const priceGap = Math.max(0, requiredPrice - quotePrice);
 
   const actualMargin = marginPercent;
 
@@ -935,14 +964,14 @@ function renderScopeBuilder() {
     const tasksHtml = Object.entries(data.tasks).map(([task, checked]) => `
       <div class="scope-task">
         <input type="checkbox" ${checked ? 'checked' : ''} onchange="updateScopeTask('${room}', '${task}', this.checked)">
-        <label>${task}</label>
+        <label>${escapeHtml(task)}</label>
       </div>
     `).join('');
 
     return `
       <div class="scope-room">
         <div class="scope-room-header" onclick="toggleScopeRoom('${room}')">
-          <span class="scope-room-title">${room}</span>
+          <span class="scope-room-title">${escapeHtml(room)}</span>
           <span class="scope-room-toggle">${data.expanded ? '▼' : '▶'}</span>
         </div>
         <div class="scope-room-content ${data.expanded ? 'expanded' : ''}">
@@ -956,10 +985,10 @@ function renderScopeBuilder() {
 function renderFrequencyMatrix() {
   const table = document.getElementById('freqMatrix');
   let html = '<tr><th>Area</th><th>Task</th><th style="width: 60px;">Daily</th><th style="width: 60px;">Weekly</th><th style="width: 60px;">Monthly</th><th style="width: 70px;">Quarterly</th></tr>';
-  
+
   Object.entries(scopeItems).forEach(([room, data]) => {
     Object.entries(data.tasks).filter(([, checked]) => checked).forEach(([task]) => {
-      html += `<tr><td>${room}</td><td>${task}</td>
+      html += `<tr><td>${escapeHtml(room)}</td><td>${escapeHtml(task)}</td>
         <td><input type="radio" name="freq-${room}-${task}" value="daily"></td>
         <td><input type="radio" name="freq-${room}-${task}" value="weekly" checked></td>
         <td><input type="radio" name="freq-${room}-${task}" value="monthly"></td>
@@ -967,7 +996,7 @@ function renderFrequencyMatrix() {
       </tr>`;
     });
   });
-  
+
   table.innerHTML = html;
 }
 
@@ -1014,14 +1043,27 @@ function generateProposal() {
   const freqDisplay = { 'daily': 'Daily (5x/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];
   const proposalId = generateProposalId();
 
+  const safeClientName = escapeHtml(clientName);
+  const safeClientEmail = escapeHtml(document.getElementById('propClientEmail').value);
+  const safeServiceDays = escapeHtml(serviceDays);
+  const safeServiceWindow = escapeHtml(serviceWindow);
+  const safeInclusions = escapeHtml(inclusions);
+  const safeExclusions = escapeHtml(exclusions);
+  const safeSqft = escapeHtml(sqft);
+  const safePrice = escapeHtml(price);
+  const safeCrewSize = escapeHtml(crewSize);
+  const safeHoursPerVisit = escapeHtml(hoursPerVisit);
+  const safeLaborRate = escapeHtml(document.getElementById('propLaborRate').value || '33');
+  const safeProposalId = escapeHtml(proposalId);
+
   const scopeHtml = Object.entries(scopeItems).map(([room, data]) => {
     const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
     if (tasks.length === 0) return '';
     return `
       <div class="proposal-scope-item">
-        <div class="proposal-scope-room">${room}</div>
+        <div class="proposal-scope-room">${escapeHtml(room)}</div>
         <div class="proposal-scope-tasks">
-          ${tasks.map(task => `• ${task}`).join('<br>')}
+          ${tasks.map(task => `• ${escapeHtml(task)}`).join('<br>')}
         </div>
       </div>
     `;
@@ -1040,17 +1082,17 @@ function generateProposal() {
     <div class="proposal-preview">
       <div class="proposal-header">
         <div class="proposal-title">CLEANING SERVICES PROPOSAL</div>
-        <div class="proposal-subtitle">Proposal ID: ${proposalId} | Scope Version: v1.0</div>
+        <div class="proposal-subtitle">Proposal ID: ${safeProposalId} | Scope Version: v1.0</div>
       </div>
 
       <div style="text-align: center; margin-bottom: 2rem;">
-        <div class="proposal-client">${clientName}</div>
+        <div class="proposal-client">${safeClientName}</div>
       </div>
 
       <div class="proposal-details">
         <div class="proposal-detail">
           <div class="proposal-detail-label">Facility Size</div>
-          <div class="proposal-detail-value">${sqft} sq ft</div>
+          <div class="proposal-detail-value">${safeSqft} sq ft</div>
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Service Frequency</div>
@@ -1058,11 +1100,11 @@ function generateProposal() {
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Monthly Investment</div>
-          <div class="proposal-detail-value">$${price}</div>
+          <div class="proposal-detail-value">$${safePrice}</div>
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Email</div>
-          <div class="proposal-detail-value" style="font-size: 12px;">${document.getElementById('propClientEmail').value || 'TBD'}</div>
+          <div class="proposal-detail-value" style="font-size: 12px;">${safeClientEmail || 'TBD'}</div>
         </div>
       </div>
 
@@ -1074,18 +1116,18 @@ function generateProposal() {
       <div class="proposal-section">
         <div class="proposal-section-title">Service Schedule</div>
         <div class="proposal-section-content">
-          Service Days: ${serviceDays}<br>
-          Service Window: ${serviceWindow}<br>
-          Estimated Crew Size: ${crewSize}<br>
-          Estimated Duration per Visit: ${hoursPerVisit} hours
+          Service Days: ${safeServiceDays}<br>
+          Service Window: ${safeServiceWindow}<br>
+          Estimated Crew Size: ${safeCrewSize}<br>
+          Estimated Duration per Visit: ${safeHoursPerVisit} hours
         </div>
       </div>
 
       <div class="proposal-section">
         <div class="proposal-section-title">Supplies & Equipment Responsibility</div>
         <div class="proposal-section-content">
-          Cleaning Supplies: ${suppliesBy.charAt(0).toUpperCase() + suppliesBy.slice(1)}<br>
-          Equipment: ${equipmentBy.charAt(0).toUpperCase() + equipmentBy.slice(1)}
+          Cleaning Supplies: ${escapeHtml(suppliesBy.charAt(0).toUpperCase() + suppliesBy.slice(1))}<br>
+          Equipment: ${escapeHtml(equipmentBy.charAt(0).toUpperCase() + equipmentBy.slice(1))}
         </div>
       </div>
 
@@ -1101,7 +1143,7 @@ function generateProposal() {
 
       <div class="proposal-section">
         <div class="proposal-section-title">Included</div>
-        <div class="proposal-section-content" style="white-space: pre-wrap;">${inclusions || '- Regular cleaning as specified\\n- All supplies provided\\n- Professional staff'}</div>
+        <div class="proposal-section-content" style="white-space: pre-wrap;">${safeInclusions || '- Regular cleaning as specified\\n- All supplies provided\\n- Professional staff'}</div>
       </div>
 
       <div class="proposal-section">
@@ -1114,12 +1156,12 @@ function generateProposal() {
 
       <div class="proposal-section">
         <div class="proposal-section-title">Excluded</div>
-        <div class="proposal-section-content" style="white-space: pre-wrap;">${exclusions || '- Carpet shampooing\\n- Deep exterior cleaning\\n- Repairs or maintenance'}</div>
+        <div class="proposal-section-content" style="white-space: pre-wrap;">${safeExclusions || '- Carpet shampooing\\n- Deep exterior cleaning\\n- Repairs or maintenance'}</div>
       </div>
 
       <div class="proposal-price">
         <div class="proposal-price-label">Monthly Investment</div>
-        <div class="proposal-price-value">$${price}</div>
+        <div class="proposal-price-value">$${safePrice}</div>
         <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes specified supplies</div>
       </div>
 
@@ -1127,12 +1169,12 @@ function generateProposal() {
         <div class="proposal-section-title">Financial Summary</div>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-size: 13px; color: #4a5568;">
           <div>
-            <strong>Monthly Revenue:</strong> $${price}<br>
-            <strong>Crew Cost:</strong> ${crewSize} people × ${hoursPerVisit}h/visit × $${document.getElementById('propLaborRate').value || '33'}/hr<br>
-            <strong>Planned Labour Hours:</strong> ${document.querySelector('#plannedHoursOutput')?.textContent || Math.round(crewSize * hoursPerVisit * (freq || 1) * 4.33)}h/month
+            <strong>Monthly Revenue:</strong> $${safePrice}<br>
+            <strong>Crew Cost:</strong> ${safeCrewSize} people × ${safeHoursPerVisit}h/visit × $${safeLaborRate}/hr<br>
+            <strong>Planned Labour Hours:</strong> ${escapeHtml(document.querySelector('#plannedHoursOutput')?.textContent || Math.round(crewSize * hoursPerVisit * (freq || 1) * 4.33))}h/month
           </div>
           <div>
-            <strong style="font-size: 14px; color: #10b981;">Target Margin:</strong> 25%<br>
+            <strong style="font-size: 14px; color: #10b981;">Target Margin:</strong> ${escapeHtml(document.getElementById('propTargetMargin').value || '40')}%<br>
             <em style="font-size: 12px;">Actual margin depends on whether crews stay on schedule</em>
           </div>
         </div>
@@ -1155,7 +1197,7 @@ function generateProposal() {
           <div class="proposal-signature-label">Authorized Representative</div>
           <div style="font-size: 13px; color: #718096;">
             <a href="mailto:conequotes.service@outlook.com" style="color: #10b981; text-decoration: none;">conequotes.service@outlook.com</a>
-            <br><small>Proposal ID: ${proposalId}</small>
+            <br><small>Proposal ID: ${safeProposalId}</small>
           </div>
         </div>
       </div>
@@ -1184,7 +1226,7 @@ function sendProposal() {
 
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freqVal = freqMap[freq] || 1;
-  const plannedHours = Math.round(hoursPerVisit * freqVal * 4.33);
+  const plannedHours = Number((Number(crewSize) * hoursPerVisit * freqVal * 4.33).toFixed(1));
   const proposalId = generateProposalId();
 
   // Get change order triggers
@@ -1215,7 +1257,7 @@ function sendProposal() {
     pricing: {
       monthlyPrice: price,
       laborRate: laborRate,
-      targetMargin: 25,
+      targetMargin: Number(document.getElementById('propTargetMargin').value) || 40,
     },
     labour: {
       crewSize: crewSize,
@@ -1278,6 +1320,10 @@ function sendProposal() {
   contracts.push(contract);
   saveContracts(contracts);
 
+  document.getElementById('propClientName').value = '';
+  document.getElementById('propClientEmail').value = '';
+  document.getElementById('propPrice').value = '11000';
+
   if (clientEmail) {
     const scopeText = Object.entries(scopeItems).map(([room, data]) => {
       const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
@@ -1294,13 +1340,31 @@ function sendProposal() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(emailData)
-    }).catch(err => console.log('Email delivery note: Check your email client'));
-  }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Email delivery failed');
+        }
 
-  alert('✓ Contract ' + proposalId + ' created for ' + clientName + '!\n\nView in Contracts tab.');
-  document.getElementById('propClientName').value = '';
-  document.getElementById('propClientEmail').value = '';
-  document.getElementById('propPrice').value = '11000';
+        alert(
+          '✓ Contract ' + proposalId +
+          ' created and proposal email sent to ' + clientEmail + '.'
+        );
+      })
+      .catch(error => {
+        console.error(error);
+
+        alert(
+          'Contract ' + proposalId +
+          ' was created locally, but the proposal email could not be sent.'
+        );
+      });
+  } else {
+    alert(
+      'Contract ' + proposalId +
+      ' created locally. No client email was provided.'
+    );
+  }
 }
 
 // CONTRACTS LIST VIEW
@@ -1327,8 +1391,8 @@ function renderContractsList() {
       if (tasks.length === 0) return '';
       return `
         <div style="margin-bottom: 1rem;">
-          <strong>${room}</strong><br>
-          <span style="color: #718096; font-size: 13px;">${tasks.join(', ')}</span>
+          <strong>${escapeHtml(room)}</strong><br>
+          <span style="color: #718096; font-size: 13px;">${tasks.map(escapeHtml).join(', ')}</span>
         </div>
       `;
     }).join('');
@@ -1341,10 +1405,10 @@ function renderContractsList() {
       <div class="contract-card">
         <div class="contract-header">
           <div>
-            <div class="contract-name">${baseline.client.name}</div>
-            <div class="contract-freq">${baseline.facility.sqft} sq ft • ${contract.proposalId}</div>
+            <div class="contract-name">${escapeHtml(baseline.client.name)}</div>
+            <div class="contract-freq">${escapeHtml(baseline.facility.sqft)} sq ft • ${escapeHtml(contract.proposalId)}</div>
           </div>
-          <span class="status-badge status-healthy">${contract.current_state.status}</span>
+          <span class="status-badge status-healthy">${escapeHtml(contract.current_state.status)}</span>
         </div>
 
         <div class="baseline-notice">
@@ -1358,19 +1422,19 @@ function renderContractsList() {
             <div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Client</span>
-                <span class="contract-info-value">${baseline.client.name}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.client.name)}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Email</span>
-                <span class="contract-info-value" style="font-size: 12px;">${baseline.client.email || 'Not provided'}</span>
+                <span class="contract-info-value" style="font-size: 12px;">${escapeHtml(baseline.client.email) || 'Not provided'}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Facility Size</span>
-                <span class="contract-info-value">${baseline.facility.sqft} sq ft</span>
+                <span class="contract-info-value">${escapeHtml(baseline.facility.sqft)} sq ft</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Facility Type</span>
-                <span class="contract-info-value">${baseline.facility.type}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.facility.type)}</span>
               </div>
             </div>
             <div>
@@ -1380,15 +1444,15 @@ function renderContractsList() {
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Frequency</span>
-                <span class="contract-info-value">${baseline.service.frequency.charAt(0).toUpperCase() + baseline.service.frequency.slice(1)}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.service.frequency.charAt(0).toUpperCase() + baseline.service.frequency.slice(1))}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Days</span>
-                <span class="contract-info-value">${baseline.service.days}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.service.days)}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Window</span>
-                <span class="contract-info-value">${baseline.service.window}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.service.window)}</span>
               </div>
             </div>
           </div>
@@ -1421,15 +1485,15 @@ function renderContractsList() {
             <div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Crew Size</span>
-                <span class="contract-info-value">${baseline.labour.crewSize} person${baseline.labour.crewSize > 1 ? 's' : ''}</span>
+                <span class="contract-info-value">${escapeHtml(baseline.labour.crewSize)} person${baseline.labour.crewSize > 1 ? 's' : ''}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Hours per Visit</span>
-                <span class="contract-info-value">${baseline.labour.hoursPerVisit}h</span>
+                <span class="contract-info-value">${escapeHtml(baseline.labour.hoursPerVisit)}h</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Target Margin</span>
-                <span class="contract-info-value" style="color: #10b981;">25%</span>
+                <span class="contract-info-value" style="color: #10b981;">${baseline.pricing.targetMargin}%</span>
               </div>
             </div>
           </div>
@@ -1438,12 +1502,12 @@ function renderContractsList() {
         <!-- INCLUSIONS & EXCLUSIONS -->
         <div class="contract-section">
           <h3>Inclusions</h3>
-          <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${baseline.inclusions || 'Not specified'}</div>
+          <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${escapeHtml(baseline.inclusions) || 'Not specified'}</div>
         </div>
 
         <div class="contract-section">
           <h3>Exclusions</h3>
-          <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${baseline.exclusions || 'Not specified'}</div>
+          <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${escapeHtml(baseline.exclusions) || 'Not specified'}</div>
         </div>
 
         <!-- CHANGE ORDER TRIGGERS -->
@@ -1454,7 +1518,7 @@ function renderContractsList() {
 
         <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
           <p style="font-size: 12px; color: #718096;">
-            Contract ID: ${contract.id} | Proposal: ${contract.proposalId} | Created: ${new Date(contract.proposalSentAt).toLocaleDateString()}
+            Contract ID: ${contract.id} | Proposal: ${escapeHtml(contract.proposalId)} | Created: ${new Date(contract.proposalSentAt).toLocaleDateString()}
           </p>
         </div>
       </div>
@@ -1480,8 +1544,17 @@ function renderMarginGuardian() {
 
     const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
     const plannedHours = baseline.labour.plannedHours;
-    const efficiency = (actualHours / plannedHours) * 100;
-    
+
+    const frequencyMap = {
+      daily: 5,
+      '3x': 3,
+      weekly: 1,
+      biweekly: 0.5
+    };
+    const weeklyFrequency = frequencyMap[baseline.service.frequency] || 1;
+    const plannedWeeklyHours = Number(baseline.labour.crewSize) * Number(baseline.labour.hoursPerVisit) * weeklyFrequency;
+    const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
+
     const laborCost = actualHours * baseline.pricing.laborRate;
     const miscExpenses = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) : 0;
     const totalCost = laborCost + miscExpenses;
@@ -1525,8 +1598,8 @@ function renderMarginGuardian() {
       <div class="contract-card">
         <div class="contract-header">
           <div>
-            <div class="contract-name">${baseline.client.name}</div>
-            <div class="contract-freq">${baseline.service.frequency.charAt(0).toUpperCase() + baseline.service.frequency.slice(1)} • ${baseline.facility.sqft} sq ft • ${contract.proposalId}</div>
+            <div class="contract-name">${escapeHtml(baseline.client.name)}</div>
+            <div class="contract-freq">${escapeHtml(baseline.service.frequency.charAt(0).toUpperCase() + baseline.service.frequency.slice(1))} • ${escapeHtml(baseline.facility.sqft)} sq ft • ${escapeHtml(contract.proposalId)}</div>
           </div>
           <span class="status-badge ${statusClass}">
             ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : actualHours === 0 ? '⏳' : '🔴'} ${status}
@@ -1540,9 +1613,9 @@ function renderMarginGuardian() {
             <div class="metric-variance">per month</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Planned Labour</div>
-            <div class="metric-value">${plannedHours}h</div>
-            <div class="metric-variance">@$${baseline.pricing.laborRate}/hr</div>
+            <div class="metric-label">Planned Labour This Week</div>
+            <div class="metric-value">${plannedWeeklyHours.toFixed(1)}h</div>
+            <div class="metric-variance">@ baseline</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Actual Labour</div>
@@ -1554,12 +1627,12 @@ function renderMarginGuardian() {
         <div class="margin-metric">
           <div class="metric-box">
             <div class="metric-label">Expected Margin</div>
-            <div class="metric-value">25.0%</div>
+            <div class="metric-value">${baseline.pricing.targetMargin.toFixed(1)}%</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Current Margin</div>
-            <div class="metric-value ${currentMargin >= 25 ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : currentMargin + '%'}</div>
-            ${actualHours === 0 ? '<div class="metric-variance">awaiting data</div>' : (currentMargin >= 25 ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>')}
+            <div class="metric-value ${currentMargin >= baseline.pricing.targetMargin ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : currentMargin + '%'}</div>
+            ${actualHours === 0 ? '<div class="metric-variance">awaiting data</div>' : (currentMargin >= baseline.pricing.targetMargin ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>')}
           </div>
           <div class="metric-box">
             <div class="metric-label">Profit / Month</div>
@@ -1755,9 +1828,17 @@ function updateStats(contracts) {
     if (!contract.original_baseline) return; // Skip old contracts
     
     const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseInt(log.hours), 0) : 0;
-    const plannedHours = contract.original_baseline.labour.plannedHours;
-    const efficiency = (actualHours / plannedHours) * 100;
-    
+    const baseline = contract.original_baseline;
+    const frequencyMap = {
+      daily: 5,
+      '3x': 3,
+      weekly: 1,
+      biweekly: 0.5
+    };
+    const weeklyFrequency = frequencyMap[baseline.service.frequency] || 1;
+    const plannedWeeklyHours = Number(baseline.labour.crewSize) * Number(baseline.labour.hoursPerVisit) * weeklyFrequency;
+    const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
+
     if (actualHours === 0) return; // Don't count contracts without data
     if (efficiency > 120) risk++;
     else if (efficiency > 110) watch++;
