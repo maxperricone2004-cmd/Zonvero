@@ -215,7 +215,7 @@
 <!-- CALCULATOR TAB -->
 <div id="calculator" class="tab-content">
   <h2>Build a profitable bid</h2>
-  <p class="section-intro">Market-accurate pricing by facility type. See revenue and labor hours instantly.</p>
+  <p class="section-intro">Market-accurate pricing by facility type. See revenue, costs, and profit instantly.</p>
   <div class="calculator">
     <div class="calc-row">
       <div class="form-group">
@@ -247,6 +247,32 @@
         <input type="number" id="laborRate" value="33" onchange="updateCalc()">
       </div>
     </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Crew Size (# of people)</label>
+        <select id="crewSize" onchange="updateCalc()">
+          <option value="1">1 person</option>
+          <option value="2">2 people</option>
+          <option value="3" selected>3 people</option>
+          <option value="4">4 people</option>
+          <option value="5">5 people</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Hours per Visit</label>
+        <input type="number" id="hoursPerVisit" value="2.5" step="0.5" min="1" onchange="updateCalc()">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Supplies Cost per Visit ($)</label>
+        <input type="number" id="suppliesCostPerVisit" value="50" min="0" step="10" onchange="updateCalc()">
+      </div>
+      <div class="form-group">
+        <label>Overhead/Admin per Visit ($)</label>
+        <input type="number" id="overheadPerVisit" value="25" min="0" step="5" onchange="updateCalc()">
+      </div>
+    </div>
     <div class="output-row">
       <div class="output-box">
         <div class="output-label">Price per Visit</div>
@@ -264,11 +290,57 @@
         <div class="output-unit">per month</div>
       </div>
       <div class="output-box">
-        <div class="output-label">Your Margin</div>
-        <div class="output-value" style="color: #10b981; font-size: 20px;">25%</div>
-        <div class="output-unit">protected</div>
+        <div class="output-label">Real Margin</div>
+        <div class="output-value" id="marginOutput" style="color: #10b981; font-size: 20px;">25%</div>
+        <div class="output-unit" id="marginStatus">protected</div>
       </div>
     </div>
+
+    <!-- COST BREAKDOWN -->
+    <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 2rem; margin-top: 2rem; margin-bottom: 2rem;">
+      <h3 style="margin-bottom: 1.5rem; color: #1a202c;">Cost Breakdown per Visit</h3>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+        <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Revenue</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownRevenue">$2,750</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Labor Cost</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownLabor">$440</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Supplies</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownSupplies">$50</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 2px solid #10b981;">
+            <span style="color: #718096; font-size: 13px;">Overhead</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownOverhead">$25</span>
+          </div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <span style="color: #1a202c; font-weight: 600;">Your Profit</span>
+            <span style="color: #10b981; font-weight: 700; font-size: 18px;" id="costBreakdownProfit">$2,235</span>
+          </div>
+          <div style="font-size: 12px; color: #718096; line-height: 1.6;">
+            <strong style="color: #1a202c;">Profit Margin:</strong> <span id="costBreakdownMarginPercent" style="color: #10b981; font-weight: 600;">81%</span><br>
+            <em style="font-size: 11px;">Includes all labor, supplies, and overhead</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK WARNING -->
+    <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+      <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 1rem;">⚠️ Risk Scenario</div>
+      <div style="font-size: 13px; color: #78350f; line-height: 1.6;">
+        <strong>If labor runs 20% over plan:</strong><br>
+        Your margin drops from <span id="riskBaselineMargin" style="color: #10b981; font-weight: 600;">81%</span> to <span id="riskWorstCaseMargin" style="color: #ef4444; font-weight: 600;">75%</span><br>
+        <em style="font-size: 12px;">Profit would be <span id="riskWorstCaseProfit" style="color: #ef4444; font-weight: 600;">$2,059</span> instead of <span id="riskBaselineProfit" style="color: #10b981; font-weight: 600;">$2,235</span></em>
+      </div>
+    </div>
+
     <button class="action-button" onclick="useThisQuote()" style="width: 100%; margin-top: 2rem; background: #059669; font-size: 16px; padding: 1rem;">→ Use This Quote in Proposal</button>
   </div>
 </div>
@@ -323,11 +395,11 @@
     <div class="assumptions-grid">
       <div class="form-group">
         <label>Estimated Crew Size</label>
-        <input type="number" id="propCrewSize" value="1" min="1">
+        <input type="number" id="propCrewSize" value="3" min="1" onchange="syncProposalToCalc()">
       </div>
       <div class="form-group">
         <label>Estimated Hours per Visit</label>
-        <input type="number" id="propHoursPerVisit" value="2" step="0.5" min="0.5">
+        <input type="number" id="propHoursPerVisit" value="2.5" step="0.5" min="0.5" onchange="syncProposalToCalc()">
       </div>
       <div class="form-group">
         <label>Service Day(s) of Week</label>
@@ -539,13 +611,17 @@ function switchTab(tabName) {
   if (tabName === 'contracts') renderContractsList();
 }
 
-// Calculator - MARKET-ACCURATE PRICING
+// Calculator - MARKET-ACCURATE PRICING WITH CREW ECONOMICS & FULL COSTS
 function updateCalc() {
   const sqft = parseInt(document.getElementById('sqft').value) || 25000;
   const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
   const facilityType = document.getElementById('facilityType').value;
+  const crewSize = parseInt(document.getElementById('crewSize').value) || 3;
+  const hoursPerPersonPerVisit = parseFloat(document.getElementById('hoursPerVisit').value) || 2.5;
+  const suppliesCostPerVisit = parseFloat(document.getElementById('suppliesCostPerVisit').value) || 50;
+  const overheadPerVisit = parseFloat(document.getElementById('overheadPerVisit').value) || 25;
   
-  // Market-accurate pricing per sqft by facility type (based on HomeAdvisor 2024-2025 data)
+  // Market-accurate pricing per sqft by facility type
   const pricingMap = {
     'warehouse': 0.046,
     'retail': 0.10,
@@ -560,14 +636,70 @@ function updateCalc() {
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[document.getElementById('frequency').value] || 1;
   
-  // Market-accurate labor hours: 2,000 sqft office = 6 hours (0.003 hours per sqft)
-  const hoursPerVisit = sqft * 0.003;
-  const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
-  const monthly = Math.round(quotePrice * freq * 4.33);
+  // Revenue calculation (per visit)
+  const revenuePerVisit = quotePrice;
+  const monthlyRevenue = Math.round(revenuePerVisit * freq * 4.33);
   
+  // Labor cost per visit (crew size × hours per person × rate)
+  const totalPersonHoursPerVisit = crewSize * hoursPerPersonPerVisit;
+  const laborCostPerVisit = Math.round(totalPersonHoursPerVisit * laborRate);
+  const totalPersonHoursPerMonth = Math.round(totalPersonHoursPerVisit * freq * 4.33);
+  
+  // Total costs per visit
+  const totalCostPerVisit = laborCostPerVisit + suppliesCostPerVisit + overheadPerVisit;
+  const monthlyTotalCost = Math.round(totalCostPerVisit * freq * 4.33);
+  
+  // Profit calculations
+  const profitPerVisit = Math.max(0, revenuePerVisit - totalCostPerVisit);
+  const monthlyProfit = Math.max(0, monthlyRevenue - monthlyTotalCost);
+  const marginPercent = revenuePerVisit > 0 ? ((profitPerVisit / revenuePerVisit) * 100).toFixed(1) : 0;
+  
+  // Risk scenario: labor runs 20% over plan
+  const laborCostRiskPerVisit = Math.round(laborCostPerVisit * 1.2);
+  const totalCostRiskPerVisit = laborCostRiskPerVisit + suppliesCostPerVisit + overheadPerVisit;
+  const profitPerVisitRisk = Math.max(0, revenuePerVisit - totalCostRiskPerVisit);
+  const monthlyProfitRisk = Math.max(0, monthlyRevenue - (Math.round(totalCostRiskPerVisit * freq * 4.33)));
+  const marginPercentRisk = revenuePerVisit > 0 ? ((profitPerVisitRisk / revenuePerVisit) * 100).toFixed(1) : 0;
+  
+  // Margin status
+  let marginStatus = 'protected';
+  if (marginPercent < 0) marginStatus = 'not viable';
+  else if (marginPercent < 15) marginStatus = 'thin margin';
+  else if (marginPercent < 25) marginStatus = 'below target';
+  else marginStatus = 'protected';
+  
+  // Update main outputs
   document.getElementById('quotePriceOutput').textContent = '$' + quotePrice.toLocaleString();
-  document.getElementById('monthlyOutput').textContent = '$' + monthly.toLocaleString();
-  document.getElementById('plannedHoursOutput').textContent = plannedHours;
+  document.getElementById('monthlyOutput').textContent = '$' + monthlyRevenue.toLocaleString();
+  document.getElementById('plannedHoursOutput').textContent = totalPersonHoursPerMonth;
+  document.getElementById('marginOutput').textContent = marginPercent + '%';
+  document.getElementById('marginStatus').textContent = marginStatus;
+  
+  // Update cost breakdown
+  document.getElementById('costBreakdownRevenue').textContent = '$' + revenuePerVisit.toLocaleString();
+  document.getElementById('costBreakdownLabor').textContent = '$' + laborCostPerVisit.toLocaleString();
+  document.getElementById('costBreakdownSupplies').textContent = '$' + suppliesCostPerVisit.toLocaleString();
+  document.getElementById('costBreakdownOverhead').textContent = '$' + overheadPerVisit.toLocaleString();
+  document.getElementById('costBreakdownProfit').textContent = '$' + profitPerVisit.toLocaleString();
+  document.getElementById('costBreakdownMarginPercent').textContent = marginPercent + '%';
+  
+  // Update risk scenario
+  document.getElementById('riskBaselineMargin').textContent = marginPercent + '%';
+  document.getElementById('riskWorstCaseMargin').textContent = marginPercentRisk + '%';
+  document.getElementById('riskBaselineProfit').textContent = '$' + profitPerVisit.toLocaleString();
+  document.getElementById('riskWorstCaseProfit').textContent = '$' + profitPerVisitRisk.toLocaleString();
+}
+
+function syncProposalToCalc() {
+  // Sync crew size and hours from Proposal back to Calculator
+  const propCrewSize = document.getElementById('propCrewSize').value;
+  const propHoursPerVisit = document.getElementById('propHoursPerVisit').value;
+  
+  document.getElementById('crewSize').value = propCrewSize;
+  document.getElementById('hoursPerVisit').value = propHoursPerVisit;
+  
+  // Trigger recalculation
+  updateCalc();
 }
 
 function useThisQuote() {
@@ -575,6 +707,10 @@ function useThisQuote() {
   const facilityType = document.getElementById('facilityType').value;
   const frequency = document.getElementById('frequency').value;
   const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
+  const crewSize = parseInt(document.getElementById('crewSize').value) || 3;
+  const hoursPerPersonPerVisit = parseFloat(document.getElementById('hoursPerVisit').value) || 2.5;
+  const suppliesCostPerVisit = parseFloat(document.getElementById('suppliesCostPerVisit').value) || 50;
+  const overheadPerVisit = parseFloat(document.getElementById('overheadPerVisit').value) || 25;
   
   // Calculate the monthly price from the quote
   const pricingMap = {
@@ -588,8 +724,6 @@ function useThisQuote() {
   const quotePrice = Math.round(sqft * pricePerSqFt);
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freq = freqMap[frequency] || 1;
-  const hoursPerVisit = sqft * 0.003;
-  const plannedHours = Math.round(hoursPerVisit * freq * 4.33);
   const monthlyPrice = Math.round(quotePrice * freq * 4.33);
   
   // Pre-fill the Proposal Builder fields
@@ -598,6 +732,8 @@ function useThisQuote() {
   document.getElementById('propFrequency').value = frequency;
   document.getElementById('propLaborRate').value = laborRate;
   document.getElementById('propPrice').value = monthlyPrice;
+  document.getElementById('propCrewSize').value = crewSize;
+  document.getElementById('propHoursPerVisit').value = hoursPerPersonPerVisit;
   
   // Scroll to top and switch tab
   window.scrollTo(0, 0);
@@ -699,7 +835,7 @@ function generateProposal() {
   const freq = document.getElementById('propFrequency').value;
   const price = document.getElementById('propPrice').value || 11000;
   const crewSize = document.getElementById('propCrewSize').value || 1;
-  const hoursPerVisit = document.getElementById('propHoursPerVisit').value || 2;
+  const hoursPerVisit = document.getElementById('propHoursPerVisit').value || 2.5;
   const serviceDays = document.getElementById('propServiceDays').value;
   const serviceWindow = document.getElementById('propServiceWindow').value;
   const suppliesBy = document.getElementById('propSuppliesBy').value;
@@ -866,7 +1002,7 @@ function sendProposal() {
 
   const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
   const freqVal = freqMap[freq] || 1;
-  const plannedHours = Math.round(hoursPerVisit * freqVal * 4.33);
+  const plannedHours = Math.round(crewSize * hoursPerVisit * freqVal * 4.33);
   const proposalId = generateProposalId();
 
   // Get change order triggers
@@ -1145,7 +1281,7 @@ function renderContractsList() {
   }).join('');
 }
 
-// MARGIN GUARDIAN (updated to read baseline)
+// MARGIN GUARDIAN
 function renderMarginGuardian() {
   const contracts = getContracts();
   const container = document.getElementById('contractsContainer');
