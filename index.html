@@ -366,6 +366,14 @@
       .live-margin-alert { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .alert-action-button { margin-left: 0; width: 100%; }
     }
+    .photo-analysis-section { background: #f7fafc; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+    .photo-upload-area { border: 2px dashed #cbd5e0; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .photo-upload-area:hover { border-color: #10b981; background: #f0fdf4; }
+    .photo-preview { max-width: 400px; border-radius: 6px; margin: 1.5rem auto; display: none; }
+    .analysis-result { background: white; padding: 1.5rem; border-radius: 6px; margin-top: 1rem; border-left: 4px solid #10b981; }
+    .analysis-result.deviation { border-color: #ef4444; }
+    .analysis-status { font-weight: 600; margin-bottom: 0.75rem; font-size: 14px; }
+    .analysis-text { color: #4a5568; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
   </style>
 </head>
 <body>
@@ -378,6 +386,7 @@
     <button class="tab-btn" onclick="switchTab('contracts')">Contracts</button>
     <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
     <button class="tab-btn" onclick="switchTab('crewIntelligence')">Crew Intelligence</button>
+    <button class="tab-btn" onclick="switchTab('scopeDetection')">Scope Detection</button>
   </nav>
 </header>
 
@@ -1099,6 +1108,21 @@
 
   <div id="crewIntelligenceContent">
     <p style="color: #718096; font-size: 13px;">Select a contract with time logs to see crew performance data.</p>
+  </div>
+</div>
+
+<div id="scopeDetection" class="tab-content">
+  <h2>AI Scope Detection</h2>
+  <p class="section-intro">Upload photos to detect scope deviations securely</p>
+  <div class="photo-analysis-section">
+    <h3>Upload Service Photo</h3>
+    <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoUpload').click()">
+      <p style="color: #718096; margin-bottom: 0.5rem; font-size: 15px;">Click to upload or drag & drop</p>
+      <p style="font-size: 12px; color: #a0aec0;">JPG, PNG (Max 10MB)</p>
+    </div>
+    <input type="file" id="photoUpload" style="display: none;" accept="image/*" onchange="handlePhotoUpload(event)">
+    <img id="photoPreview" class="photo-preview">
+    <div id="analysisResult"></div>
   </div>
 </div>
 
@@ -3906,6 +3930,48 @@ window.addEventListener('hashchange', function() {
     switchTab(tabName);
   }
 });
+
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = document.getElementById('photoPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('analysisResult').innerHTML = '<div class="analysis-result"><div class="analysis-status">🔍 Analyzing...</div><div class="analysis-text">Sending to AI analysis...</div></div>';
+    analyzePhotoSecure(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzePhotoSecure(imageBase64) {
+  try {
+    const base64Data = imageBase64.split(',')[1];
+    const response = await fetch('/api/analyze-photo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: base64Data })
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || 'Analysis failed');
+    const analysis = data.analysis;
+    const safeAnalysis = escapeHtml(analysis).replace(/\n/g, '<br>');
+    const hasDeviation = analysis.includes('SCOPE CREEP: YES');
+    const isHighConfidence = analysis.includes('CONFIDENCE: HIGH');
+    let resultHTML = '';
+    if (hasDeviation && isHighConfidence) {
+      resultHTML = `<div class="analysis-result deviation"><div class="analysis-status">🚨 Scope Deviation Detected</div><div class="analysis-text">${safeAnalysis}</div><button class="action-button" style="margin-top: 1rem;">Generate Change Order</button></div>`;
+    } else if (hasDeviation) {
+      resultHTML = `<div class="analysis-result"><div class="analysis-status">⚠️ Possible Deviation</div><div class="analysis-text">${safeAnalysis}</div></div>`;
+    } else {
+      resultHTML = `<div class="analysis-result" style="border-color: #10b981;"><div class="analysis-status">✅ Normal Scope</div><div class="analysis-text">${safeAnalysis}</div></div>`;
+    }
+    document.getElementById('analysisResult').innerHTML = resultHTML;
+  } catch (error) {
+    document.getElementById('analysisResult').innerHTML = `<div class="analysis-result deviation"><div class="analysis-status">⚠️ Error</div><div class="analysis-text">${escapeHtml(error.message)}</div></div>`;
+  }
+}
 </script>
 
 </body>
