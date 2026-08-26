@@ -41,6 +41,49 @@
     .margin-alert.warning { display: block; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
     .margin-alert.danger { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
     .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .input-help { font-size: 11px; color: #718096; margin-top: 0.35rem; line-height: 1.4; }
+    .mg-inline-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .scope-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .scope-photo-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .scope-photo-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .scope-photo-card label {
+      display: block;
+      color: #4a5568;
+      font-size: 12px;
+      margin-top: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .scope-photo-card input,
+    .scope-photo-card select,
+    .scope-photo-card textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .benchmark-sources { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
+    .benchmark-sources h3 { margin-bottom: 0.75rem; }
+    .benchmark-sources p { color: #4a5568; font-size: 13px; line-height: 1.7; margin-bottom: 1rem; }
+    .benchmark-sources ul { margin-left: 1.25rem; color: #4a5568; font-size: 13px; line-height: 1.8; }
+    .benchmark-sources a { color: #10b981; }
+    .risk-scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .scope-room { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }
     .scope-room-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; cursor: pointer; }
     .scope-room-title { font-weight: 600; font-size: 15px; color: #1a202c; }
@@ -86,6 +129,21 @@
     .danger-alert { background: #fee2e2; border-color: #fecaca; }
     .danger-alert .alert-title { color: #7f1d1d; }
     .danger-alert .alert-text { color: #7f1d1d; }
+    .live-margin-alert {
+      margin: 1.5rem 0 1rem 0;
+      padding: 1.25rem;
+      border-radius: 6px;
+      font-size: 14px;
+      border-left: 4px solid;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .live-margin-alert.healthy { background: #dcfce7; border-color: #10b981; color: #166534; font-weight: 500; }
+    .live-margin-alert.warning { background: #fef3c7; border-color: #f59e0b; color: #92400e; font-weight: 500; }
+    .live-margin-alert.critical { background: #fee2e2; border-color: #ef4444; color: #991b1b; font-weight: 500; }
+    .alert-action-button { background: #10b981; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-left: 1rem; }
+    .alert-action-button:hover { background: #059669; }
     .action-button { background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 500; font-size: 14px; cursor: pointer; margin-top: 1rem; }
     .action-button:hover { background: #059669; }
     .proposal-preview { background: white; padding: 2.5rem; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 900px; margin: 0 auto; }
@@ -131,13 +189,155 @@
     .crew-item-name { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 0.25rem; }
     .crew-item-hours { font-size: 18px; font-weight: 600; color: #10b981; }
     .crew-item-hours-label { font-size: 11px; color: #718096; margin-top: 0.25rem; }
+    .crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .crew-card { background: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; }
+    .crew-card .crew-name { font-weight: 600; font-size: 16px; color: #1a202c; margin-bottom: 1rem; }
+    .crew-perf-stat { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+    .crew-perf-stat-label { color: #718096; }
+    .crew-perf-stat-value { font-weight: 600; color: #1a202c; }
+    .crew-rank-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 1rem; }
+    .rank-excellent { background: #dcfce7; color: #166534; }
+    .rank-good { background: #dbeafe; color: #1e40af; }
+    .rank-warning { background: #fef3c7; color: #92400e; }
+    .rank-risk { background: #fee2e2; color: #991b1b; }
+
+    .change-order-section {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .change-order-form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .change-order-form .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .change-order-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .change-order-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .change-order-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a202c;
+    }
+
+    .change-order-meta {
+      font-size: 12px;
+      color: #718096;
+      margin-top: 0.25rem;
+    }
+
+    .change-order-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .change-order-grid > div {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1rem;
+    }
+
+    .change-order-label {
+      display: block;
+      font-size: 11px;
+      color: #718096;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .change-order-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .change-order-actions .action-button {
+      margin-top: 0;
+    }
+
+    .change-order-danger-button {
+      background: #dc2626;
+    }
+
+    .change-order-danger-button:hover {
+      background: #b91c1c;
+    }
+
+    .stats-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mg-subnav {
+      display: flex;
+      gap: 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 2rem;
+    }
+
+    .mg-subnav-tab {
+      background: none;
+      border: none;
+      color: #4a5568;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0 0 0.75rem 0;
+      margin-bottom: -1px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .mg-subnav-tab:hover {
+      color: #10b981;
+    }
+
+    .mg-subnav-tab.active {
+      color: #10b981;
+      border-bottom-color: #10b981;
+    }
+
+    .contract-card-highlight {
+      animation: contractCardHighlight 2s ease-out;
+    }
+
+    @keyframes contractCardHighlight {
+      0% { box-shadow: 0 0 0 3px #10b981; }
+      100% { box-shadow: none; }
+    }
+
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid-3 { grid-template-columns: repeat(2, 1fr); }
       .margin-metric { grid-template-columns: 1fr; }
       .proposal-details { grid-template-columns: repeat(2, 1fr); }
       .assumptions-grid { grid-template-columns: 1fr; }
       .contract-info-grid { grid-template-columns: 1fr; }
       .output-row { grid-template-columns: repeat(3, 1fr); }
+      .risk-scenario-grid { grid-template-columns: 1fr; }
+      .change-order-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
       header { flex-direction: column; gap: 1rem; text-align: center; }
@@ -148,11 +348,23 @@
       .two-col-grid,
       .assumptions-grid,
       .proposal-details,
-      .margin-metric { grid-template-columns: 1fr; }
+      .margin-metric,
+      .mg-inline-grid,
+      .stats-grid-3,
+      .scope-photo-grid { grid-template-columns: 1fr; }
       .proposal-signature { grid-template-columns: 1fr; gap: 1.5rem; }
       .proposal-preview { padding: 1.5rem; }
       .freq-matrix { font-size: 12px; display: block; overflow-x: auto; }
       .freq-matrix th, .freq-matrix td { padding: 0.5rem; }
+      .change-order-form,
+      .change-order-grid { grid-template-columns: 1fr; }
+      .change-order-form .full-width { grid-column: auto; }
+      .change-order-header { flex-direction: column; }
+      .change-order-actions { flex-direction: column; }
+      .change-order-actions .action-button { width: 100%; }
+      .mg-subnav { gap: 1rem; }
+      .live-margin-alert { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .alert-action-button { margin-left: 0; width: 100%; }
     }
   </style>
 </head>
@@ -165,6 +377,7 @@
     <button class="tab-btn" onclick="switchTab('proposal')">Proposal Builder</button>
     <button class="tab-btn" onclick="switchTab('contracts')">Contracts</button>
     <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
+    <button class="tab-btn" onclick="switchTab('crewIntelligence')">Crew Intelligence</button>
   </nav>
 </header>
 
@@ -288,7 +501,7 @@
     <div class="calc-row">
       <div class="form-group">
         <label>Facility Type</label>
-        <select id="facilityType" onchange="updateCalc()">
+        <select id="facilityType" onchange="updateProductionRateFromFacility()">
           <option value="office">Office</option>
           <option value="retail">Retail</option>
           <option value="warehouse">Warehouse</option>
@@ -311,12 +524,6 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Labour Rate per Hour</label>
-        <input type="number" id="laborRate" value="33" onchange="updateCalc()" min="1" max="500">
-      </div>
-    </div>
-    <div class="calc-row">
-      <div class="form-group">
         <label>Crew Size (# of people)</label>
         <select id="crewSize" onchange="updateCalc()">
           <option value="1">1 person</option>
@@ -326,58 +533,107 @@
           <option value="5">5 people</option>
         </select>
       </div>
+    </div>
+    <div class="calc-row">
       <div class="form-group">
-        <label>Hours per Visit</label>
-        <input type="number" id="hoursPerVisit" value="2.5" step="0.5" min="1" onchange="updateCalc()">
+        <label for="baseWageRate">Base Cleaner Wage per Hour ($)</label>
+        <input type="number" id="baseWageRate" value="22" min="0" step="0.50" onchange="updateCalc()">
+        <div class="input-help">Employee wage assumption. Adjust to your actual local wage.</div>
+      </div>
+      <div class="form-group">
+        <label for="laborRate">Billable Labour Rate per Hour ($)</label>
+        <input type="number" id="laborRate" value="40" min="0" step="0.50" onchange="updateCalc()">
+        <div class="input-help">Customer-facing labour-rate benchmark. Adjust to your pricing model.</div>
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
-        <label>Supplies Cost per Visit ($)</label>
-        <input type="number" id="suppliesCostPerVisit" value="50" min="0" step="10" onchange="updateCalc()">
+        <label for="productionRate">Production Rate (sq ft per worker-hour)</label>
+        <input type="number" id="productionRate" value="4250" min="1" step="50" onchange="updateCalc()">
+        <div class="input-help">Planning benchmark. Adjust after a walkthrough or historical job review.</div>
       </div>
       <div class="form-group">
-        <label>Overhead/Admin per Visit ($)</label>
-        <input type="number" id="overheadPerVisit" value="25" min="0" step="5" onchange="updateCalc()">
+        <label for="scopeComplexity">Scope Complexity</label>
+        <select id="scopeComplexity" onchange="updateCalc()">
+          <option value="0.9">Light / open area</option>
+          <option value="1" selected>Standard</option>
+          <option value="1.15">Detailed / high-touch</option>
+          <option value="1.3">Heavy / difficult conditions</option>
+        </select>
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
-        <label>Target Margin (%)</label>
-        <input type="number" id="targetMargin" value="40" onchange="updateCalc()" min="0" max="95" step="1">
+        <label for="payrollBurden">Payroll Burden (%)</label>
+        <input type="number" id="payrollBurden" value="25" min="0" max="100" step="0.5" onchange="updateCalc()">
+        <div class="input-help">Payroll taxes, vacation pay, insurance, and other labour on-costs.</div>
+      </div>
+      <div class="form-group">
+        <label for="suppliesPercent">Supplies (% of revenue)</label>
+        <input type="number" id="suppliesPercent" value="4" min="0" max="50" step="0.5" onchange="updateCalc()">
       </div>
     </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label for="overheadPerLaborHour">Overhead per Worker-Hour ($)</label>
+        <input type="number" id="overheadPerLaborHour" value="6" min="0" step="0.50" onchange="updateCalc()">
+      </div>
+      <div class="form-group">
+        <label for="travelCostPerVisit">Travel Cost per Visit ($)</label>
+        <input type="number" id="travelCostPerVisit" value="0" min="0" step="5" onchange="updateCalc()">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label for="equipmentCostPerVisit">Equipment Cost per Visit ($)</label>
+        <input type="number" id="equipmentCostPerVisit" value="0" min="0" step="5" onchange="updateCalc()">
+      </div>
+      <div class="form-group">
+        <label for="targetMargin">Target Margin (%)</label>
+        <input type="number" id="targetMargin" value="25" min="0" max="95" step="1" onchange="updateCalc()">
+      </div>
+    </div>
+
+    <!-- Legacy field, hidden: kept only so Proposal Builder's crew/hours sync (syncProposalToCalc) does not error. Not used by the pricing formula. -->
+    <input type="hidden" id="hoursPerVisit" value="2.5">
+
     <div class="output-row">
       <div class="output-box">
-        <div class="output-label">Price per Visit</div>
-        <div class="output-value" id="quotePriceOutput">—</div>
-        <div class="output-unit">estimated quote price</div>
+        <div class="output-label">Recommended Price per Visit</div>
+        <div class="output-value" id="recommendedPriceOutput">—</div>
+        <div class="output-unit">planning benchmark, not guaranteed</div>
       </div>
       <div class="output-box">
         <div class="output-label">Monthly Revenue</div>
         <div class="output-value" id="monthlyOutput">—</div>
-        <div class="output-unit">4 weeks</div>
+        <div class="output-unit">4.33 weeks</div>
       </div>
       <div class="output-box">
-        <div class="output-label">Planned Labour</div>
+        <div class="output-label">Worker-Hours per Visit</div>
         <div class="output-value" id="plannedHoursOutput" style="font-size: 20px;">—</div>
-        <div class="output-unit">per month</div>
+        <div class="output-unit">total across crew</div>
       </div>
       <div class="output-box">
-        <div class="output-label">Estimated Labour Cost</div>
-        <div class="output-value" id="estimatedLaborCostOutput">—</div>
-        <div class="output-unit">per month</div>
+        <div class="output-label">Crew Duration per Visit</div>
+        <div class="output-value" id="crewDurationOutput" style="font-size: 20px;">—</div>
+        <div class="output-unit">elapsed time on site</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">Fully Loaded Labour</div>
+        <div class="output-value" id="estimatedLaborCostOutput" style="font-size: 20px;">—</div>
+        <div class="output-unit">per visit</div>
       </div>
       <div class="output-box">
         <div class="output-label">Estimated Margin</div>
         <div class="output-value" id="marginOutput" style="color: #10b981; font-size: 20px;">—</div>
         <div class="output-unit" id="marginStatus">target</div>
       </div>
-      <div class="output-box">
-        <div class="output-label">Required Price</div>
-        <div class="output-value" id="requiredPriceOutput">—</div>
-        <div class="output-unit">to hit target margin</div>
-      </div>
+    </div>
+
+    <!-- Legacy fields, hidden: no external code reads them, kept only for id compatibility. The recommended price above already reflects the target margin. -->
+    <div style="display: none;">
+      <span id="quotePriceOutput">—</span>
+      <span id="requiredPriceOutput">—</span>
     </div>
 
     <div id="marginAlert" class="margin-alert"></div>
@@ -392,12 +648,28 @@
             <span style="color: #1a202c; font-weight: 600;" id="costBreakdownRevenue">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
-            <span style="color: #718096; font-size: 13px;">Labour Cost</span>
+            <span style="color: #718096; font-size: 13px;">Base Wages</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownBaseWages">—</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Payroll Burden</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownPayrollBurden">—</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Fully Loaded Labour</span>
             <span style="color: #1a202c; font-weight: 600;" id="costBreakdownLabor">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
             <span style="color: #718096; font-size: 13px;">Supplies</span>
             <span style="color: #1a202c; font-weight: 600;" id="costBreakdownSupplies">—</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Travel</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownTravel">—</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Equipment</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownEquipment">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 2px solid #10b981;">
             <span style="color: #718096; font-size: 13px;">Overhead</span>
@@ -405,28 +677,75 @@
           </div>
         </div>
         <div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <span style="color: #718096; font-size: 13px;">Total Cost</span>
+            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownTotal">—</span>
+          </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
             <span style="color: #1a202c; font-weight: 600;">Your Profit</span>
             <span style="color: #10b981; font-weight: 700; font-size: 18px;" id="costBreakdownProfit">—</span>
           </div>
           <div style="font-size: 12px; color: #718096; line-height: 1.6;">
             <strong style="color: #1a202c;">Profit Margin:</strong> <span id="costBreakdownMarginPercent" style="color: #10b981; font-weight: 600;">—</span><br>
-            <em style="font-size: 11px;">Includes all labour, supplies, and overhead</em>
+            <em style="font-size: 11px;">Includes base wages, payroll burden, supplies, travel, equipment, and overhead</em>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RISK WARNING -->
+    <!-- RISK SCENARIOS -->
     <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
-      <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 1rem;">⚠️ Risk Scenario</div>
-      <div style="font-size: 13px; color: #78350f; line-height: 1.6;">
-        <strong>If labour runs 20% over plan:</strong><br>
-        Your margin drops from <span id="riskBaselineMargin" style="color: #10b981; font-weight: 600;">—</span> to <span id="riskWorstCaseMargin" style="color: #ef4444; font-weight: 600;">—</span><br>
-        <em style="font-size: 12px;">Profit would be <span id="riskWorstCaseProfit" style="color: #ef4444; font-weight: 600;">—</span> instead of <span id="riskBaselineProfit" style="color: #10b981; font-weight: 600;">—</span></em>
+      <div style="font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 1rem;">⚠️ Risk Scenarios</div>
+      <div class="risk-scenario-grid" style="font-size: 13px; color: #78350f; line-height: 1.6;">
+        <div>
+          <strong>Labour runs 20% over plan</strong><br>
+          Margin: <span id="riskLaborMargin" style="color: #ef4444; font-weight: 600;">—</span><br>
+          Profit: <span id="riskLaborProfit" style="color: #ef4444; font-weight: 600;">—</span>
+        </div>
+        <div>
+          <strong>Supplies rise to 6%</strong><br>
+          Margin: <span id="riskSuppliesMargin" style="color: #ef4444; font-weight: 600;">—</span><br>
+          Profit: <span id="riskSuppliesProfit" style="color: #ef4444; font-weight: 600;">—</span>
+        </div>
+        <div>
+          <strong>Both occur together</strong><br>
+          Margin: <span id="riskCombinedMargin" style="color: #ef4444; font-weight: 600;">—</span><br>
+          Profit: <span id="riskCombinedProfit" style="color: #ef4444; font-weight: 600;">—</span><br>
+          <em style="font-size: 11px;">vs. baseline: <span id="riskCombinedImpact">—</span></em>
+        </div>
       </div>
     </div>
     <button class="action-button" onclick="useThisQuote()" style="width: 100%; margin-top: 2rem; background: #059669; font-size: 16px; padding: 1rem;">→ Use This Quote in Proposal</button>
+  </div>
+
+  <div class="benchmark-sources">
+    <h3>Planning benchmarks used</h3>
+    <p>
+      ConeQuotes uses editable planning benchmarks to estimate labour,
+      productivity, supplies, overhead, and pricing. These are starting points,
+      not guaranteed market prices. Confirm assumptions through a walkthrough and
+      your own historical job data.
+    </p>
+    <ul>
+      <li>
+        Ontario wage reference:
+        <a href="https://www.jobbank.gc.ca/marketreport/wages-occupation/14306/ON"
+           target="_blank"
+           rel="noopener noreferrer">
+          Government of Canada Job Bank — Cleaner wages in Ontario
+        </a>.
+      </li>
+      <li>
+        Production rates:
+        public ISSA-style planning methodology. Confirm actual productivity
+        through walkthroughs and completed-job history.
+      </li>
+      <li>
+        Supplies and overhead:
+        editable planning assumptions that should be replaced with the
+        contractor's own accounting data.
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -475,6 +794,25 @@
   </div>
 
   <div class="calculator" style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Site Walkthrough &amp; Scope Evidence</h3>
+    <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">
+      Upload photos from the walkthrough to document site conditions, access requirements, special areas, and exclusions. Link each photo to a room or scope area so the original proposal has visual context.
+    </p>
+    <div class="form-group">
+      <label>Walkthrough Photos</label>
+      <input type="file" id="scopePhotoInput" accept="image/*" multiple>
+    </div>
+    <button class="action-button" onclick="addScopePhotos()" style="margin-top: 1rem;">Add Walkthrough Photos</button>
+    <div id="scopePhotoPricingWarning" class="scope-note" style="display: none; margin-top: 1.5rem; background: #fee2e2; border-left-color: #ef4444; color: #7f1d1d;">
+      This walkthrough item may affect labour, equipment, travel, or scope assumptions. Review the quote before sending.
+    </div>
+    <div id="scopePhotoPreview"></div>
+    <p style="font-size: 11px; color: #718096; font-style: italic; margin-top: 1rem;">
+      Photos are compressed and stored locally in this prototype. They are not backed up or synchronized between devices.
+    </p>
+  </div>
+
+  <div class="calculator" style="margin-top: 2rem;">
     <h3 style="margin-bottom: 1.5rem;">Step 3: Service Assumptions</h3>
     <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Define labour estimates, access, supplies, and responsibilities.</p>
     <div class="assumptions-grid">
@@ -483,8 +821,14 @@
         <input type="number" id="propCrewSize" value="3" min="1" onchange="syncProposalToCalc()">
       </div>
       <div class="form-group">
-        <label>Estimated Hours per Visit</label>
-        <input type="number" id="propHoursPerVisit" value="2.5" step="0.5" min="0.5" onchange="syncProposalToCalc()">
+        <label>Worker-Hours per Visit</label>
+        <input type="number" id="propWorkerHoursPerVisit" value="5.88" step="0.01" min="0">
+        <div class="input-help">Total labour required across the whole crew, not per person.</div>
+      </div>
+      <div class="form-group">
+        <label>Crew Duration per Visit (hours)</label>
+        <input type="number" id="propCrewDuration" value="1.96" step="0.01" min="0" onchange="syncProposalToCalc()">
+        <div class="input-help">Elapsed time on site with this crew size.</div>
       </div>
       <div class="form-group">
         <label>Service Day(s) of Week</label>
@@ -599,19 +943,69 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Labour Rate per Hour</label>
-        <input type="number" id="propLaborRate" value="33">
+        <label>Billable Labour Rate per Hour ($)</label>
+        <input type="number" id="propLaborRate" value="40" min="0" step="0.50">
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
-        <label>Monthly Investment (What you'll charge the client)</label>
-        <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
+        <label>Base Cleaner Wage per Hour ($)</label>
+        <input type="number" id="propBaseWageRate" value="22" min="0" step="0.50">
       </div>
       <div class="form-group">
-        <label>Target Margin (%)</label>
-        <input type="number" id="propTargetMargin" value="40" min="0" max="95" step="1">
+        <label>Production Rate (sq ft per worker-hour)</label>
+        <input type="number" id="propProductionRate" value="4250" min="1" step="50">
       </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Scope Complexity</label>
+        <select id="propScopeComplexity">
+          <option value="0.9">Light / open area</option>
+          <option value="1" selected>Standard</option>
+          <option value="1.15">Detailed / high-touch</option>
+          <option value="1.3">Heavy / difficult conditions</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Payroll Burden (%)</label>
+        <input type="number" id="propPayrollBurden" value="25" min="0" max="100" step="0.5">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Supplies (% of revenue)</label>
+        <input type="number" id="propSuppliesPercent" value="4" min="0" max="50" step="0.5">
+      </div>
+      <div class="form-group">
+        <label>Overhead per Worker-Hour ($)</label>
+        <input type="number" id="propOverheadPerLaborHour" value="6" min="0" step="0.50">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Travel Cost per Visit ($)</label>
+        <input type="number" id="propTravelCost" value="0" min="0" step="5">
+      </div>
+      <div class="form-group">
+        <label>Equipment Cost per Visit ($)</label>
+        <input type="number" id="propEquipmentCost" value="0" min="0" step="5">
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="form-group">
+        <label>Target Margin (%)</label>
+        <input type="number" id="propTargetMargin" value="25" min="0" max="95" step="1">
+      </div>
+      <div class="form-group">
+        <label>Recommended Price per Visit ($)</label>
+        <input type="number" id="propRecommendedPrice" value="" min="0" step="1">
+        <p class="input-help">Use the Calculator or enter a reviewed price before creating a contract.</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Monthly Investment (What you'll charge the client)</label>
+      <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
     </div>
   </div>
 
@@ -673,7 +1067,39 @@
       <div class="stat-value" id="statRisk">0</div>
     </div>
   </div>
-  <div id="contractsContainer"></div>
+  <div class="mg-subnav">
+    <button class="mg-subnav-tab active" id="mgSubNavInbox" onclick="switchMarginSubTab('inbox')">Inbox</button>
+    <button class="mg-subnav-tab" id="mgSubNavWeekly" onclick="switchMarginSubTab('weekly')">Weekly Review</button>
+    <button class="mg-subnav-tab" id="mgSubNavContracts" onclick="switchMarginSubTab('contracts')">Contracts</button>
+  </div>
+
+  <div id="marginSubTabInbox" class="mg-subtab-content" style="display: block;">
+    <div id="marginLeakInboxContainer"></div>
+  </div>
+
+  <div id="marginSubTabWeekly" class="mg-subtab-content" style="display: none;">
+    <div id="weeklyReviewContainer"></div>
+  </div>
+
+  <div id="marginSubTabContracts" class="mg-subtab-content" style="display: none;">
+    <div id="contractsContainer"></div>
+  </div>
+</div>
+
+<div id="crewIntelligence" class="tab-content">
+  <h2>Crew Intelligence &amp; Profitability</h2>
+  <p class="section-intro">Track which crews hit targets, run over, and are most profitable, based on each contract's own baseline.</p>
+
+  <div style="margin-bottom: 2rem;">
+    <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">Select Contract:</label>
+    <select id="crewAnalysisSelect" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; width: 100%; max-width: 400px;" onchange="renderCrewIntelligence()">
+      <option value="">-- Choose a contract --</option>
+    </select>
+  </div>
+
+  <div id="crewIntelligenceContent">
+    <p style="color: #718096; font-size: 13px;">Select a contract with time logs to see crew performance data.</p>
+  </div>
 </div>
 
 </main>
@@ -696,7 +1122,28 @@ function getContracts() {
 }
 
 function saveContracts(contracts) {
-  localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
+  try {
+    localStorage.setItem('coneQuotesContracts', JSON.stringify(contracts));
+    return true;
+  } catch (err) {
+    console.error('Failed to save contracts to localStorage:', err);
+    return false;
+  }
+}
+
+function getMarginLeaks() {
+  const stored = localStorage.getItem('coneQuotesMarginLeaks');
+  return stored ? JSON.parse(stored) : { leaks: [], lastComputedAt: null };
+}
+
+function saveMarginLeaks(data) {
+  try {
+    localStorage.setItem('coneQuotesMarginLeaks', JSON.stringify(data));
+    return true;
+  } catch (err) {
+    console.error('Failed to save margin leaks to localStorage:', err);
+    return false;
+  }
 }
 
 function escapeHtml(value) {
@@ -706,6 +1153,182 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// Editable planning benchmarks only — not guaranteed market prices or official rates.
+const MARKET_BENCHMARKS = {
+  labour: {
+    region: 'Ontario',
+    wageLow: 17.60,
+    wageReference: 19.00,
+    wageHigh: 25.89,
+    defaultBaseWageRate: 22.00,
+    defaultBillableRate: 40.00,
+    sourceName: 'Government of Canada Job Bank',
+    sourceUrl: 'https://www.jobbank.gc.ca/marketreport/wages-occupation/14306/ON',
+    sourceDate: 'January 2026'
+  },
+
+  productionRates: {
+    office: {
+      label: 'General Office',
+      low: 3500,
+      high: 5000,
+      defaultRate: 4250
+    },
+    retail: {
+      label: 'Retail',
+      low: 4000,
+      high: 5500,
+      defaultRate: 4750
+    },
+    warehouse: {
+      label: 'Warehouse / Distribution',
+      low: 5000,
+      high: 7000,
+      defaultRate: 6000
+    },
+    medical: {
+      label: 'Medical / Clinical',
+      low: 1800,
+      high: 2500,
+      defaultRate: 2150
+    }
+  },
+
+  supplies: {
+    lowPercent: 3,
+    defaultPercent: 4,
+    highPercent: 6
+  },
+
+  overhead: {
+    lowPerWorkerHour: 4,
+    defaultPerWorkerHour: 6,
+    highPerWorkerHour: 8
+  }
+};
+
+const facilityProductionDefaults = {
+  office: 4250,
+  retail: 4750,
+  warehouse: 6000,
+  medical: 2150
+};
+
+function safeNumber(value, fallback = 0, minimum = 0, maximum = Infinity) {
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+
+  return Math.min(Math.max(number, minimum), maximum);
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-CA', {
+    style: 'currency',
+    currency: 'CAD',
+    maximumFractionDigits: 0
+  }).format(Number(value) || 0);
+}
+
+function updateProductionRateFromFacility() {
+  const facilityType = document.getElementById('facilityType').value;
+  const rate = facilityProductionDefaults[facilityType] || 4250;
+
+  document.getElementById('productionRate').value = rate;
+  updateCalc();
+}
+
+// Shared pricing engine — used by updateCalc() and useThisQuote() so the
+// Calculator and the Proposal Builder transfer never compute the price differently.
+function calculatePricing(inputs) {
+  const {
+    sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
+    payrollBurden, suppliesPercent, overheadPerWorkerHour,
+    travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
+  } = inputs;
+
+  // Worker-hours (total across the crew) from production rate and scope complexity
+  const workerHoursPerVisit = (sqft / productionRate) * scopeComplexity;
+
+  // Crew size affects elapsed duration only, not total worker-hours
+  const crewDurationPerVisit = crewSize > 0 ? workerHoursPerVisit / crewSize : workerHoursPerVisit;
+
+  // Fully loaded labour
+  const baseWagesPerVisit = workerHoursPerVisit * baseWageRate;
+  const payrollBurdenCostPerVisit = baseWagesPerVisit * (payrollBurden / 100);
+  const fullyLoadedLaborCostPerVisit = baseWagesPerVisit + payrollBurdenCostPerVisit;
+
+  const overheadCostPerVisit = workerHoursPerVisit * overheadPerWorkerHour;
+
+  const supplyRate = Math.min(suppliesPercent / 100, 0.50);
+
+  const costsBeforeSupplies = fullyLoadedLaborCostPerVisit + travelCostPerVisit + equipmentCostPerVisit + overheadCostPerVisit;
+  const priceBeforeTargetMargin = supplyRate < 1 ? costsBeforeSupplies / (1 - supplyRate) : costsBeforeSupplies;
+  const requiredPrice = targetMarginPercent < 95 ? priceBeforeTargetMargin / (1 - targetMarginPercent / 100) : priceBeforeTargetMargin;
+
+  const revenuePerVisit = requiredPrice;
+  const suppliesCostPerVisit = revenuePerVisit * supplyRate;
+  const totalCostPerVisit = fullyLoadedLaborCostPerVisit + suppliesCostPerVisit + travelCostPerVisit + equipmentCostPerVisit + overheadCostPerVisit;
+
+  // Profit — never clamped to zero
+  const profitPerVisit = revenuePerVisit - totalCostPerVisit;
+  const marginPercent = revenuePerVisit > 0
+    ? Number(((profitPerVisit / revenuePerVisit) * 100).toFixed(1))
+    : 0;
+
+  return {
+    workerHoursPerVisit,
+    crewDurationPerVisit,
+    baseWagesPerVisit,
+    payrollBurdenCostPerVisit,
+    fullyLoadedLaborCostPerVisit,
+    overheadCostPerVisit,
+    supplyRate,
+    requiredPrice,
+    revenuePerVisit,
+    suppliesCostPerVisit,
+    totalCostPerVisit,
+    profitPerVisit,
+    marginPercent
+  };
+}
+
+// Backward/forward-compatible baseline readers — old contracts predate the Phase 1/2
+// pricing engine fields, so every read of a saved contract goes through these.
+function getBaselineBillableRate(baseline) {
+  return Number(
+    baseline.pricing?.billableLaborRate ??
+    baseline.pricing?.laborRate ??
+    33
+  );
+}
+
+function getBaselineTargetMargin(baseline) {
+  return Number(
+    baseline.pricing?.targetMargin ??
+    25
+  );
+}
+
+function getBaselineWorkerHoursPerVisit(baseline) {
+  if (baseline.labour?.workerHoursPerVisit != null) {
+    return Number(baseline.labour.workerHoursPerVisit);
+  }
+  // Old contracts stored hoursPerVisit as hours per person; the crew works those
+  // hours in parallel, so total worker-hours across the crew is crewSize x hoursPerVisit.
+  return Number(baseline.labour?.crewSize || 1) *
+    Number(baseline.labour?.hoursPerVisit || 0);
+}
+
+function getBaselineCrewDuration(baseline) {
+  if (baseline.labour?.crewDurationPerVisit != null) {
+    return Number(baseline.labour.crewDurationPerVisit);
+  }
+  return Number(baseline.labour?.hoursPerVisit || 0);
 }
 
 // Tabs
@@ -722,63 +1345,67 @@ function switchTab(tabName) {
 
   if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
+  if (tabName === 'crewIntelligence') populateCrewAnalysisSelect();
 }
 
 // Calculator
 function updateCalc() {
-  const sqft = parseInt(document.getElementById('sqft').value) || 25000;
-  const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
-  const facilityType = document.getElementById('facilityType').value;
-  const crewSize = parseInt(document.getElementById('crewSize').value) || 3;
-  const hoursPerPersonPerVisit = parseFloat(document.getElementById('hoursPerVisit').value) || 2.5;
-  const suppliesCostPerVisit = parseFloat(document.getElementById('suppliesCostPerVisit').value) || 50;
-  const overheadPerVisit = parseFloat(document.getElementById('overheadPerVisit').value) || 25;
-  const targetMarginPercent = Number(document.getElementById('targetMargin').value) || 40;
-
-  // Estimated quote price per sqft by facility type
-  const pricingMap = {
-    'warehouse': 0.046,
-    'retail': 0.10,
-    'office': 0.11,
-    'medical': 0.133
-  };
-
-  const pricePerSqFt = pricingMap[facilityType] || 0.11;
-  const quotePrice = Math.round(sqft * pricePerSqFt);
+  const sqft = safeNumber(document.getElementById('sqft').value, 25000, 1, 1000000);
+  const crewSize = safeNumber(document.getElementById('crewSize').value, 3, 1, 100);
+  const baseWageRate = safeNumber(document.getElementById('baseWageRate').value, 22, 0, 500);
+  const billableLaborRate = safeNumber(document.getElementById('laborRate').value, 40, 0, 500);
+  const productionRate = safeNumber(document.getElementById('productionRate').value, 4250, 1, 1000000);
+  const scopeComplexity = safeNumber(document.getElementById('scopeComplexity').value, 1, 0.5, 3);
+  const payrollBurden = safeNumber(document.getElementById('payrollBurden').value, 25, 0, 100);
+  const suppliesPercent = safeNumber(document.getElementById('suppliesPercent').value, 4, 0, 50);
+  const overheadPerWorkerHour = safeNumber(document.getElementById('overheadPerLaborHour').value, 6, 0, 1000);
+  const travelCostPerVisit = safeNumber(document.getElementById('travelCostPerVisit').value, 0, 0, 100000);
+  const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
+  const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
 
   // Frequency multiplier
-  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
-  const freq = freqMap[document.getElementById('frequency').value] || 1;
+  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+  const frequency = frequencyMap[document.getElementById('frequency').value] || 1;
 
-  // Revenue calculation (per visit)
-  const revenuePerVisit = quotePrice;
-  const monthlyRevenue = Math.round(revenuePerVisit * freq * 4.33);
+  const {
+    workerHoursPerVisit,
+    crewDurationPerVisit,
+    baseWagesPerVisit,
+    payrollBurdenCostPerVisit,
+    fullyLoadedLaborCostPerVisit,
+    overheadCostPerVisit,
+    supplyRate,
+    requiredPrice,
+    revenuePerVisit,
+    suppliesCostPerVisit,
+    totalCostPerVisit,
+    profitPerVisit,
+    marginPercent
+  } = calculatePricing({
+    sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
+    payrollBurden, suppliesPercent, overheadPerWorkerHour,
+    travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
+  });
 
-  // Labor cost per visit (crew size × hours per person × rate)
-  const totalPersonHoursPerVisit = crewSize * hoursPerPersonPerVisit;
-  const laborCostPerVisit = Math.round(totalPersonHoursPerVisit * laborRate);
-  const totalPersonHoursPerMonth = totalPersonHoursPerVisit * freq * 4.33;
+  const monthlyRevenue = revenuePerVisit * frequency * 4.33;
 
-  // Total costs per visit
-  const totalCostPerVisit = laborCostPerVisit + suppliesCostPerVisit + overheadPerVisit;
+  // Multi-factor risk scenarios, calculated from the live values above
+  const laborRiskBaseWages = baseWagesPerVisit * 1.2;
+  const laborRiskFullyLoaded = laborRiskBaseWages * (1 + payrollBurden / 100);
+  const laborRiskTotalCost = laborRiskFullyLoaded + suppliesCostPerVisit + travelCostPerVisit + equipmentCostPerVisit + overheadCostPerVisit;
+  const laborRiskProfit = revenuePerVisit - laborRiskTotalCost;
+  const laborRiskMargin = revenuePerVisit > 0 ? (laborRiskProfit / revenuePerVisit) * 100 : 0;
 
-  // Profit calculations — losses are shown, never clamped to zero
-  const profitPerVisit = revenuePerVisit - totalCostPerVisit;
-  const marginPercent = revenuePerVisit > 0
-    ? Number(((profitPerVisit / revenuePerVisit) * 100).toFixed(1))
-    : 0;
+  const suppliesRiskRate = 0.06;
+  const suppliesRiskCost = revenuePerVisit * suppliesRiskRate;
+  const suppliesRiskTotalCost = fullyLoadedLaborCostPerVisit + suppliesRiskCost + travelCostPerVisit + equipmentCostPerVisit + overheadCostPerVisit;
+  const suppliesRiskProfit = revenuePerVisit - suppliesRiskTotalCost;
+  const suppliesRiskMargin = revenuePerVisit > 0 ? (suppliesRiskProfit / revenuePerVisit) * 100 : 0;
 
-  // Risk scenario: labor runs 20% over plan
-  const laborCostRiskPerVisit = Math.round(laborCostPerVisit * 1.2);
-  const totalCostRiskPerVisit = laborCostRiskPerVisit + suppliesCostPerVisit + overheadPerVisit;
-  const profitPerVisitRisk = revenuePerVisit - totalCostRiskPerVisit;
-  const marginPercentRisk = revenuePerVisit > 0
-    ? Number(((profitPerVisitRisk / revenuePerVisit) * 100).toFixed(1))
-    : 0;
-
-  // Required price to hit target margin, and the gap to close
-  const requiredPrice = totalCostPerVisit / (1 - targetMarginPercent / 100);
-  const priceGap = Math.max(0, requiredPrice - quotePrice);
+  const combinedTotalCost = laborRiskFullyLoaded + suppliesRiskCost + travelCostPerVisit + equipmentCostPerVisit + overheadCostPerVisit;
+  const combinedProfit = revenuePerVisit - combinedTotalCost;
+  const combinedMargin = revenuePerVisit > 0 ? (combinedProfit / revenuePerVisit) * 100 : 0;
+  const combinedImpact = combinedProfit - profitPerVisit;
 
   const actualMargin = marginPercent;
 
@@ -790,10 +1417,13 @@ function updateCalc() {
   document.getElementById('marginStatus').textContent = marginStatus;
 
   // Update main outputs
-  document.getElementById('quotePriceOutput').textContent = '$' + quotePrice.toLocaleString();
-  document.getElementById('monthlyOutput').textContent = '$' + monthlyRevenue.toLocaleString();
-  document.getElementById('plannedHoursOutput').textContent = totalPersonHoursPerMonth.toFixed(1) + ' hrs';
-  document.getElementById('requiredPriceOutput').textContent = '$' + Math.round(requiredPrice).toLocaleString();
+  document.getElementById('recommendedPriceOutput').textContent = formatCurrency(requiredPrice);
+  document.getElementById('quotePriceOutput').textContent = formatCurrency(requiredPrice);
+  document.getElementById('requiredPriceOutput').textContent = formatCurrency(requiredPrice);
+  document.getElementById('monthlyOutput').textContent = formatCurrency(monthlyRevenue);
+  document.getElementById('plannedHoursOutput').textContent = workerHoursPerVisit.toFixed(2) + ' hrs';
+  document.getElementById('crewDurationOutput').textContent = crewDurationPerVisit.toFixed(2) + ' hrs';
+  document.getElementById('estimatedLaborCostOutput').textContent = formatCurrency(fullyLoadedLaborCostPerVisit);
 
   const marginOutputEl = document.getElementById('marginOutput');
   if (actualMargin < 0) {
@@ -810,13 +1440,12 @@ function updateCalc() {
   alertEl.classList.remove('healthy', 'warning', 'danger');
   if (actualMargin < 0) {
     alertEl.classList.add('danger');
-    alertEl.textContent = '⚠️ This quote would lose money. Costs exceed revenue by $' +
-      Math.abs(Math.round(profitPerVisit)).toLocaleString() + '.';
+    alertEl.textContent = '⚠️ This quote would lose money. Costs exceed revenue by ' +
+      formatCurrency(Math.abs(profitPerVisit)) + '.';
   } else if (actualMargin < targetMarginPercent - 5) {
     alertEl.classList.add('danger');
     alertEl.textContent = '⚠️ Below target. Current: ' + actualMargin +
-      '%. Target: ' + targetMarginPercent +
-      '%. Raise price by $' + Math.round(priceGap).toLocaleString() + '.';
+      '%. Target: ' + targetMarginPercent + '%.';
   } else if (actualMargin < targetMarginPercent) {
     alertEl.classList.add('warning');
     alertEl.textContent = '⚡ Close to target. Current: ' + actualMargin +
@@ -827,58 +1456,76 @@ function updateCalc() {
       '% (Target: ' + targetMarginPercent + '%).';
   }
 
-  // Calculate and display estimated labour cost (based on per-visit labour cost, not a re-rounded hour count)
-  const estimatedMonthlyLaborCost = Math.round(laborCostPerVisit * freq * 4.33);
-  document.getElementById('estimatedLaborCostOutput').textContent = '$' + estimatedMonthlyLaborCost.toLocaleString();
-
   // Update cost breakdown
-  document.getElementById('costBreakdownRevenue').textContent = '$' + revenuePerVisit.toLocaleString();
-  document.getElementById('costBreakdownLabor').textContent = '$' + laborCostPerVisit.toLocaleString();
-  document.getElementById('costBreakdownSupplies').textContent = '$' + suppliesCostPerVisit.toLocaleString();
-  document.getElementById('costBreakdownOverhead').textContent = '$' + overheadPerVisit.toLocaleString();
-  document.getElementById('costBreakdownProfit').textContent = '$' + Math.round(profitPerVisit).toLocaleString();
+  document.getElementById('costBreakdownRevenue').textContent = formatCurrency(revenuePerVisit);
+  document.getElementById('costBreakdownBaseWages').textContent = formatCurrency(baseWagesPerVisit);
+  document.getElementById('costBreakdownPayrollBurden').textContent = formatCurrency(payrollBurdenCostPerVisit);
+  document.getElementById('costBreakdownLabor').textContent = formatCurrency(fullyLoadedLaborCostPerVisit);
+  document.getElementById('costBreakdownSupplies').textContent = formatCurrency(suppliesCostPerVisit);
+  document.getElementById('costBreakdownTravel').textContent = formatCurrency(travelCostPerVisit);
+  document.getElementById('costBreakdownEquipment').textContent = formatCurrency(equipmentCostPerVisit);
+  document.getElementById('costBreakdownOverhead').textContent = formatCurrency(overheadCostPerVisit);
+  document.getElementById('costBreakdownTotal').textContent = formatCurrency(totalCostPerVisit);
+  document.getElementById('costBreakdownProfit').textContent = formatCurrency(profitPerVisit);
   document.getElementById('costBreakdownMarginPercent').textContent = actualMargin + '%';
 
-  // Update risk scenario
-  document.getElementById('riskBaselineMargin').textContent = actualMargin + '%';
-  document.getElementById('riskWorstCaseMargin').textContent = marginPercentRisk + '%';
-  document.getElementById('riskBaselineProfit').textContent = '$' + Math.round(profitPerVisit).toLocaleString();
-  document.getElementById('riskWorstCaseProfit').textContent = '$' + Math.round(profitPerVisitRisk).toLocaleString();
+  // Update multi-factor risk scenarios
+  document.getElementById('riskLaborMargin').textContent = laborRiskMargin.toFixed(1) + '%';
+  document.getElementById('riskLaborProfit').textContent = formatCurrency(laborRiskProfit);
+  document.getElementById('riskSuppliesMargin').textContent = suppliesRiskMargin.toFixed(1) + '%';
+  document.getElementById('riskSuppliesProfit').textContent = formatCurrency(suppliesRiskProfit);
+  document.getElementById('riskCombinedMargin').textContent = combinedMargin.toFixed(1) + '%';
+  document.getElementById('riskCombinedProfit').textContent = formatCurrency(combinedProfit);
+  document.getElementById('riskCombinedImpact').textContent = (combinedImpact >= 0 ? '+' : '-') + formatCurrency(Math.abs(combinedImpact)) + ' vs. baseline profit';
 }
 
 function useThisQuote() {
-  const sqft = parseInt(document.getElementById('sqft').value) || 25000;
+  const sqft = safeNumber(document.getElementById('sqft').value, 25000, 1, 1000000);
   const facilityType = document.getElementById('facilityType').value;
   const frequency = document.getElementById('frequency').value;
-  const laborRate = parseInt(document.getElementById('laborRate').value) || 33;
-  const crewSize = parseInt(document.getElementById('crewSize').value) || 3;
-  const hoursPerPersonPerVisit = parseFloat(document.getElementById('hoursPerVisit').value) || 2.5;
-  const suppliesCostPerVisit = parseFloat(document.getElementById('suppliesCostPerVisit').value) || 50;
-  const overheadPerVisit = parseFloat(document.getElementById('overheadPerVisit').value) || 25;
-  
-  // Calculate the monthly price from the quote
-  const pricingMap = {
-    'warehouse': 0.046,
-    'retail': 0.10,
-    'office': 0.11,
-    'medical': 0.133
-  };
-  
-  const pricePerSqFt = pricingMap[facilityType] || 0.11;
-  const quotePrice = Math.round(sqft * pricePerSqFt);
-  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
-  const freq = freqMap[frequency] || 1;
-  const monthlyPrice = Math.round(quotePrice * freq * 4.33);
-  
-  // Pre-fill the Proposal Builder fields
+  const crewSize = safeNumber(document.getElementById('crewSize').value, 3, 1, 100);
+  const baseWageRate = safeNumber(document.getElementById('baseWageRate').value, 22, 0, 500);
+  const billableLaborRate = safeNumber(document.getElementById('laborRate').value, 40, 0, 500);
+  const productionRate = safeNumber(document.getElementById('productionRate').value, 4250, 1, 1000000);
+  const scopeComplexity = safeNumber(document.getElementById('scopeComplexity').value, 1, 0.5, 3);
+  const payrollBurden = safeNumber(document.getElementById('payrollBurden').value, 25, 0, 100);
+  const suppliesPercent = safeNumber(document.getElementById('suppliesPercent').value, 4, 0, 50);
+  const overheadPerWorkerHour = safeNumber(document.getElementById('overheadPerLaborHour').value, 6, 0, 1000);
+  const travelCostPerVisit = safeNumber(document.getElementById('travelCostPerVisit').value, 0, 0, 100000);
+  const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
+  const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
+
+  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+  const freq = frequencyMap[frequency] || 1;
+
+  const { workerHoursPerVisit, crewDurationPerVisit, requiredPrice } = calculatePricing({
+    sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
+    payrollBurden, suppliesPercent, overheadPerWorkerHour,
+    travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
+  });
+
+  const monthlyPrice = Math.round(requiredPrice * freq * 4.33);
+
+  // Pre-fill the Proposal Builder fields with the full set of calculator assumptions
   document.getElementById('propSqft').value = sqft;
   document.getElementById('propFacilityType').value = facilityType;
   document.getElementById('propFrequency').value = frequency;
-  document.getElementById('propLaborRate').value = laborRate;
-  document.getElementById('propPrice').value = monthlyPrice;
+  document.getElementById('propBaseWageRate').value = baseWageRate;
+  document.getElementById('propLaborRate').value = billableLaborRate;
+  document.getElementById('propProductionRate').value = productionRate;
+  document.getElementById('propScopeComplexity').value = scopeComplexity;
+  document.getElementById('propPayrollBurden').value = payrollBurden;
+  document.getElementById('propSuppliesPercent').value = suppliesPercent;
+  document.getElementById('propOverheadPerLaborHour').value = overheadPerWorkerHour;
+  document.getElementById('propTravelCost').value = travelCostPerVisit;
+  document.getElementById('propEquipmentCost').value = equipmentCostPerVisit;
+  document.getElementById('propTargetMargin').value = targetMarginPercent;
+  document.getElementById('propWorkerHoursPerVisit').value = Number(workerHoursPerVisit.toFixed(2));
   document.getElementById('propCrewSize').value = crewSize;
-  document.getElementById('propHoursPerVisit').value = hoursPerPersonPerVisit;
-  
+  document.getElementById('propCrewDuration').value = Number(crewDurationPerVisit.toFixed(2));
+  document.getElementById('propRecommendedPrice').value = Math.round(requiredPrice);
+  document.getElementById('propPrice').value = monthlyPrice;
+
   // Scroll to top and switch tab
   window.scrollTo(0, 0);
   switchTab('proposal');
@@ -927,15 +1574,181 @@ function validateCalculatorInputs() {
 }
 
 function syncProposalToCalc() {
-  // Sync crew size and hours from Proposal back to Calculator
-  const propCrewSize = document.getElementById('propCrewSize').value;
-  const propHoursPerVisit = document.getElementById('propHoursPerVisit').value;
-  
-  document.getElementById('crewSize').value = propCrewSize;
-  document.getElementById('hoursPerVisit').value = propHoursPerVisit;
-  
-  // Trigger recalculation
   updateCalc();
+}
+
+// Site Walkthrough Photos (Proposal Builder only, prototype-local — never sent anywhere)
+const SCOPE_PHOTO_TYPES = [
+  'Existing condition',
+  'Access issue',
+  'Special equipment required',
+  'High-risk area',
+  'Surface or floor condition',
+  'Exclusion evidence',
+  'Other'
+];
+const SCOPE_PHOTO_SIZE_WARNING_BYTES = 900000; // ~900KB of base64 data URL
+
+let scopePhotos = [];
+
+function compressImage(file, maxSize = 1600, quality = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = event => {
+      const image = new Image();
+
+      image.onload = () => {
+        const scale = Math.min(
+          1,
+          maxSize / Math.max(image.width, image.height)
+        );
+
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(image.width * scale);
+        canvas.height = Math.round(image.height * scale);
+
+        const context = canvas.getContext('2d');
+        context.drawImage(
+          image,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+
+      image.onerror = reject;
+      image.src = event.target.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function addScopePhotos() {
+  const input = document.getElementById('scopePhotoInput');
+  const files = Array.from(input.files || []);
+  if (files.length === 0) return;
+
+  const validFiles = [];
+  const rejectedNames = [];
+  files.forEach(file => {
+    if (file.type && file.type.startsWith('image/')) {
+      validFiles.push(file);
+    } else {
+      rejectedNames.push(file.name);
+    }
+  });
+
+  if (rejectedNames.length > 0) {
+    alert('The following file(s) are not images and were skipped: ' + rejectedNames.join(', '));
+  }
+
+  Promise.all(validFiles.map(file =>
+    compressImage(file)
+      .then(dataUrl => ({ file, dataUrl }))
+      .catch(() => null)
+  )).then(results => {
+    let failedCount = 0;
+
+    results.forEach(result => {
+      if (!result) {
+        failedCount++;
+        return;
+      }
+      const { file, dataUrl } = result;
+      scopePhotos.push({
+        id: 'photo-' + Date.now() + '-' + Math.floor(Math.random() * 100000),
+        name: file.name,
+        dataUrl: dataUrl,
+        area: '',
+        type: SCOPE_PHOTO_TYPES[0],
+        note: '',
+        affectsPricing: false,
+        includeInProposal: false,
+        sizeWarning: dataUrl.length > SCOPE_PHOTO_SIZE_WARNING_BYTES,
+        createdAt: new Date().toISOString()
+      });
+    });
+
+    if (failedCount > 0) {
+      alert('One or more photos could not be processed and were skipped.');
+    }
+
+    input.value = '';
+    renderScopePhotos();
+  });
+}
+
+function renderScopePhotos() {
+  const container = document.getElementById('scopePhotoPreview');
+  if (!container) return;
+
+  if (scopePhotos.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = '<div class="scope-photo-grid">' + scopePhotos.map(photo => `
+    <div class="scope-photo-card">
+      <img src="${photo.dataUrl}" alt="${escapeHtml(photo.name)}">
+      <div style="font-size: 12px; color: #1a202c; font-weight: 600; word-break: break-word;">${escapeHtml(photo.name)}</div>
+      ${photo.sizeWarning ? '<div style="font-size: 11px; color: #ef4444; margin-top: 0.25rem;">Large file — may affect storage limits in this prototype.</div>' : ''}
+      <label>Room or Area</label>
+      <input type="text" value="${escapeHtml(photo.area)}" placeholder="e.g., Restrooms" oninput="updateScopePhotoField('${photo.id}', 'area', this.value)">
+      <label>Photo Type</label>
+      <select onchange="updateScopePhotoField('${photo.id}', 'type', this.value)">
+        ${SCOPE_PHOTO_TYPES.map(type => `<option value="${escapeHtml(type)}" ${type === photo.type ? 'selected' : ''}>${escapeHtml(type)}</option>`).join('')}
+      </select>
+      <label>Note</label>
+      <textarea style="min-height: 50px;" oninput="updateScopePhotoField('${photo.id}', 'note', this.value)">${escapeHtml(photo.note)}</textarea>
+      <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;">
+        <input type="checkbox" style="width: 16px; height: 16px;" ${photo.affectsPricing ? 'checked' : ''} onchange="updateScopePhotoAffectsPricing('${photo.id}', this.checked)">
+        <span style="font-size: 12px; color: #4a5568;">Affects Pricing</span>
+      </label>
+      <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+        <input type="checkbox" style="width: 16px; height: 16px;" ${photo.includeInProposal ? 'checked' : ''} onchange="updateScopePhotoIncludeInProposal('${photo.id}', this.checked)">
+        <span style="font-size: 12px; color: #4a5568;">Include in Proposal</span>
+      </label>
+      <button class="action-button" style="width: 100%; margin-top: 0.75rem; background: #ef4444;" onclick="removeScopePhoto('${photo.id}')">Remove</button>
+    </div>
+  `).join('') + '</div>';
+}
+
+function updateScopePhotoField(photoId, field, value) {
+  const photo = scopePhotos.find(p => p.id === photoId);
+  if (photo) photo[field] = value;
+}
+
+function updateScopePhotoAffectsPricing(photoId, checked) {
+  const photo = scopePhotos.find(p => p.id === photoId);
+  if (photo) photo.affectsPricing = checked;
+  updateScopePhotoPricingWarning();
+}
+
+function updateScopePhotoIncludeInProposal(photoId, checked) {
+  const photo = scopePhotos.find(p => p.id === photoId);
+  if (photo) photo.includeInProposal = checked;
+}
+
+function removeScopePhoto(photoId) {
+  scopePhotos = scopePhotos.filter(p => p.id !== photoId);
+  renderScopePhotos();
+  updateScopePhotoPricingWarning();
+}
+
+function updateScopePhotoPricingWarning() {
+  const warningEl = document.getElementById('scopePhotoPricingWarning');
+  if (!warningEl) return;
+  warningEl.style.display = scopePhotos.some(p => p.affectsPricing) ? 'block' : 'none';
+}
+
+function getScopePhotosFromUI() {
+  return scopePhotos;
 }
 
 // Scope Builder
@@ -1030,18 +1843,36 @@ function generateProposal() {
   }
 
   const sqft = document.getElementById('propSqft').value;
+  const facilityType = document.getElementById('propFacilityType').value;
   const freq = document.getElementById('propFrequency').value;
   const price = document.getElementById('propPrice').value || 11000;
   const crewSize = document.getElementById('propCrewSize').value || 1;
-  const hoursPerVisit = document.getElementById('propHoursPerVisit').value || 2;
+  const workerHoursPerVisit = document.getElementById('propWorkerHoursPerVisit').value || 0;
+  const crewDuration = document.getElementById('propCrewDuration').value || 2;
   const serviceDays = document.getElementById('propServiceDays').value;
   const serviceWindow = document.getElementById('propServiceWindow').value;
   const suppliesBy = document.getElementById('propSuppliesBy').value;
   const equipmentBy = document.getElementById('propEquipmentBy').value;
 
+  const baseWageRate = document.getElementById('propBaseWageRate').value || 22;
+  const billableRate = document.getElementById('propLaborRate').value || 40;
+  const productionRate = document.getElementById('propProductionRate').value || 4250;
+  const scopeComplexitySelect = document.getElementById('propScopeComplexity');
+  const scopeComplexityLabel = scopeComplexitySelect.options[scopeComplexitySelect.selectedIndex]
+    ? scopeComplexitySelect.options[scopeComplexitySelect.selectedIndex].text
+    : 'Standard';
+  const payrollBurden = document.getElementById('propPayrollBurden').value || 25;
+  const suppliesPercent = document.getElementById('propSuppliesPercent').value || 4;
+  const overheadPerWorkerHour = document.getElementById('propOverheadPerLaborHour').value || 6;
+  const travelCost = document.getElementById('propTravelCost').value || 0;
+  const equipmentCost = document.getElementById('propEquipmentCost').value || 0;
+  const targetMargin = document.getElementById('propTargetMargin').value || 25;
+  const recommendedPrice = document.getElementById('propRecommendedPrice').value || 0;
+
   const inclusions = document.getElementById('propInclusions').value;
   const exclusions = document.getElementById('propExclusions').value;
 
+  const facilityTypeDisplay = { office: 'Office', retail: 'Retail', warehouse: 'Warehouse', medical: 'Medical/Healthcare' }[facilityType] || facilityType;
   const freqDisplay = { 'daily': 'Daily (5x/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];
   const proposalId = generateProposalId();
 
@@ -1052,11 +1883,16 @@ function generateProposal() {
   const safeInclusions = escapeHtml(inclusions);
   const safeExclusions = escapeHtml(exclusions);
   const safeSqft = escapeHtml(sqft);
-  const safePrice = escapeHtml(price);
+  const safeFacilityType = escapeHtml(facilityTypeDisplay);
   const safeCrewSize = escapeHtml(crewSize);
-  const safeHoursPerVisit = escapeHtml(hoursPerVisit);
-  const safeLaborRate = escapeHtml(document.getElementById('propLaborRate').value || '33');
+  const safeWorkerHoursPerVisit = escapeHtml(workerHoursPerVisit);
+  const safeCrewDuration = escapeHtml(crewDuration);
   const safeProposalId = escapeHtml(proposalId);
+  const safeProductionRate = escapeHtml(productionRate);
+  const safeScopeComplexityLabel = escapeHtml(scopeComplexityLabel);
+  const safePayrollBurden = escapeHtml(payrollBurden);
+  const safeSuppliesPercent = escapeHtml(suppliesPercent);
+  const safeTargetMargin = escapeHtml(targetMargin);
 
   const scopeHtml = Object.entries(scopeItems).map(([room, data]) => {
     const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
@@ -1080,6 +1916,25 @@ function generateProposal() {
     document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
   ].filter(Boolean).map(item => `• ${item}`).join('<br>');
 
+  const includedScopePhotos = getScopePhotosFromUI().filter(photo => photo.includeInProposal);
+  const scopePhotosHtml = includedScopePhotos.length > 0 ? `
+      <div class="proposal-section">
+        <div class="proposal-section-title">Site Walkthrough Evidence</div>
+        <div class="proposal-section-content">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            ${includedScopePhotos.map(photo => `
+              <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem;">
+                <img src="${photo.dataUrl}" alt="${escapeHtml(photo.name)}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 0.5rem;">
+                <div style="font-size: 12px; font-weight: 600; color: #1a202c;">${escapeHtml(photo.area) || 'Unspecified area'}</div>
+                <div style="font-size: 11px; color: #718096;">${escapeHtml(photo.type)}</div>
+                ${photo.note ? `<div style="font-size: 12px; color: #4a5568; margin-top: 0.25rem;">${escapeHtml(photo.note)}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+  ` : '';
+
   const proposal = `
     <div class="proposal-preview">
       <div class="proposal-header">
@@ -1093,8 +1948,12 @@ function generateProposal() {
 
       <div class="proposal-details">
         <div class="proposal-detail">
-          <div class="proposal-detail-label">Facility Size</div>
+          <div class="proposal-detail-label">Facility</div>
           <div class="proposal-detail-value">${safeSqft} sq ft</div>
+        </div>
+        <div class="proposal-detail">
+          <div class="proposal-detail-label">Facility Type</div>
+          <div class="proposal-detail-value">${safeFacilityType}</div>
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Service Frequency</div>
@@ -1102,7 +1961,7 @@ function generateProposal() {
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Monthly Investment</div>
-          <div class="proposal-detail-value">$${safePrice}</div>
+          <div class="proposal-detail-value">${formatCurrency(price)}</div>
         </div>
         <div class="proposal-detail">
           <div class="proposal-detail-label">Email</div>
@@ -1114,14 +1973,15 @@ function generateProposal() {
         <div class="proposal-section-title">Scope of Work</div>
         <div class="proposal-section-content">${scopeHtml || 'No tasks selected'}</div>
       </div>
-
+      ${scopePhotosHtml}
       <div class="proposal-section">
         <div class="proposal-section-title">Service Schedule</div>
         <div class="proposal-section-content">
           Service Days: ${safeServiceDays}<br>
           Service Window: ${safeServiceWindow}<br>
-          Estimated Crew Size: ${safeCrewSize}<br>
-          Estimated Duration per Visit: ${safeHoursPerVisit} hours
+          Crew Size: ${safeCrewSize}<br>
+          Worker-Hours per Visit: ${safeWorkerHoursPerVisit}h<br>
+          Crew Duration per Visit: ${safeCrewDuration} hours
         </div>
       </div>
 
@@ -1163,20 +2023,27 @@ function generateProposal() {
 
       <div class="proposal-price">
         <div class="proposal-price-label">Monthly Investment</div>
-        <div class="proposal-price-value">$${safePrice}</div>
+        <div class="proposal-price-value">${formatCurrency(price)}</div>
         <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes specified supplies</div>
       </div>
 
       <div class="proposal-section">
-        <div class="proposal-section-title">Financial Summary</div>
+        <div class="proposal-section-title">Pricing &amp; Labour Assumptions</div>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; font-size: 13px; color: #4a5568;">
           <div>
-            <strong>Monthly Revenue:</strong> $${safePrice}<br>
-            <strong>Crew Cost:</strong> ${safeCrewSize} people × ${safeHoursPerVisit}h/visit × $${safeLaborRate}/hr<br>
-            <strong>Planned Labour Hours:</strong> ${escapeHtml(document.querySelector('#plannedHoursOutput')?.textContent || Math.round(crewSize * hoursPerVisit * (freq || 1) * 4.33))}h/month
+            <strong>Base Cleaner Wage:</strong> ${formatCurrency(baseWageRate)}/hr<br>
+            <strong>Billable Labour Rate:</strong> ${formatCurrency(billableRate)}/hr<br>
+            <strong>Production Rate:</strong> ${safeProductionRate} sq ft per worker-hour<br>
+            <strong>Scope Complexity:</strong> ${safeScopeComplexityLabel}<br>
+            <strong>Payroll Burden:</strong> ${safePayrollBurden}%<br>
+            <strong>Supplies:</strong> ${safeSuppliesPercent}% of revenue
           </div>
           <div>
-            <strong style="font-size: 14px; color: #10b981;">Target Margin:</strong> ${escapeHtml(document.getElementById('propTargetMargin').value || '40')}%<br>
+            <strong>Overhead:</strong> ${formatCurrency(overheadPerWorkerHour)}/worker-hour<br>
+            <strong>Travel Cost:</strong> ${formatCurrency(travelCost)}/visit<br>
+            <strong>Equipment Cost:</strong> ${formatCurrency(equipmentCost)}/visit<br>
+            <strong style="font-size: 14px; color: #10b981;">Target Margin:</strong> ${safeTargetMargin}%<br>
+            <strong style="font-size: 14px; color: #10b981;">Recommended Price per Visit:</strong> ${formatCurrency(recommendedPrice)}<br>
             <em style="font-size: 12px;">Actual margin depends on whether crews stay on schedule</em>
           </div>
         </div>
@@ -1218,17 +2085,64 @@ function sendProposal() {
     return;
   }
 
-  const sqft = parseInt(document.getElementById('propSqft').value) || 25000;
+  const sqft = safeNumber(document.getElementById('propSqft').value, 25000, 1, 1000000);
   const facilityType = document.getElementById('propFacilityType').value;
   const freq = document.getElementById('propFrequency').value;
-  const laborRate = parseInt(document.getElementById('propLaborRate').value) || 33;
-  const price = parseInt(document.getElementById('propPrice').value) || 11000;
-  const crewSize = document.getElementById('propCrewSize').value;
-  const hoursPerVisit = parseFloat(document.getElementById('propHoursPerVisit').value);
 
-  const freqMap = { 'daily': 5, '3x': 3, 'weekly': 1, 'biweekly': 0.5 };
-  const freqVal = freqMap[freq] || 1;
-  const plannedHours = Number((Number(crewSize) * hoursPerVisit * freqVal * 4.33).toFixed(1));
+  const baseWageRate = safeNumber(document.getElementById('propBaseWageRate').value, 22, 0, 500);
+  const billableLaborRate = safeNumber(document.getElementById('propLaborRate').value, 40, 0, 500);
+  const productionRate = safeNumber(document.getElementById('propProductionRate').value, 4250, 1, 1000000);
+  const scopeComplexity = safeNumber(document.getElementById('propScopeComplexity').value, 1, 0.5, 3);
+  const payrollBurden = safeNumber(document.getElementById('propPayrollBurden').value, 25, 0, 100);
+  const suppliesPercent = safeNumber(document.getElementById('propSuppliesPercent').value, 4, 0, 50);
+  const overheadPerWorkerHour = safeNumber(document.getElementById('propOverheadPerLaborHour').value, 6, 0, 1000);
+  const travelCostPerVisit = safeNumber(document.getElementById('propTravelCost').value, 0, 0, 100000);
+  const equipmentCostPerVisit = safeNumber(document.getElementById('propEquipmentCost').value, 0, 0, 100000);
+  const targetMargin = safeNumber(document.getElementById('propTargetMargin').value, 25, 0, 95);
+  const crewSize = safeNumber(document.getElementById('propCrewSize').value, 3, 1, 100);
+  const workerHoursPerVisit = safeNumber(document.getElementById('propWorkerHoursPerVisit').value, 0, 0, 100000);
+  const crewDurationPerVisit = safeNumber(document.getElementById('propCrewDuration').value, 0, 0, 100000);
+  const recommendedPriceRaw = document.getElementById('propRecommendedPrice').value;
+  if (recommendedPriceRaw === '' || isNaN(Number(recommendedPriceRaw)) || Number(recommendedPriceRaw) <= 0) {
+    alert('Please calculate or confirm the recommended price before creating a contract.');
+    return;
+  }
+  const recommendedPricePerVisit = safeNumber(recommendedPriceRaw, 0, 0, 10000000);
+  const price = safeNumber(document.getElementById('propPrice').value, 0, 0, 10000000);
+
+  const expectedCrewDuration = crewSize > 0 ? workerHoursPerVisit / crewSize : workerHoursPerVisit;
+  const crewDurationDifference = Math.abs(crewDurationPerVisit - expectedCrewDuration);
+  if (crewDurationDifference > 0.25) {
+    const proceed = confirm(
+      'Crew duration does not match worker-hours and crew size. ' +
+      'Expected approximately ' +
+      expectedCrewDuration.toFixed(2) +
+      ' hours. Continue anyway?'
+    );
+    if (!proceed) {
+      return;
+    }
+  }
+
+  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+  const frequencyValue = document.getElementById('propFrequency').value;
+  const frequency = frequencyMap[frequencyValue] || 1;
+
+  const plannedHours = Number((workerHoursPerVisit * frequency * 4.33).toFixed(1));
+
+  const baseWagesPerVisit = workerHoursPerVisit * baseWageRate;
+  const payrollBurdenCostPerVisit = baseWagesPerVisit * (payrollBurden / 100);
+  const fullyLoadedLaborCostPerVisit = baseWagesPerVisit + payrollBurdenCostPerVisit;
+  const estimatedSuppliesCostPerVisit = recommendedPricePerVisit * (suppliesPercent / 100);
+  const estimatedOverheadCostPerVisit = workerHoursPerVisit * overheadPerWorkerHour;
+
+  const totalCostPerVisit =
+    fullyLoadedLaborCostPerVisit +
+    estimatedSuppliesCostPerVisit +
+    estimatedOverheadCostPerVisit +
+    travelCostPerVisit +
+    equipmentCostPerVisit;
+
   const proposalId = generateProposalId();
 
   // Get change order triggers
@@ -1241,7 +2155,8 @@ function sendProposal() {
     document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
   ].filter(Boolean);
 
-  // ORIGINAL CONTRACT BASELINE (immutable)
+  // ORIGINAL CONTRACT BASELINE (immutable) — the calculator is the source of truth
+  // for pricing assumptions, so the full estimate is captured here, not just the price.
   const original_baseline = {
     client: {
       name: clientName,
@@ -1258,12 +2173,32 @@ function sendProposal() {
     },
     pricing: {
       monthlyPrice: price,
-      laborRate: laborRate,
-      targetMargin: Number(document.getElementById('propTargetMargin').value) || 40,
+      recommendedPricePerVisit: recommendedPricePerVisit,
+      baseWageRate: baseWageRate,
+      billableLaborRate: billableLaborRate,
+      targetMargin: targetMargin,
+    },
+    estimating: {
+      productionRate: productionRate,
+      scopeComplexity: scopeComplexity,
+      payrollBurden: payrollBurden,
+      suppliesPercent: suppliesPercent,
+      overheadPerWorkerHour: overheadPerWorkerHour,
+      travelCostPerVisit: travelCostPerVisit,
+      equipmentCostPerVisit: equipmentCostPerVisit,
+      workerHoursPerVisit: workerHoursPerVisit,
+      crewDurationPerVisit: crewDurationPerVisit,
+      baseWagesPerVisit: baseWagesPerVisit,
+      payrollBurdenCostPerVisit: payrollBurdenCostPerVisit,
+      fullyLoadedLaborCostPerVisit: fullyLoadedLaborCostPerVisit,
+      estimatedSuppliesCostPerVisit: estimatedSuppliesCostPerVisit,
+      estimatedOverheadCostPerVisit: estimatedOverheadCostPerVisit,
+      totalCostPerVisit: totalCostPerVisit,
     },
     labour: {
       crewSize: crewSize,
-      hoursPerVisit: hoursPerVisit,
+      workerHoursPerVisit: workerHoursPerVisit,
+      crewDurationPerVisit: crewDurationPerVisit,
       plannedHours: plannedHours,
     },
     scope: JSON.parse(JSON.stringify(scopeItems)), // Deep copy
@@ -1277,6 +2212,7 @@ function sendProposal() {
       clientManagesSecurityAlarms: document.getElementById('propAlarm').checked,
       parkingAvailable: document.getElementById('propParking').checked,
     },
+    scopePhotos: JSON.parse(JSON.stringify(getScopePhotosFromUI())), // Deep copy — later edits to scopePhotos must not mutate this saved baseline
     proposalCreatedAt: new Date().toISOString(),
     scopeVersion: 'v1.0',
   };
@@ -1288,17 +2224,17 @@ function sendProposal() {
     clientName,
     clientEmail,
     status: 'Proposal Sent',
-    
+
     // IMMUTABLE ORIGINAL BASELINE
     original_baseline: original_baseline,
-    
+
     // CURRENT STATE (can evolve later)
     current_state: {
       status: 'Proposal Sent',
       currentPrice: price,
       lastModified: new Date().toISOString(),
     },
-    
+
     // ACTUALS (tracking)
     actuals: {
       labourHours: [],
@@ -1306,25 +2242,34 @@ function sendProposal() {
       completedTasks: [],
       additionalScopeItems: [],
     },
-    
-    // Keep for backward compatibility with Margin Guardian
+
+    // Kept for backward compatibility with older code paths, if any still read these directly
     quotePrice: price,
-    laborRate: laborRate,
+    laborRate: billableLaborRate,
     plannedHours: plannedHours,
     sqft: sqft,
     frequency: freq,
     weeklylogs: [],
     expenses: [],
+    changeOrders: [],
     proposalSentAt: new Date().toISOString(),
   };
 
   const contracts = getContracts();
   contracts.push(contract);
-  saveContracts(contracts);
+  const saved = saveContracts(contracts);
+  if (!saved) {
+    alert('This photo could not be saved in prototype mode. Use a smaller image or remove another photo.');
+    return;
+  }
 
   document.getElementById('propClientName').value = '';
   document.getElementById('propClientEmail').value = '';
   document.getElementById('propPrice').value = '11000';
+
+  scopePhotos = [];
+  renderScopePhotos();
+  updateScopePhotoPricingWarning();
 
   if (clientEmail) {
     const scopeText = Object.entries(scopeItems).map(([room, data]) => {
@@ -1442,7 +2387,7 @@ function renderContractsList() {
             <div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Monthly Contract Value</span>
-                <span class="contract-info-value">$${baseline.pricing.monthlyPrice}</span>
+                <span class="contract-info-value">${formatCurrency(baseline.pricing.monthlyPrice)}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Frequency</span>
@@ -1473,11 +2418,11 @@ function renderContractsList() {
             <div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Monthly Revenue</span>
-                <span class="contract-info-value">$${baseline.pricing.monthlyPrice}</span>
+                <span class="contract-info-value">${formatCurrency(baseline.pricing.monthlyPrice)}</span>
               </div>
               <div class="contract-info-row">
-                <span class="contract-info-label">Labour Rate</span>
-                <span class="contract-info-value">$${baseline.pricing.laborRate}/hr</span>
+                <span class="contract-info-label">Billable Labour Rate</span>
+                <span class="contract-info-value">${formatCurrency(getBaselineBillableRate(baseline))}/hr</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Planned Hours</span>
@@ -1490,16 +2435,65 @@ function renderContractsList() {
                 <span class="contract-info-value">${escapeHtml(baseline.labour.crewSize)} person${baseline.labour.crewSize > 1 ? 's' : ''}</span>
               </div>
               <div class="contract-info-row">
-                <span class="contract-info-label">Hours per Visit</span>
-                <span class="contract-info-value">${escapeHtml(baseline.labour.hoursPerVisit)}h</span>
+                <span class="contract-info-label">Worker-Hours per Visit</span>
+                <span class="contract-info-value">${getBaselineWorkerHoursPerVisit(baseline).toFixed(2)}h</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Crew Duration per Visit</span>
+                <span class="contract-info-value">${getBaselineCrewDuration(baseline).toFixed(2)}h</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Target Margin</span>
-                <span class="contract-info-value" style="color: #10b981;">${baseline.pricing.targetMargin}%</span>
+                <span class="contract-info-value" style="color: #10b981;">${getBaselineTargetMargin(baseline)}%</span>
               </div>
             </div>
           </div>
         </div>
+
+        ${baseline.estimating && Object.keys(baseline.estimating).length > 0 ? `
+        <!-- ESTIMATING ASSUMPTIONS -->
+        <div class="contract-section">
+          <h3>Estimating Assumptions</h3>
+          <div class="contract-info-grid">
+            <div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Base Cleaner Wage</span>
+                <span class="contract-info-value">${formatCurrency(baseline.pricing.baseWageRate ?? 22)}/hr</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Production Rate</span>
+                <span class="contract-info-value">${escapeHtml(baseline.estimating.productionRate)} sq ft/hr</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Scope Complexity</span>
+                <span class="contract-info-value">${escapeHtml(baseline.estimating.scopeComplexity)}x</span>
+              </div>
+            </div>
+            <div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Payroll Burden</span>
+                <span class="contract-info-value">${escapeHtml(baseline.estimating.payrollBurden)}%</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Supplies</span>
+                <span class="contract-info-value">${escapeHtml(baseline.estimating.suppliesPercent)}% of revenue</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Overhead</span>
+                <span class="contract-info-value">${formatCurrency(baseline.estimating.overheadPerWorkerHour ?? 6)}/worker-hour</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Travel Cost</span>
+                <span class="contract-info-value">${formatCurrency(baseline.estimating.travelCostPerVisit ?? 0)}/visit</span>
+              </div>
+              <div class="contract-info-row">
+                <span class="contract-info-label">Equipment Cost</span>
+                <span class="contract-info-value">${formatCurrency(baseline.estimating.equipmentCostPerVisit ?? 0)}/visit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        ` : ''}
 
         <!-- INCLUSIONS & EXCLUSIONS -->
         <div class="contract-section">
@@ -1528,10 +2522,681 @@ function renderContractsList() {
   }).join('');
 }
 
+// MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
+const MARGIN_LEAK_FREQUENCY_MAP = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+const MARGIN_LEAK_RECOMPUTE_THROTTLE_MS = 5 * 60 * 1000;
+let showDismissedLeaks = false;
+let activeMarginSubTab = 'inbox';
+let selectedWeeklyReviewWeekStartMs = null;
+
+function detectMarginLeaks(contracts) {
+  const candidates = [];
+
+  contracts.forEach(contract => {
+    const baseline = contract.original_baseline;
+    if (!baseline) return;
+
+    const contractName = contract.clientName || contract.proposalId || ('Contract ' + contract.id);
+    const weeklyFrequency = MARGIN_LEAK_FREQUENCY_MAP[baseline.service?.frequency] || 1;
+    const visitsPerMonth = weeklyFrequency * 4.33;
+    const plannedWeeklyHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
+    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
+
+    // A. Labour overrun
+    if (plannedWeeklyHours > 0 && actualHours > 0) {
+      const laborVariancePercent = ((actualHours - plannedWeeklyHours) / plannedWeeklyHours) * 100;
+      if (laborVariancePercent > 10) {
+        candidates.push({
+          dedupeKey: 'labour_overrun:' + contract.id,
+          contractId: contract.id,
+          contractName,
+          leakType: 'labour_overrun',
+          severity: laborVariancePercent > 20 ? 'high' : 'medium',
+          description: 'Logged labour is ' + laborVariancePercent.toFixed(1) + '% over baseline (' + actualHours.toFixed(1) + 'h logged vs ' + plannedWeeklyHours.toFixed(1) + 'h planned this week).',
+          baselineValue: plannedWeeklyHours,
+          actualValue: actualHours,
+          variance: laborVariancePercent,
+        });
+      }
+    }
+
+    // B. Cost overrun
+    const baselineMonthlyCost = (
+      (baseline.estimating?.travelCostPerVisit ?? 0) +
+      (baseline.estimating?.equipmentCostPerVisit ?? 0) +
+      (baseline.estimating?.estimatedSuppliesCostPerVisit ?? 0)
+    ) * visitsPerMonth;
+    const actualMonthlyCost = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) : 0;
+    if (baselineMonthlyCost > 0 && actualMonthlyCost > 0) {
+      const costVariancePercent = ((actualMonthlyCost - baselineMonthlyCost) / baselineMonthlyCost) * 100;
+      if (costVariancePercent > 15) {
+        candidates.push({
+          dedupeKey: 'cost_overrun:' + contract.id,
+          contractId: contract.id,
+          contractName,
+          leakType: 'cost_overrun',
+          severity: costVariancePercent > 25 ? 'high' : 'medium',
+          description: 'Logged expenses are ' + costVariancePercent.toFixed(1) + '% over the baseline monthly cost assumption (' + formatCurrency(actualMonthlyCost) + ' logged vs ' + formatCurrency(baselineMonthlyCost) + ' planned).',
+          baselineValue: baselineMonthlyCost,
+          actualValue: actualMonthlyCost,
+          variance: costVariancePercent,
+        });
+      }
+    }
+
+    // C & D. Change orders: unapproved for too long, or absorbed
+    (contract.changeOrders || []).forEach(order => {
+      if (order.status === 'Draft' || order.status === 'Awaiting Approval') {
+        const ageDays = (Date.now() - new Date(order.createdAt).getTime()) / 86400000;
+        if (ageDays > 14) {
+          candidates.push({
+            dedupeKey: 'unapproved_change_order:' + contract.id + ':' + order.id,
+            contractId: contract.id,
+            contractName,
+            leakType: 'unapproved_change_order',
+            severity: ageDays > 30 ? 'high' : 'medium',
+            description: 'Change order "' + order.description + '" has been ' + order.status + ' for ' + Math.floor(ageDays) + ' days.',
+            baselineValue: 14,
+            actualValue: Math.floor(ageDays),
+            variance: Math.floor(ageDays - 14),
+          });
+        }
+      }
+      if (order.status === 'Absorbed') {
+        candidates.push({
+          dedupeKey: 'absorbed_cost:' + contract.id + ':' + order.id,
+          contractId: contract.id,
+          contractName,
+          leakType: 'absorbed_cost',
+          severity: order.totalCost > 500 ? 'high' : order.totalCost >= 200 ? 'medium' : 'low',
+          description: 'Change order "' + order.description + '" was absorbed instead of billed (' + formatCurrency(order.totalCost) + ').',
+          baselineValue: 0,
+          actualValue: order.totalCost,
+          variance: order.totalCost,
+        });
+      }
+    });
+
+    // E. Negative margin variance
+    if (actualHours > 0 && (baseline.pricing?.monthlyPrice || 0) > 0) {
+      const billableRate = getBaselineBillableRate(baseline);
+      const laborCost = actualHours * billableRate;
+      const miscExpenses = actualMonthlyCost;
+      const totalCost = laborCost + miscExpenses;
+      const currentMargin = ((baseline.pricing.monthlyPrice - totalCost) / baseline.pricing.monthlyPrice) * 100;
+      const targetMargin = getBaselineTargetMargin(baseline);
+      const marginVariance = targetMargin - currentMargin; // positive = below target
+
+      if (marginVariance > 5) {
+        candidates.push({
+          dedupeKey: 'negative_margin_variance:' + contract.id,
+          contractId: contract.id,
+          contractName,
+          leakType: 'negative_margin_variance',
+          severity: marginVariance > 10 ? 'high' : 'medium',
+          description: 'Current margin is ' + marginVariance.toFixed(1) + ' points below the ' + targetMargin.toFixed(1) + '% target (' + currentMargin.toFixed(1) + '% actual).',
+          baselineValue: targetMargin,
+          actualValue: currentMargin,
+          variance: marginVariance,
+        });
+      }
+    }
+  });
+
+  return candidates;
+}
+
+function recomputeMarginLeaks(contracts, options = {}) {
+  const stored = getMarginLeaks();
+  const now = Date.now();
+
+  if (!options.force && stored.lastComputedAt && (now - new Date(stored.lastComputedAt).getTime()) < MARGIN_LEAK_RECOMPUTE_THROTTLE_MS) {
+    return stored.leaks;
+  }
+
+  const candidates = detectMarginLeaks(contracts);
+  const existingKeys = new Set(stored.leaks.map(leak => leak.dedupeKey));
+
+  candidates.forEach(candidate => {
+    if (!existingKeys.has(candidate.dedupeKey)) {
+      stored.leaks.push({
+        id: Date.now() + '-' + Math.floor(Math.random() * 100000),
+        contractId: candidate.contractId,
+        contractName: candidate.contractName,
+        leakType: candidate.leakType,
+        severity: candidate.severity,
+        description: candidate.description,
+        baselineValue: candidate.baselineValue,
+        actualValue: candidate.actualValue,
+        variance: candidate.variance,
+        dedupeKey: candidate.dedupeKey,
+        createdAt: new Date().toISOString(),
+        triageStatus: 'new',
+        triageNote: '',
+        triagedAt: null,
+        resolvedAt: null,
+      });
+      existingKeys.add(candidate.dedupeKey);
+    }
+  });
+
+  stored.lastComputedAt = new Date().toISOString();
+  saveMarginLeaks(stored);
+  return stored.leaks;
+}
+
+function triageLeak(leakId, newStatus, note) {
+  const stored = getMarginLeaks();
+  const leak = stored.leaks.find(l => l.id === leakId);
+  if (!leak) return;
+
+  leak.triageStatus = newStatus;
+  if (note !== undefined && note !== null) leak.triageNote = note;
+  leak.triagedAt = new Date().toISOString();
+  if (newStatus === 'dismissed' || newStatus === 'action_taken') {
+    leak.resolvedAt = new Date().toISOString();
+  }
+
+  saveMarginLeaks(stored);
+  renderMarginLeakInbox(stored.leaks);
+}
+
+function dismissLeak(leakId) {
+  triageLeak(leakId, 'dismissed');
+}
+
+function addLeakNote(leakId) {
+  const stored = getMarginLeaks();
+  const leak = stored.leaks.find(l => l.id === leakId);
+  if (!leak) return;
+
+  const note = prompt('Add a note about this margin leak:', leak.triageNote || '');
+  if (note === null) return;
+
+  triageLeak(leakId, leak.triageStatus, note.trim());
+}
+
+function toggleShowDismissedLeaks(checked) {
+  showDismissedLeaks = checked;
+  renderMarginLeakInbox(getMarginLeaks().leaks);
+}
+
+function scrollToContractCard(contractId) {
+  switchMarginSubTab('contracts');
+  setTimeout(() => {
+    const card = document.getElementById('contractCard-' + contractId);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    card.classList.add('contract-card-highlight');
+    setTimeout(() => card.classList.remove('contract-card-highlight'), 2000);
+  }, 50);
+}
+
+function formatLeakVariance(leak) {
+  if (leak.leakType === 'absorbed_cost') return formatCurrency(leak.variance);
+  if (leak.leakType === 'unapproved_change_order') return leak.variance + ' day(s) over the 14-day threshold';
+  if (leak.leakType === 'negative_margin_variance') return (leak.variance >= 0 ? '+' : '') + leak.variance.toFixed(1) + ' points';
+  return (leak.variance >= 0 ? '+' : '') + leak.variance.toFixed(1) + '%';
+}
+
+const MARGIN_LEAK_TYPE_LABELS = {
+  labour_overrun: 'Labour Overrun',
+  cost_overrun: 'Cost Overrun',
+  unapproved_change_order: 'Unapproved Change Order',
+  absorbed_cost: 'Absorbed Cost',
+  negative_margin_variance: 'Negative Margin Variance',
+};
+
+const MARGIN_LEAK_SEVERITY_CLASS = { high: 'status-risk', medium: 'status-watch', low: 'status-healthy' };
+
+function renderMarginLeakInbox(leaks) {
+  const container = document.getElementById('marginLeakInboxContainer');
+  if (!container) return;
+
+  const totalLeaks = leaks.length;
+  const newLeaks = leaks.filter(l => l.triageStatus === 'new').length;
+  const highSeverityLeaks = leaks.filter(l => l.severity === 'high' && l.triageStatus !== 'dismissed').length;
+
+  const visibleLeaks = (showDismissedLeaks ? leaks : leaks.filter(l => l.triageStatus !== 'dismissed'))
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const listHtml = visibleLeaks.length === 0
+    ? '<div class="empty-state">No margin leaks to review right now.</div>'
+    : visibleLeaks.map(leak => {
+        let actionButtons = '';
+        if (leak.triageStatus === 'new') {
+          actionButtons += `<button class="action-button" onclick="triageLeak('${leak.id}', 'acknowledged')">Acknowledge</button>`;
+        }
+        if (leak.triageStatus === 'acknowledged') {
+          actionButtons += `<button class="action-button" onclick="triageLeak('${leak.id}', 'action_taken')">Mark Action Taken</button>`;
+        }
+        actionButtons += `<button class="action-button" onclick="addLeakNote('${leak.id}')">Add Note</button>`;
+        if (leak.triageStatus !== 'dismissed') {
+          actionButtons += `<button class="action-button change-order-danger-button" onclick="dismissLeak('${leak.id}')">Dismiss</button>`;
+        }
+
+        const triageBadgeClass = leak.triageStatus === 'dismissed' ? 'status-risk' : leak.triageStatus === 'new' ? 'status-watch' : 'status-healthy';
+
+        return `
+          <div class="change-order-card">
+            <div class="change-order-header">
+              <div>
+                <div class="change-order-title" style="cursor: pointer;" onclick="scrollToContractCard(${leak.contractId})">${escapeHtml(leak.contractName)}</div>
+                <div class="change-order-meta">${escapeHtml(MARGIN_LEAK_TYPE_LABELS[leak.leakType] || leak.leakType)} • Created ${new Date(leak.createdAt).toLocaleDateString()}</div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                <span class="status-badge ${MARGIN_LEAK_SEVERITY_CLASS[leak.severity] || 'status-watch'}">${escapeHtml(leak.severity)}</span>
+                <span class="status-badge ${triageBadgeClass}">${escapeHtml(leak.triageStatus.replace('_', ' '))}</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: #4a5568; margin-bottom: 0.5rem;">${escapeHtml(leak.description)}</p>
+            <p style="font-size: 12px; color: #718096; margin-bottom: 0.75rem;">Variance: ${escapeHtml(formatLeakVariance(leak))}</p>
+            ${leak.triageNote ? `<div class="scope-note" style="margin-top: 0;"><strong>Note:</strong> ${escapeHtml(leak.triageNote)}</div>` : ''}
+            <div class="change-order-actions" style="margin-top: 1rem;">${actionButtons}</div>
+          </div>
+        `;
+      }).join('');
+
+  container.innerHTML = `
+    <h3 style="margin-bottom: 0.5rem;">Margin Leak Inbox</h3>
+    <div class="stats-grid stats-grid-3" style="margin-bottom: 1.5rem;">
+      <div class="stat-card">
+        <div class="stat-label">Total Leaks</div>
+        <div class="stat-value">${totalLeaks}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New Leaks</div>
+        <div class="stat-value">${newLeaks}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">High Severity</div>
+        <div class="stat-value">${highSeverityLeaks}</div>
+      </div>
+    </div>
+    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 13px; color: #4a5568; margin-bottom: 1.5rem;">
+      <input type="checkbox" id="showDismissedLeaksToggle" ${showDismissedLeaks ? 'checked' : ''} onchange="toggleShowDismissedLeaks(this.checked)">
+      Show dismissed leaks
+    </label>
+    ${listHtml}
+  `;
+}
+
+function currentWeeklyReviewWeekStart() {
+  if (selectedWeeklyReviewWeekStartMs === null) {
+    selectedWeeklyReviewWeekStartMs = Date.now() - 7 * 86400000;
+  }
+  return new Date(selectedWeeklyReviewWeekStartMs).toISOString();
+}
+
+function currentWeeklyReviewWeekEnd() {
+  const start = selectedWeeklyReviewWeekStartMs === null ? Date.now() - 7 * 86400000 : selectedWeeklyReviewWeekStartMs;
+  return new Date(start + 7 * 86400000).toISOString();
+}
+
+function computeWeeklyReview(contracts, leaks, weekStart, weekEnd) {
+  const startTime = new Date(weekStart).getTime();
+  const endTime = new Date(weekEnd).getTime();
+
+  const activeContracts = contracts.filter(c => c.original_baseline);
+
+  let healthyCount = 0;
+  let measurableCount = 0;
+  let marginVarianceSum = 0;
+
+  activeContracts.forEach(contract => {
+    const baseline = contract.original_baseline;
+    const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
+    if (actualHours <= 0) return;
+
+    const monthlyPrice = baseline.pricing?.monthlyPrice || 0;
+    if (monthlyPrice <= 0) return;
+
+    const billableRate = getBaselineBillableRate(baseline);
+    const laborCost = actualHours * billableRate;
+    const miscExpenses = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) : 0;
+    const totalCost = laborCost + miscExpenses;
+    const currentMargin = ((monthlyPrice - totalCost) / monthlyPrice) * 100;
+    const targetMargin = getBaselineTargetMargin(baseline);
+    const marginVariance = currentMargin - targetMargin;
+
+    measurableCount++;
+    marginVarianceSum += marginVariance;
+    if (marginVariance >= 0) healthyCount++;
+  });
+
+  const weekLeaks = leaks.filter(leak => {
+    const t = new Date(leak.createdAt).getTime();
+    return t >= startTime && t <= endTime;
+  });
+
+  const contractsWithLeaksCount = new Set(weekLeaks.map(leak => leak.contractId)).size;
+
+  const laborVarianceHours = weekLeaks
+    .filter(leak => leak.leakType === 'labour_overrun')
+    .reduce((sum, leak) => sum + (leak.actualValue - leak.baselineValue), 0);
+
+  const costVarianceDollars = weekLeaks
+    .filter(leak => leak.leakType === 'cost_overrun')
+    .reduce((sum, leak) => sum + (leak.actualValue - leak.baselineValue), 0);
+
+  const absorbedLeaks = weekLeaks.filter(leak => leak.leakType === 'absorbed_cost');
+  const totalAbsorbedCost = absorbedLeaks.reduce((sum, leak) => sum + leak.actualValue, 0);
+
+  const averageMarginVariance = measurableCount > 0 ? marginVarianceSum / measurableCount : 0;
+
+  const severityRank = { high: 3, medium: 2, low: 1 };
+  const topLeaks = weekLeaks
+    .slice()
+    .sort((a, b) => {
+      const sevDiff = (severityRank[b.severity] || 0) - (severityRank[a.severity] || 0);
+      if (sevDiff !== 0) return sevDiff;
+      return Math.abs(b.variance) - Math.abs(a.variance);
+    })
+    .slice(0, 3);
+
+  const narrative =
+    'This week, ' + contractsWithLeaksCount + ' of ' + activeContracts.length + ' contracts showed margin leaks. ' +
+    (laborVarianceHours !== 0 ? 'Labour ran ' + (laborVarianceHours > 0 ? '+' : '') + laborVarianceHours.toFixed(1) + 'h vs. baseline on flagged contracts. ' : '') +
+    (absorbedLeaks.length > 0 ? absorbedLeaks.length + ' change order' + (absorbedLeaks.length === 1 ? '' : 's') + ' totalling ' + formatCurrency(totalAbsorbedCost) + ' ' + (absorbedLeaks.length === 1 ? 'was' : 'were') + ' absorbed. ' : '') +
+    'Average margin variance was ' + (averageMarginVariance >= 0 ? '+' : '') + averageMarginVariance.toFixed(1) + ' points vs. target.';
+
+  return {
+    weekStart,
+    weekEnd,
+    activeContractsCount: activeContracts.length,
+    healthyContractsCount: healthyCount,
+    contractsWithLeaksCount,
+    laborVarianceHours,
+    costVarianceDollars,
+    totalAbsorbedCost,
+    averageMarginVariance,
+    topLeaks,
+    narrative,
+  };
+}
+
+function renderWeeklyReview(weeklyData) {
+  const container = document.getElementById('weeklyReviewContainer');
+  if (!container) return;
+
+  const weekStartLabel = new Date(weeklyData.weekStart).toLocaleDateString();
+
+  const topLeaksHtml = weeklyData.topLeaks.length > 0
+    ? weeklyData.topLeaks.map(leak => `
+        <div class="change-order-card">
+          <div class="change-order-header">
+            <div>
+              <div class="change-order-title">${escapeHtml(leak.contractName)}</div>
+              <div class="change-order-meta">${escapeHtml(MARGIN_LEAK_TYPE_LABELS[leak.leakType] || leak.leakType)}</div>
+            </div>
+            <span class="status-badge ${MARGIN_LEAK_SEVERITY_CLASS[leak.severity] || 'status-watch'}">${escapeHtml(leak.severity)}</span>
+          </div>
+          <p style="font-size: 13px; color: #4a5568;">${escapeHtml(leak.description)}</p>
+        </div>
+      `).join('')
+    : '<div class="empty-state">No leaks recorded for this week.</div>';
+
+  container.innerHTML = `
+    <h3 style="margin-bottom: 0.5rem;">Weekly Margin Review — Week of ${weekStartLabel}</h3>
+    <div class="form-group" style="max-width: 260px; margin-bottom: 1.5rem;">
+      <label>Select Week Starting</label>
+      <input type="date" id="weeklyReviewWeekStart" value="${weeklyData.weekStart.slice(0, 10)}" onchange="onWeeklyReviewWeekChange(this.value)">
+    </div>
+    <div class="stats-grid" style="margin-bottom: 1.5rem;">
+      <div class="stat-card">
+        <div class="stat-label">Active Contracts</div>
+        <div class="stat-value">${weeklyData.activeContractsCount}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Healthy</div>
+        <div class="stat-value">${weeklyData.healthyContractsCount}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">With Leaks</div>
+        <div class="stat-value">${weeklyData.contractsWithLeaksCount}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Margin Variance</div>
+        <div class="stat-value">${weeklyData.averageMarginVariance >= 0 ? '+' : ''}${weeklyData.averageMarginVariance.toFixed(1)}pts</div>
+      </div>
+    </div>
+    <div class="stats-grid stats-grid-3" style="margin-bottom: 1.5rem;">
+      <div class="stat-card">
+        <div class="stat-label">Labour Variance</div>
+        <div class="stat-value">${weeklyData.laborVarianceHours >= 0 ? '+' : ''}${weeklyData.laborVarianceHours.toFixed(1)}h</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cost Variance</div>
+        <div class="stat-value">${formatCurrency(weeklyData.costVarianceDollars)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Absorbed Cost</div>
+        <div class="stat-value">${formatCurrency(weeklyData.totalAbsorbedCost)}</div>
+      </div>
+    </div>
+    <div class="baseline-notice" id="weeklyReviewNarrative">${escapeHtml(weeklyData.narrative)}</div>
+    <button class="action-button" onclick="copyWeeklyReviewSummary()">Copy Summary</button>
+    <h4 style="margin: 2rem 0 1rem;">Top Leaks This Week</h4>
+    ${topLeaksHtml}
+  `;
+}
+
+function onWeeklyReviewWeekChange(dateValue) {
+  const start = new Date(dateValue + 'T00:00:00');
+  if (isNaN(start.getTime())) return;
+
+  selectedWeeklyReviewWeekStartMs = start.getTime();
+  const contracts = getContracts();
+  const leaksData = getMarginLeaks();
+  const weeklyData = computeWeeklyReview(contracts, leaksData.leaks, currentWeeklyReviewWeekStart(), currentWeeklyReviewWeekEnd());
+  renderWeeklyReview(weeklyData);
+}
+
+function copyWeeklyReviewSummary() {
+  const el = document.getElementById('weeklyReviewNarrative');
+  if (!el) return;
+
+  const text = el.textContent.trim();
+  navigator.clipboard.writeText(text)
+    .then(() => alert('Weekly summary copied to clipboard.'))
+    .catch(() => alert('Could not copy to clipboard. Please copy manually:\n\n' + text));
+}
+
+function switchMarginSubTab(tab) {
+  activeMarginSubTab = tab;
+  ['inbox', 'weekly', 'contracts'].forEach(t => {
+    const suffix = t.charAt(0).toUpperCase() + t.slice(1);
+    const panel = document.getElementById('marginSubTab' + suffix);
+    const btn = document.getElementById('mgSubNav' + suffix);
+    if (panel) panel.style.display = t === tab ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+}
+
+// LIVE MARGIN ALERT (Feature 1 -- per-card, real-time labour-overage banner)
+function calculateLiveMarginAlert(contract) {
+  if (!contract.original_baseline || !contract.weeklylogs) return null;
+
+  const baseline = contract.original_baseline;
+  const monthlyPrice = baseline.pricing?.monthlyPrice || 0;
+  if (monthlyPrice <= 0) return null;
+
+  const actualHours = contract.weeklylogs.reduce((sum, log) => sum + (parseFloat(log.hours) || 0), 0);
+  if (actualHours === 0) return null;
+
+  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+  const weeklyFrequency = frequencyMap[baseline.service?.frequency] || 1;
+  const plannedHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
+  if (plannedHours <= 0) return null;
+
+  const billableRate = getBaselineBillableRate(baseline);
+  const actualLaborCost = actualHours * billableRate;
+  const actualExpenses = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0) : 0;
+
+  const currentMargin = ((monthlyPrice - actualLaborCost - actualExpenses) / monthlyPrice) * 100;
+  const targetMargin = getBaselineTargetMargin(baseline);
+  const overagePercent = ((actualHours - plannedHours) / plannedHours) * 100;
+
+  let status = 'healthy';
+  let recommendation = '';
+
+  if (overagePercent >= 20) {
+    status = 'critical';
+    recommendation = `🚨 CRITICAL: You're ${Math.round(overagePercent)}% over labour. Margin is at ${Math.round(currentMargin)}% (target ${Math.round(targetMargin)}%). Send a change order immediately.`;
+  } else if (overagePercent >= 15) {
+    status = 'warning';
+    recommendation = `⚠️ WARNING: You're ${Math.round(overagePercent)}% over labour. Current margin: ${Math.round(currentMargin)}% (target ${Math.round(targetMargin)}%). Consider a change order.`;
+  } else if (overagePercent >= 10) {
+    status = 'warning';
+    recommendation = `⚡ CAUTION: You're ${Math.round(overagePercent)}% over labour. Margin may slip to ${Math.round(currentMargin)}% (target ${Math.round(targetMargin)}%).`;
+  } else {
+    status = 'healthy';
+    recommendation = `✅ On track. Current margin: ${Math.round(currentMargin)}% (target ${Math.round(targetMargin)}%). Actual: ${Math.round(actualHours * 10) / 10}h | Planned: ${Math.round(plannedHours * 10) / 10}h.`;
+  }
+
+  return {
+    status,
+    currentMargin: Math.round(currentMargin),
+    targetMargin: Math.round(targetMargin),
+    actualHours: Math.round(actualHours * 10) / 10,
+    plannedHours: Math.round(plannedHours * 10) / 10,
+    overagePercent: Math.round(overagePercent * 10) / 10,
+    recommendation,
+  };
+}
+
+function focusChangeOrderForm(contractId) {
+  const target = document.getElementById('co-description-' + contractId);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  target.focus();
+}
+
+// CREW INTELLIGENCE (Feature 2 -- per-crew performance using each contract's own baseline)
+function calculateCrewPerformance(contract) {
+  if (!contract.weeklylogs || contract.weeklylogs.length === 0) return {};
+  if (!contract.original_baseline) return {};
+
+  const baseline = contract.original_baseline;
+  const billableRate = getBaselineBillableRate(baseline);
+  const targetMargin = getBaselineTargetMargin(baseline);
+  const monthlyPrice = baseline.pricing?.monthlyPrice || 0;
+
+  const crews = {};
+  let totalHoursAllCrews = 0;
+
+  contract.weeklylogs.forEach(log => {
+    const crewName = log.crew || 'Unassigned';
+    if (!crews[crewName]) {
+      crews[crewName] = { name: crewName, totalHours: 0, logCount: 0 };
+    }
+    const hours = parseFloat(log.hours) || 0;
+    crews[crewName].totalHours += hours;
+    crews[crewName].logCount += 1;
+    totalHoursAllCrews += hours;
+  });
+
+  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+  const weeklyFrequency = frequencyMap[baseline.service?.frequency] || 1;
+  const plannedWeeklyHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
+
+  Object.keys(crews).forEach(crewName => {
+    const crew = crews[crewName];
+    const laborCost = crew.totalHours * billableRate;
+
+    // Attribute contract revenue to each crew proportional to the share of
+    // logged hours they worked -- expenses aren't attributable per crew
+    // since logged expenses aren't tied to a specific crew in this data model.
+    const crewRevenueShare = totalHoursAllCrews > 0 ? monthlyPrice * (crew.totalHours / totalHoursAllCrews) : 0;
+    crew.marginAchieved = crewRevenueShare > 0 ? Math.round(((crewRevenueShare - laborCost) / crewRevenueShare) * 100) : 0;
+
+    crew.efficiency = plannedWeeklyHours > 0 ? Math.round((crew.totalHours / plannedWeeklyHours) * 100) : 0;
+
+    if (crew.marginAchieved >= targetMargin + 3) crew.rank = 'excellent';
+    else if (crew.marginAchieved >= targetMargin - 2) crew.rank = 'good';
+    else if (crew.marginAchieved >= targetMargin - 10) crew.rank = 'warning';
+    else crew.rank = 'risk';
+  });
+
+  return crews;
+}
+
+function populateCrewAnalysisSelect() {
+  const select = document.getElementById('crewAnalysisSelect');
+  if (!select) return;
+
+  const previousValue = select.value;
+  const contracts = getContracts().filter(c => c.original_baseline);
+
+  select.innerHTML = '<option value="">-- Choose a contract --</option>' +
+    contracts.map(c => `<option value="${c.id}">${escapeHtml(c.clientName)}</option>`).join('');
+
+  if (contracts.some(c => String(c.id) === previousValue)) {
+    select.value = previousValue;
+  }
+
+  renderCrewIntelligence();
+}
+
+function renderCrewIntelligence() {
+  const contractId = document.getElementById('crewAnalysisSelect').value;
+  const content = document.getElementById('crewIntelligenceContent');
+
+  if (!contractId) {
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">Select a contract with time logs to see crew performance data.</p>';
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => String(c.id) === contractId);
+  if (!contract || !contract.weeklylogs || contract.weeklylogs.length === 0) {
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">This contract has no time logs yet.</p>';
+    return;
+  }
+
+  const crews = calculateCrewPerformance(contract);
+  if (Object.keys(crews).length === 0) {
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">No crew data.</p>';
+    return;
+  }
+
+  const rankIcon = { excellent: '⭐', good: '✓', warning: '⚠️', risk: '🚨' };
+
+  const cardsHtml = Object.values(crews).map(crew => `
+    <div class="crew-card">
+      <div class="crew-name">${escapeHtml(crew.name)}</div>
+      <div class="crew-perf-stat">
+        <span class="crew-perf-stat-label">Margin Achieved</span>
+        <span class="crew-perf-stat-value">${crew.marginAchieved}%</span>
+      </div>
+      <div class="crew-perf-stat">
+        <span class="crew-perf-stat-label">Total Hours</span>
+        <span class="crew-perf-stat-value">${Math.round(crew.totalHours * 10) / 10}h</span>
+      </div>
+      <div class="crew-perf-stat">
+        <span class="crew-perf-stat-label">Efficiency vs. Baseline</span>
+        <span class="crew-perf-stat-value">${crew.efficiency}%</span>
+      </div>
+      <div class="crew-perf-stat">
+        <span class="crew-perf-stat-label">Visits Logged</span>
+        <span class="crew-perf-stat-value">${crew.logCount}</span>
+      </div>
+      <span class="crew-rank-badge rank-${crew.rank}">${rankIcon[crew.rank]} ${crew.rank.charAt(0).toUpperCase() + crew.rank.slice(1)}</span>
+    </div>
+  `).join('');
+
+  content.innerHTML = `<div class="crew-grid">${cardsHtml}</div>`;
+}
+
 // MARGIN GUARDIAN (updated to read baseline)
 function renderMarginGuardian() {
   const contracts = getContracts();
   const container = document.getElementById('contractsContainer');
+
+  const leaks = recomputeMarginLeaks(contracts);
+  renderMarginLeakInbox(leaks);
+  renderWeeklyReview(computeWeeklyReview(contracts, leaks, currentWeeklyReviewWeekStart(), currentWeeklyReviewWeekEnd()));
 
   if (contracts.length === 0) {
     container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>';
@@ -1541,7 +3206,7 @@ function renderMarginGuardian() {
 
   container.innerHTML = contracts.map(contract => {
     const baseline = contract.original_baseline;
-    
+
     if (!baseline) return ''; // Skip old contracts without baseline
 
     const actualHours = contract.weeklylogs ? contract.weeklylogs.reduce((sum, log) => sum + parseFloat(log.hours), 0) : 0;
@@ -1554,15 +3219,16 @@ function renderMarginGuardian() {
       biweekly: 0.5
     };
     const weeklyFrequency = frequencyMap[baseline.service.frequency] || 1;
-    const plannedWeeklyHours = Number(baseline.labour.crewSize) * Number(baseline.labour.hoursPerVisit) * weeklyFrequency;
+    const plannedWeeklyHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
     const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
 
-    const laborCost = actualHours * baseline.pricing.laborRate;
+    const billableRate = getBaselineBillableRate(baseline);
+    const laborCost = actualHours * billableRate;
     const miscExpenses = contract.expenses ? contract.expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0) : 0;
     const totalCost = laborCost + miscExpenses;
     const grossProfit = baseline.pricing.monthlyPrice - totalCost;
     const currentMargin = ((grossProfit / baseline.pricing.monthlyPrice) * 100).toFixed(1);
-    const plannedWeeklyLaborCost = plannedWeeklyHours * baseline.pricing.laborRate;
+    const plannedWeeklyLaborCost = plannedWeeklyHours * billableRate;
     const laborShift = laborCost - plannedWeeklyLaborCost;
     const laborShiftPercent = plannedWeeklyLaborCost > 0
       ? ((laborShift / plannedWeeklyLaborCost) * 100).toFixed(1)
@@ -1599,8 +3265,16 @@ function renderMarginGuardian() {
       `;
     }
 
+    const liveAlert = calculateLiveMarginAlert(contract);
+    const liveMarginAlertHtml = liveAlert ? `
+      <div class="live-margin-alert ${liveAlert.status}">
+        <div>${escapeHtml(liveAlert.recommendation)}</div>
+        ${liveAlert.status !== 'healthy' ? `<button class="alert-action-button" onclick="focusChangeOrderForm(${contract.id})">Send CO</button>` : ''}
+      </div>
+    ` : '';
+
     return `
-      <div class="contract-card">
+      <div class="contract-card" id="contractCard-${contract.id}">
         <div class="contract-header">
           <div>
             <div class="contract-name">${escapeHtml(baseline.client.name)}</div>
@@ -1611,10 +3285,12 @@ function renderMarginGuardian() {
           </span>
         </div>
 
+        ${liveMarginAlertHtml}
+
         <div class="margin-metric">
           <div class="metric-box">
             <div class="metric-label">Contract Revenue</div>
-            <div class="metric-value">$${baseline.pricing.monthlyPrice}</div>
+            <div class="metric-value">${formatCurrency(baseline.pricing.monthlyPrice)}</div>
             <div class="metric-variance">per month</div>
           </div>
           <div class="metric-box">
@@ -1632,12 +3308,12 @@ function renderMarginGuardian() {
         <div class="margin-metric">
           <div class="metric-box">
             <div class="metric-label">Expected Margin</div>
-            <div class="metric-value">${baseline.pricing.targetMargin.toFixed(1)}%</div>
+            <div class="metric-value">${getBaselineTargetMargin(baseline).toFixed(1)}%</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Margin on Logged Costs</div>
-            <div class="metric-value ${currentMargin >= baseline.pricing.targetMargin ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : currentMargin + '%'}</div>
-            ${actualHours === 0 ? '<div class="metric-variance">awaiting data</div>' : (currentMargin >= baseline.pricing.targetMargin ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>')}
+            <div class="metric-value ${currentMargin >= getBaselineTargetMargin(baseline) ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : currentMargin + '%'}</div>
+            ${actualHours === 0 ? '<div class="metric-variance">awaiting data</div>' : (currentMargin >= getBaselineTargetMargin(baseline) ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>')}
           </div>
           <div class="metric-box">
             <div class="metric-label">Profit After Logged Costs</div>
@@ -1652,7 +3328,7 @@ function renderMarginGuardian() {
         <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
           <div style="margin-bottom: 1rem;">
             <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Log Hours This Week</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+            <div class="mg-inline-grid" style="gap: 1rem; margin-top: 0.75rem;">
               <select id="crew-${contract.id}" onchange="handleCrewSelect(${contract.id})" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
                 <option value="">Select Crew (optional)</option>
               </select>
@@ -1663,7 +3339,7 @@ function renderMarginGuardian() {
 
           <div style="margin-bottom: 1rem;">
             <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Add Expense</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
+            <div class="mg-inline-grid" style="gap: 0.75rem; margin-top: 0.75rem;">
               <select id="expType-${contract.id}" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px;">
                 <option value="Supplies">Supplies</option>
                 <option value="Equipment">Equipment</option>
@@ -1674,6 +3350,64 @@ function renderMarginGuardian() {
               <button class="action-button" onclick="addExpense(${contract.id})">Add</button>
             </div>
           </div>
+        </div>
+
+        <div class="change-order-section">
+          <h3 style="margin-bottom: 0.5rem;">Protect This Contract From Unpaid Extra Work</h3>
+          <p style="color: #718096; font-size: 13px;">
+            Record work outside the original scope. ConeQuotes calculates what to charge to preserve your target margin.
+          </p>
+          <div class="change-order-form">
+            <div class="form-group full-width">
+              <label>Description</label>
+              <input type="text" id="co-description-${contract.id}" placeholder="e.g., Post-construction deep clean">
+            </div>
+            <div class="form-group">
+              <label>Area</label>
+              <input type="text" id="co-area-${contract.id}" placeholder="e.g., Loading area">
+            </div>
+            <div class="form-group">
+              <label>Added Labour Hours</label>
+              <input type="number" id="co-labour-hours-${contract.id}" min="0" step="0.5" value="0">
+            </div>
+            <div class="form-group">
+              <label>Base Wage ($/hr)</label>
+              <input type="number" id="co-base-wage-${contract.id}" min="0" step="0.50" value="${baseline.pricing?.baseWageRate ?? 22}">
+            </div>
+            <div class="form-group">
+              <label>Payroll Burden (%)</label>
+              <input type="number" id="co-payroll-burden-${contract.id}" min="0" max="100" step="0.5" value="${baseline.estimating?.payrollBurden ?? 25}">
+            </div>
+            <div class="form-group">
+              <label>Overhead per Worker-Hour ($)</label>
+              <input type="number" id="co-overhead-${contract.id}" min="0" step="0.50" value="${baseline.estimating?.overheadPerWorkerHour ?? 6}">
+            </div>
+            <div class="form-group">
+              <label>Supplies Cost ($)</label>
+              <input type="number" id="co-supplies-${contract.id}" min="0" step="1" value="0">
+            </div>
+            <div class="form-group">
+              <label>Equipment Cost ($)</label>
+              <input type="number" id="co-equipment-${contract.id}" min="0" step="1" value="0">
+            </div>
+            <div class="form-group">
+              <label>Travel Cost ($)</label>
+              <input type="number" id="co-travel-${contract.id}" min="0" step="1" value="0">
+            </div>
+            <div class="form-group">
+              <label>Other Cost ($)</label>
+              <input type="number" id="co-other-${contract.id}" min="0" step="1" value="0">
+            </div>
+            <div class="form-group full-width">
+              <label>Target Margin (%)</label>
+              <input type="number" id="co-target-margin-${contract.id}" min="0" max="95" step="1" value="${baseline.pricing?.targetMargin ?? 25}">
+            </div>
+          </div>
+          <button class="action-button" onclick="createChangeOrder(${contract.id})" style="margin-top: 1rem;">
+            Calculate Change Order
+          </button>
+
+          ${renderChangeOrders(contract)}
         </div>
       </div>
     `;
@@ -1795,6 +3529,7 @@ function logHours(contractId) {
     
     contract.actualHours = contract.weeklylogs.reduce((sum, log) => sum + log.hours, 0);
     saveContracts(contracts);
+    recomputeMarginLeaks(contracts, { force: true });
     hoursInput.value = '';
     if (crewSelect) crewSelect.value = '';
     renderMarginGuardian();
@@ -1821,9 +3556,305 @@ function addExpense(contractId) {
       date: new Date().toISOString()
     });
     saveContracts(contracts);
+    recomputeMarginLeaks(contracts, { force: true });
     document.getElementById('expAmount-' + contractId).value = '';
     renderMarginGuardian();
   }
+}
+
+// CHANGE-ORDER GUARD (Phase 3)
+function renderChangeOrders(contract) {
+  const orders = contract.changeOrders || [];
+
+  if (!orders.length) {
+    return `
+      <div class="empty-state" style="padding: 1.5rem; margin-top: 1rem;">
+        No change orders recorded for this contract.
+      </div>
+    `;
+  }
+
+  return orders.map(order => {
+    const statusClass = order.status === 'Absorbed'
+      ? 'status-risk'
+      : (order.status === 'Draft' || order.status === 'Awaiting Approval')
+        ? 'status-watch'
+        : 'status-healthy';
+
+    const unrecoveredCost = order.status === 'Absorbed' ? order.totalCost : 0;
+    const recoverableValue = ['Approved', 'Completed', 'Invoiced'].includes(order.status) ? order.recommendedPrice : 0;
+
+    let actionButtons = '';
+    if (order.status === 'Draft') {
+      actionButtons += `<button class="action-button" onclick="updateChangeOrderStatus(${contract.id}, ${order.id}, 'Awaiting Approval')">Send for Approval</button>`;
+      actionButtons += `<button class="action-button change-order-danger-button" onclick="absorbChangeOrder(${contract.id}, ${order.id})">Absorb Cost</button>`;
+    } else if (order.status === 'Awaiting Approval') {
+      actionButtons += `<button class="action-button" onclick="updateChangeOrderStatus(${contract.id}, ${order.id}, 'Approved')">Approve</button>`;
+      actionButtons += `<button class="action-button change-order-danger-button" onclick="absorbChangeOrder(${contract.id}, ${order.id})">Absorb Cost</button>`;
+    } else if (order.status === 'Approved') {
+      actionButtons += `<button class="action-button" onclick="updateChangeOrderStatus(${contract.id}, ${order.id}, 'Completed')">Mark Completed</button>`;
+    } else if (order.status === 'Completed') {
+      actionButtons += `<button class="action-button" onclick="updateChangeOrderStatus(${contract.id}, ${order.id}, 'Invoiced')">Mark Invoiced</button>`;
+    }
+    actionButtons += `<button class="action-button" onclick="copyChangeOrderSummary(${contract.id}, ${order.id})">Copy Client Summary</button>`;
+    actionButtons += `<button class="action-button" onclick="printChangeOrder(${contract.id}, ${order.id})">Print Change Order</button>`;
+
+    return `
+      <div class="change-order-card">
+        <div class="change-order-header">
+          <div>
+            <div class="change-order-title">${escapeHtml(order.description)}</div>
+            <div class="change-order-meta">${escapeHtml(order.area) || 'No area specified'} • Created ${new Date(order.createdAt).toLocaleDateString()}</div>
+          </div>
+          <span class="status-badge ${statusClass}">${escapeHtml(order.status)}</span>
+        </div>
+
+        <div class="change-order-grid">
+          <div>
+            <span class="change-order-label">Added Labour Hours</span>
+            ${order.labourHours}h
+          </div>
+          <div>
+            <span class="change-order-label">Total Added Cost</span>
+            ${formatCurrency(order.totalCost)}
+          </div>
+          <div>
+            <span class="change-order-label">Recommended Customer Price</span>
+            ${formatCurrency(order.recommendedPrice)}
+          </div>
+          <div>
+            <span class="change-order-label">Target Margin</span>
+            ${order.targetMargin}%
+          </div>
+          <div>
+            <span class="change-order-label">Unrecovered Cost</span>
+            ${formatCurrency(unrecoveredCost)}
+          </div>
+          <div>
+            <span class="change-order-label">Recoverable Value</span>
+            ${formatCurrency(recoverableValue)}
+          </div>
+        </div>
+
+        ${order.status === 'Absorbed' && order.absorbedReason ? `
+        <div class="scope-note" style="margin-top: 0;">
+          <strong>Absorbed reason:</strong> ${escapeHtml(order.absorbedReason)}
+        </div>
+        ` : ''}
+
+        <div class="change-order-actions">
+          ${actionButtons}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function calculateChangeOrderPrice(inputs) {
+  const { labourHours, baseWageRate, payrollBurden, overheadPerWorkerHour, suppliesCost, equipmentCost, travelCost, otherCost, targetMargin } = inputs;
+
+  const fullyLoadedLaborRate = baseWageRate * (1 + payrollBurden / 100);
+  const labourCost = labourHours * fullyLoadedLaborRate;
+  const overheadCost = labourHours * overheadPerWorkerHour;
+  const totalCost = labourCost + overheadCost + suppliesCost + equipmentCost + travelCost + otherCost;
+  const recommendedPrice = targetMargin < 95 ? totalCost / (1 - targetMargin / 100) : totalCost;
+
+  return { fullyLoadedLaborRate, labourCost, overheadCost, totalCost, recommendedPrice };
+}
+
+function createChangeOrder(contractId) {
+  const description = document.getElementById('co-description-' + contractId).value.trim();
+  const area = document.getElementById('co-area-' + contractId).value.trim();
+  const labourHours = safeNumber(document.getElementById('co-labour-hours-' + contractId).value, 0, 0, 100000);
+  const baseWageRate = safeNumber(document.getElementById('co-base-wage-' + contractId).value, 22, 0, 500);
+  const payrollBurden = safeNumber(document.getElementById('co-payroll-burden-' + contractId).value, 25, 0, 100);
+  const overheadPerWorkerHour = safeNumber(document.getElementById('co-overhead-' + contractId).value, 6, 0, 1000);
+  const suppliesCost = safeNumber(document.getElementById('co-supplies-' + contractId).value, 0, 0, 1000000);
+  const equipmentCost = safeNumber(document.getElementById('co-equipment-' + contractId).value, 0, 0, 1000000);
+  const travelCost = safeNumber(document.getElementById('co-travel-' + contractId).value, 0, 0, 1000000);
+  const otherCost = safeNumber(document.getElementById('co-other-' + contractId).value, 0, 0, 1000000);
+  const targetMargin = safeNumber(document.getElementById('co-target-margin-' + contractId).value, 25, 0, 95);
+
+  if (!description) {
+    alert('Please enter a description of the extra work.');
+    return;
+  }
+
+  if (baseWageRate <= 0) {
+    alert('Base wage must be greater than $0.');
+    return;
+  }
+
+  if (labourHours <= 0 && suppliesCost <= 0 && equipmentCost <= 0 && travelCost <= 0 && otherCost <= 0) {
+    alert('Please enter at least one labour hour or added cost.');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  if (!contract) return;
+
+  contract.changeOrders = contract.changeOrders || [];
+
+  const { fullyLoadedLaborRate, labourCost, overheadCost, totalCost, recommendedPrice } = calculateChangeOrderPrice({
+    labourHours, baseWageRate, payrollBurden, overheadPerWorkerHour, suppliesCost, equipmentCost, travelCost, otherCost, targetMargin
+  });
+
+  const changeOrder = {
+    id: Date.now(),
+    description,
+    area,
+    labourHours,
+    baseWageRate,
+    payrollBurden,
+    overheadPerWorkerHour,
+    fullyLoadedLaborRate,
+    labourCost,
+    overheadCost,
+    suppliesCost,
+    equipmentCost,
+    travelCost,
+    otherCost,
+    totalCost,
+    targetMargin,
+    recommendedPrice,
+    status: 'Draft',
+    createdAt: new Date().toISOString(),
+    approvedAt: null,
+    completedAt: null,
+    invoicedAt: null,
+    absorbedReason: '',
+  };
+
+  contract.changeOrders.push(changeOrder);
+  saveContracts(contracts);
+
+  document.getElementById('co-description-' + contractId).value = '';
+  document.getElementById('co-area-' + contractId).value = '';
+  document.getElementById('co-labour-hours-' + contractId).value = '0';
+  document.getElementById('co-supplies-' + contractId).value = '0';
+  document.getElementById('co-equipment-' + contractId).value = '0';
+  document.getElementById('co-travel-' + contractId).value = '0';
+  document.getElementById('co-other-' + contractId).value = '0';
+
+  alert('Change order calculated.\nRecommended customer price: ' + formatCurrency(recommendedPrice));
+
+  renderMarginGuardian();
+}
+
+function updateChangeOrderStatus(contractId, changeOrderId, status) {
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  if (!contract || !contract.changeOrders) return;
+
+  const order = contract.changeOrders.find(o => o.id === changeOrderId);
+  if (!order) return;
+
+  order.status = status;
+  if (status === 'Approved') order.approvedAt = new Date().toISOString();
+  if (status === 'Completed') order.completedAt = new Date().toISOString();
+  if (status === 'Invoiced') order.invoicedAt = new Date().toISOString();
+
+  saveContracts(contracts);
+  recomputeMarginLeaks(contracts, { force: true });
+  renderMarginGuardian();
+}
+
+function absorbChangeOrder(contractId, changeOrderId) {
+  const reason = prompt('Why is this cost being absorbed instead of billed?');
+  if (reason === null) return;
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  if (!contract || !contract.changeOrders) return;
+
+  const order = contract.changeOrders.find(o => o.id === changeOrderId);
+  if (!order) return;
+
+  order.status = 'Absorbed';
+  order.absorbedReason = reason.trim();
+  order.completedAt = new Date().toISOString();
+
+  saveContracts(contracts);
+  recomputeMarginLeaks(contracts, { force: true });
+  renderMarginGuardian();
+}
+
+function copyChangeOrderSummary(contractId, changeOrderId) {
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  if (!contract || !contract.changeOrders) return;
+
+  const order = contract.changeOrders.find(o => o.id === changeOrderId);
+  if (!order) return;
+
+  const summary =
+    'Client: ' + contract.clientName + '\n' +
+    'Contract Reference: ' + contract.proposalId + '\n' +
+    'Change Order Reference: CO-' + order.id + '\n' +
+    'Date: ' + new Date(order.createdAt).toLocaleDateString() + '\n\n' +
+    'Description of Additional Work: ' + order.description + '\n' +
+    'Area: ' + (order.area || 'Not specified') + '\n\n' +
+    'Customer Price: ' + formatCurrency(order.recommendedPrice) + '\n' +
+    'Approval Status: ' + order.status + '\n\n' +
+    'This change applies only to work outside the original documented scope.';
+
+  navigator.clipboard.writeText(summary)
+    .then(() => alert('Client summary copied to clipboard.'))
+    .catch(() => alert('Could not copy to clipboard. Please copy manually:\n\n' + summary));
+}
+
+function printChangeOrder(contractId, changeOrderId) {
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+  if (!contract || !contract.changeOrders) return;
+
+  const order = contract.changeOrders.find(o => o.id === changeOrderId);
+  if (!order) return;
+
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert('Please allow pop-ups to print this change order.');
+    return;
+  }
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Change Order - ${escapeHtml(contract.clientName)}</title>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 2rem; color: #1a202c; }
+        h1 { font-size: 20px; margin-bottom: 0.5rem; }
+        .meta { color: #718096; font-size: 13px; margin-bottom: 1.5rem; }
+        .row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0; }
+        .label { color: #718096; font-size: 13px; }
+        .value { font-weight: 600; }
+        .price { font-size: 24px; font-weight: 700; margin: 1.5rem 0; }
+        .note { font-size: 12px; color: #718096; margin-top: 1.5rem; }
+        .signature-line { margin-top: 3rem; border-top: 1px solid #1a202c; width: 300px; padding-top: 0.5rem; font-size: 13px; color: #718096; }
+      </style>
+    </head>
+    <body>
+      <h1>Change Order</h1>
+      <div class="meta">
+        Contract Reference: ${escapeHtml(contract.proposalId)}<br>
+        Change Order Reference: CO-${order.id}<br>
+        Date: ${new Date(order.createdAt).toLocaleDateString()}
+      </div>
+      <div class="row"><span class="label">Client</span><span class="value">${escapeHtml(contract.clientName)}</span></div>
+      <div class="row"><span class="label">Description</span><span class="value">${escapeHtml(order.description)}</span></div>
+      <div class="row"><span class="label">Area</span><span class="value">${escapeHtml(order.area) || 'Not specified'}</span></div>
+      <div class="row"><span class="label">Approval Status</span><span class="value">${escapeHtml(order.status)}</span></div>
+      <div class="price">Customer Price: ${formatCurrency(order.recommendedPrice)}</div>
+      <div class="note">This change applies only to work outside the original documented scope.</div>
+      <div class="signature-line">Client Approval Signature</div>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
 }
 
 function updateStats(contracts) {
@@ -1841,7 +3872,7 @@ function updateStats(contracts) {
       biweekly: 0.5
     };
     const weeklyFrequency = frequencyMap[baseline.service.frequency] || 1;
-    const plannedWeeklyHours = Number(baseline.labour.crewSize) * Number(baseline.labour.hoursPerVisit) * weeklyFrequency;
+    const plannedWeeklyHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
     const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
 
     if (actualHours === 0) return; // Don't count contracts without data
