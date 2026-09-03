@@ -552,8 +552,8 @@
       </div>
       <div class="form-group">
         <label for="laborRate">Billable Labour Rate per Hour ($)</label>
-        <input type="number" id="laborRate" value="40" min="0" step="0.50" onchange="updateCalc()">
-        <div class="input-help">Customer-facing labour-rate benchmark. Adjust to your pricing model.</div>
+        <input type="number" id="laborRate" value="40" readonly tabindex="-1" style="background: #f7fafc; color: #4a5568; cursor: not-allowed;">
+        <div class="input-help">Auto-calculated: (Base Wage × (1 + Payroll Burden)) + Overhead, grossed up for Target Margin. Cannot be set below break-even, so it can never show a negative margin.</div>
       </div>
     </div>
     <div class="calc-row">
@@ -1330,6 +1330,19 @@ function calculatePricing(inputs) {
   };
 }
 
+// Billable Labour Rate is derived from break-even cost + target margin, not
+// entered manually -- otherwise a user could set it below Base Wage +
+// Overhead and silently create a negative margin in Margin Guardian's
+// actual-cost tracking (which uses this rate to price logged hours). Not
+// used by calculatePricing() itself: Recommended Price per Visit already
+// comes entirely from cost-plus-margin math, independent of this rate.
+function calculateAutoBillableRate(baseWageRate, payrollBurden, overheadPerWorkerHour, targetMarginPercent) {
+  const fullyBurdenedWage = baseWageRate * (1 + (payrollBurden / 100));
+  const totalHourlyBreakEvenCost = fullyBurdenedWage + overheadPerWorkerHour;
+  const marginDivisor = 1 - (targetMarginPercent / 100);
+  return marginDivisor > 0 ? totalHourlyBreakEvenCost / marginDivisor : totalHourlyBreakEvenCost;
+}
+
 // Backward/forward-compatible baseline readers — old contracts predate the Phase 1/2
 // pricing engine fields, so every read of a saved contract goes through these.
 function getBaselineBillableRate(baseline) {
@@ -1551,7 +1564,6 @@ function updateCalc() {
   const sqft = safeNumber(document.getElementById('sqft').value, 25000, 1, 1000000);
   const crewSize = safeNumber(document.getElementById('crewSize').value, 3, 1, 100);
   const baseWageRate = safeNumber(document.getElementById('baseWageRate').value, 22, 0, 500);
-  const billableLaborRate = safeNumber(document.getElementById('laborRate').value, 40, 0, 500);
   const productionRate = safeNumber(document.getElementById('productionRate').value, 4250, 1, 1000000);
   const scopeComplexity = safeNumber(document.getElementById('scopeComplexity').value, 1, 0.5, 3);
   const payrollBurden = safeNumber(document.getElementById('payrollBurden').value, 25, 0, 100);
@@ -1560,6 +1572,13 @@ function updateCalc() {
   const travelCostPerVisit = safeNumber(document.getElementById('travelCostPerVisit').value, 0, 0, 100000);
   const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
   const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
+
+  // Billable Labour Rate is read-only in the Calculator: auto-calculated from
+  // Base Wage, Payroll Burden, Overhead, and Target Margin, so it updates
+  // whenever any of those change and can never be set to a value that
+  // produces a negative margin.
+  const billableLaborRate = calculateAutoBillableRate(baseWageRate, payrollBurden, overheadPerWorkerHour, targetMarginPercent);
+  document.getElementById('laborRate').value = billableLaborRate.toFixed(2);
 
   // Job type / frequency
   const frequencyValue = document.getElementById('frequency').value;
