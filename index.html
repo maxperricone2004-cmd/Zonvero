@@ -794,7 +794,8 @@
     <div class="calc-row">
       <div class="form-group">
         <label>Square Footage</label>
-        <input type="number" id="propSqft" value="25000">
+        <input type="number" id="propSqft" value="25000" oninput="recalcProposalPricing()">
+        <div class="input-help" id="propSqftWarning" style="display: none; color: #dc2626;">Enter a square footage above to calculate pricing.</div>
       </div>
       <div class="form-group">
         <label>Facility Type</label>
@@ -980,17 +981,17 @@
     <div class="calc-row">
       <div class="form-group">
         <label>Base Cleaner Wage per Hour ($)</label>
-        <input type="number" id="propBaseWageRate" value="22" min="0" step="0.50">
+        <input type="number" id="propBaseWageRate" value="22" min="0" step="0.50" oninput="recalcProposalPricing()">
       </div>
       <div class="form-group">
         <label>Production Rate (sq ft per worker-hour)</label>
-        <input type="number" id="propProductionRate" value="4250" min="1" step="50">
+        <input type="number" id="propProductionRate" value="4250" min="1" step="50" oninput="recalcProposalPricing()">
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
         <label>Scope Complexity</label>
-        <select id="propScopeComplexity">
+        <select id="propScopeComplexity" onchange="recalcProposalPricing()">
           <option value="0.9">Light / open area</option>
           <option value="1" selected>Standard</option>
           <option value="1.15">Detailed / high-touch</option>
@@ -999,43 +1000,44 @@
       </div>
       <div class="form-group">
         <label>Payroll Burden (%)</label>
-        <input type="number" id="propPayrollBurden" value="25" min="0" max="100" step="0.5">
+        <input type="number" id="propPayrollBurden" value="25" min="0" max="100" step="0.5" oninput="recalcProposalPricing()">
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
         <label>Supplies (% of revenue)</label>
-        <input type="number" id="propSuppliesPercent" value="4" min="0" max="50" step="0.5">
+        <input type="number" id="propSuppliesPercent" value="4" min="0" max="50" step="0.5" oninput="recalcProposalPricing()">
       </div>
       <div class="form-group">
         <label>Overhead per Worker-Hour ($)</label>
-        <input type="number" id="propOverheadPerLaborHour" value="6" min="0" step="0.50">
+        <input type="number" id="propOverheadPerLaborHour" value="6" min="0" step="0.50" oninput="recalcProposalPricing()">
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
         <label>Travel Cost per Visit ($)</label>
-        <input type="number" id="propTravelCost" value="0" min="0" step="5">
+        <input type="number" id="propTravelCost" value="0" min="0" step="5" oninput="recalcProposalPricing()">
       </div>
       <div class="form-group">
         <label>Equipment Cost per Visit ($)</label>
-        <input type="number" id="propEquipmentCost" value="0" min="0" step="5">
+        <input type="number" id="propEquipmentCost" value="0" min="0" step="5" oninput="recalcProposalPricing()">
       </div>
     </div>
     <div class="calc-row">
       <div class="form-group">
         <label>Target Margin (%)</label>
-        <input type="number" id="propTargetMargin" value="25" min="0" max="95" step="1">
+        <input type="number" id="propTargetMargin" value="25" min="0" max="95" step="1" oninput="recalcProposalPricing()">
       </div>
       <div class="form-group">
         <label>Recommended Price per Visit ($)</label>
-        <input type="number" id="propRecommendedPrice" value="" min="0" step="1">
-        <p class="input-help">Use the Calculator or enter a reviewed price before creating a contract.</p>
+        <input type="number" id="propRecommendedPrice" value="" min="0" step="1" readonly tabindex="-1" style="background: #f7fafc; color: #4a5568; cursor: not-allowed;">
+        <p class="input-help">Auto-calculated live from the assumptions above. Updates instantly -- no recalculate button needed.</p>
       </div>
     </div>
     <div class="form-group">
       <label id="propPriceLabel">Monthly Investment (What you'll charge the client)</label>
-      <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
+      <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000" oninput="handlePropPriceManualInput()">
+      <div class="input-help" id="realizedMarginIndicator" style="display: none;"></div>
     </div>
   </div>
 
@@ -1719,6 +1721,128 @@ function updateCalc() {
   document.getElementById('riskCombinedImpact').textContent = (combinedImpact >= 0 ? '+' : '-') + formatCurrency(Math.abs(combinedImpact)) + ' vs. baseline profit';
 }
 
+// STEP 6 LIVE PRICING ENGINE (Proposal Builder)
+// Reuses calculatePricing() -- the same function the Calculator uses --
+// against Step 6's own fields, so a contractor editing Step 6 directly
+// (without ever touching the Calculator) still gets a working, live
+// Recommended Price / Total One-Time Job Price instead of the previous
+// completely static fields.
+
+// Square footage safely, from wherever the proposal's state currently has
+// it: Step 1's own field first, falling back to the Calculator snapshot
+// (Step 1/2 of the wider quote flow) if Step 1 is missing or zero, and
+// finally to 0 rather than ever producing NaN.
+function getProposalSqft() {
+  const raw = document.getElementById('propSqft')?.value;
+  const parsed = Number(raw);
+  if (raw && !isNaN(parsed) && parsed > 0) return parsed;
+  return (currentQuoteState && currentQuoteState.sqft > 0) ? currentQuoteState.sqft : 0;
+}
+
+// Single read of every Step 6 pricing input plus sqft, and the one call
+// site for calculatePricing() on the Proposal Builder side -- so there is
+// exactly one pricing formula, reused, never duplicated.
+function getProposalPricingSnapshot() {
+  const sqft = getProposalSqft();
+  const frequency = document.getElementById('propFrequency').value;
+  const isOneTime = isOneTimeFrequency(frequency);
+  const visitsPerMonth = getVisitsPerMonth(frequency);
+
+  const crewSize = safeNumber(document.getElementById('propCrewSize').value, 3, 1, 100);
+  const baseWageRate = safeNumber(document.getElementById('propBaseWageRate').value, 22, 0, 500);
+  const productionRate = safeNumber(document.getElementById('propProductionRate').value, 4250, 1, 1000000);
+  const scopeComplexity = safeNumber(document.getElementById('propScopeComplexity').value, 1, 0.5, 3);
+  const payrollBurden = safeNumber(document.getElementById('propPayrollBurden').value, 25, 0, 100);
+  const suppliesPercent = safeNumber(document.getElementById('propSuppliesPercent').value, 4, 0, 50);
+  const overheadPerWorkerHour = safeNumber(document.getElementById('propOverheadPerLaborHour').value, 6, 0, 1000);
+  const travelCostPerVisit = safeNumber(document.getElementById('propTravelCost').value, 0, 0, 100000);
+  const equipmentCostPerVisit = safeNumber(document.getElementById('propEquipmentCost').value, 0, 0, 100000);
+  const targetMarginPercent = safeNumber(document.getElementById('propTargetMargin').value, 25, 0, 95);
+
+  const pricing = calculatePricing({
+    sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
+    payrollBurden, suppliesPercent, overheadPerWorkerHour,
+    travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
+  });
+
+  return { sqft, isOneTime, visitsPerMonth, ...pricing };
+}
+
+// Recalculates Recommended Price per Visit and the total price field live,
+// bound to every Step 6 pricing input (and propSqft) so nothing needs a
+// manual recalculate button or page refresh.
+function recalcProposalPricing() {
+  const snap = getProposalPricingSnapshot();
+
+  const sqftWarningEl = document.getElementById('propSqftWarning');
+  if (sqftWarningEl) sqftWarningEl.style.display = snap.sqft > 0 ? 'none' : 'block';
+
+  const recommendedPriceEl = document.getElementById('propRecommendedPrice');
+  const priceEl = document.getElementById('propPrice');
+
+  if (snap.sqft <= 0) {
+    // Missing/zero square footage: show nothing rather than NaN, and skip
+    // touching the total price field (nothing valid to compute yet).
+    recommendedPriceEl.value = '';
+    hideRealizedMarginIndicator();
+    return;
+  }
+
+  recommendedPriceEl.value = Math.round(snap.requiredPrice);
+
+  const autoPrice = snap.isOneTime
+    ? Math.round(snap.requiredPrice)
+    : Math.round(snap.requiredPrice * snap.visitsPerMonth);
+
+  if (snap.isOneTime) {
+    // One-time always mirrors the recommended price directly -- never a
+    // separately typed, conflicting or double-applied rate.
+    isManualPriceOverride = false;
+    priceEl.value = autoPrice;
+  } else if (!isManualPriceOverride) {
+    priceEl.value = autoPrice;
+  }
+
+  refreshRealizedMarginIndicator(snap);
+}
+
+// Bound to propPrice's oninput -- fires only on a genuine keystroke, never
+// on the programmatic `.value = ...` assignments recalcProposalPricing()
+// itself makes, so this cleanly distinguishes "the contractor typed a
+// custom price" from "the engine just recalculated."
+function handlePropPriceManualInput() {
+  const frequency = document.getElementById('propFrequency').value;
+  if (isOneTimeFrequency(frequency)) return; // one-time never diverges from the recommended price
+
+  isManualPriceOverride = true;
+  refreshRealizedMarginIndicator(getProposalPricingSnapshot());
+}
+
+function refreshRealizedMarginIndicator(snap) {
+  const el = document.getElementById('realizedMarginIndicator');
+  if (!el) return;
+
+  if (!isManualPriceOverride || snap.isOneTime || snap.sqft <= 0) {
+    el.style.display = 'none';
+    return;
+  }
+
+  const priceValue = safeNumber(document.getElementById('propPrice').value, 0, 0, 100000000);
+  const periodCost = snap.totalCostPerVisit * snap.visitsPerMonth;
+  const realizedMargin = priceValue > 0 ? ((priceValue - periodCost) / priceValue) * 100 : 0;
+  const targetMargin = safeNumber(document.getElementById('propTargetMargin').value, 25, 0, 95);
+
+  el.style.display = 'block';
+  el.style.color = realizedMargin < 0 ? '#dc2626' : (realizedMargin < targetMargin ? '#b45309' : '#059669');
+  el.textContent = 'Realized Margin at your custom price: ' + realizedMargin.toFixed(1) +
+    '% (target was ' + targetMargin + '%).';
+}
+
+function hideRealizedMarginIndicator() {
+  const el = document.getElementById('realizedMarginIndicator');
+  if (el) el.style.display = 'none';
+}
+
 function useThisQuote() {
   const sqft = safeNumber(document.getElementById('sqft').value, 25000, 1, 1000000);
   const facilityType = document.getElementById('facilityType').value;
@@ -1795,8 +1919,15 @@ function useThisQuote() {
   document.getElementById('propWorkerHoursPerVisit').value = Number(currentQuoteState.workerHoursPerVisit.toFixed(2));
   document.getElementById('propCrewSize').value = currentQuoteState.crewSize;
   document.getElementById('propCrewDuration').value = Number(currentQuoteState.crewDurationPerVisit.toFixed(2));
-  document.getElementById('propRecommendedPrice').value = Math.round(currentQuoteState.recommendedPricePerVisit);
-  document.getElementById('propPrice').value = currentQuoteState.oneTimePrice ?? currentQuoteState.monthlyPrice;
+
+  // A fresh transfer from the Calculator always starts clean -- any
+  // earlier manually-typed price in the Proposal Builder no longer
+  // applies. recalcProposalPricing() (below, via
+  // updateProposalFrequencyLabels()) recomputes Recommended Price per
+  // Visit and the total price field from the prop* values just set above,
+  // through the exact same calculatePricing() call, so there is only ever
+  // one place that writes to those two fields.
+  isManualPriceOverride = false;
 
   // Load the facility-specific scope template to match (respects any scope
   // the contractor has already customized -- see loadFacilityTaskTemplate()).
@@ -1820,6 +1951,10 @@ function updateProposalFrequencyLabels() {
   // The Frequency Matrix's column set (Included/Excluded/Optional vs.
   // Daily/Weekly/.../As Needed) depends on this same frequency.
   renderFrequencyMatrix();
+
+  // Visits-per-month (and, for one-time, the forced price sync) both
+  // depend on this same frequency.
+  recalcProposalPricing();
 }
 
 // Format input value display (comma formatting for readability)
@@ -2117,6 +2252,14 @@ let scopeIsUntouched = true;
 // Snapshot of the Calculator's assumptions at the moment "Use This Quote"
 // last ran -- populated by useThisQuote(), read by the Proposal Builder.
 let currentQuoteState = null;
+
+// True once the contractor has manually typed into Step 6's "Total
+// One-Time Job Price" / "Monthly Investment" field (propPrice). While
+// true, recalcProposalPricing() leaves that field alone instead of
+// silently overwriting a deliberately custom price -- except for a
+// one-time job, which always mirrors the recommended price (see
+// recalcProposalPricing()).
+let isManualPriceOverride = false;
 
 function initializeScopes() {
   const facilityType = document.getElementById('propFacilityType')?.value || 'office';
@@ -4487,6 +4630,7 @@ function updateStats(contracts) {
 document.addEventListener('DOMContentLoaded', function() {
   initializeScopes();
   updateCalc();
+  recalcProposalPricing();
 
   const tabName = window.location.hash.slice(1);
   if (tabName && document.getElementById(tabName)) {
