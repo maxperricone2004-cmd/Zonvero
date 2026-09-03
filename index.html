@@ -33,6 +33,13 @@
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
     .output-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
     .output-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .recommended-price-card {
+      border: 2px solid #10b981;
+      background: #f0fdf4;
+      position: sticky;
+      top: 90px;
+      z-index: 2;
+    }
     .output-label { color: #718096; font-size: 12px; margin-bottom: 0.5rem; }
     .output-value { font-size: 24px; font-weight: 600; color: #10b981; }
     .output-unit { color: #718096; font-size: 12px; margin-top: 0.25rem; }
@@ -40,6 +47,8 @@
     .margin-alert.healthy { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
     .margin-alert.warning { display: block; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
     .margin-alert.danger { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .cost-total-row { background: #f7fafc; border-top: 2px solid #cbd5e0; font-weight: 700; }
+    .profit-row { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; font-weight: 700; }
     .two-col-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     .input-help { font-size: 11px; color: #718096; margin-top: 0.35rem; line-height: 1.4; }
     .mg-inline-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
@@ -100,6 +109,8 @@
     .freq-matrix th { background: #f7fafc; font-weight: 600; color: #1a202c; }
     .freq-matrix td { background: white; }
     .freq-matrix input { width: 18px; height: 18px; cursor: pointer; }
+    .matrix-category-row th { background: #e2e8f0; text-align: left; }
+    .matrix-actions { display: flex; gap: 1rem; margin-top: 1rem; }
     .checklist-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
     .checklist-item { display: flex; align-items: center; gap: 0.5rem; }
     .checklist-item input { width: 18px; height: 18px; cursor: pointer; }
@@ -365,6 +376,9 @@
       .mg-subnav { gap: 1rem; }
       .live-margin-alert { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .alert-action-button { margin-left: 0; width: 100%; }
+      .recommended-price-card { position: static; }
+      .matrix-actions { flex-direction: column; }
+      .matrix-actions .action-button { width: 100%; }
     }
     .photo-analysis-section { background: #f7fafc; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
     .photo-upload-area { border: 2px dashed #cbd5e0; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
@@ -587,6 +601,7 @@
       <div class="form-group">
         <label for="overheadPerLaborHour">Overhead per Worker-Hour ($)</label>
         <input type="number" id="overheadPerLaborHour" value="6" min="0" step="0.50" onchange="updateCalc()">
+        <div class="input-help">Total Annual Overhead ÷ Total Billable Labor Hours. (Typical benchmark: $3.00–$8.00/hr)</div>
       </div>
       <div class="form-group">
         <label for="travelCostPerVisit">Travel Cost per Visit ($)</label>
@@ -608,7 +623,7 @@
     <input type="hidden" id="hoursPerVisit" value="2.5">
 
     <div class="output-row">
-      <div class="output-box">
+      <div class="output-box recommended-price-card">
         <div class="output-label">Recommended Price per Visit</div>
         <div class="output-value" id="recommendedPriceOutput">—</div>
         <div class="output-unit">planning benchmark, not guaranteed</div>
@@ -687,13 +702,13 @@
           </div>
         </div>
         <div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
-            <span style="color: #718096; font-size: 13px;">Total Cost</span>
-            <span style="color: #1a202c; font-weight: 600;" id="costBreakdownTotal">—</span>
+          <div class="cost-total-row" style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding: 0.75rem;">
+            <span style="font-size: 13px;">Total Cost <span style="font-weight: 400; color: #718096;">(modeled break-even cost)</span></span>
+            <span id="costBreakdownTotal">—</span>
           </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
-            <span style="color: #1a202c; font-weight: 600;">Your Profit</span>
-            <span style="color: #10b981; font-weight: 700; font-size: 18px;" id="costBreakdownProfit">—</span>
+          <div class="profit-row" style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem;">
+            <span>Your Profit <span style="font-weight: 400; color: #4a5568; font-size: 12px;">(revenue − modeled cost)</span></span>
+            <span id="costBreakdownProfit" style="color: #10b981; font-size: 18px;">—</span>
           </div>
           <div style="font-size: 12px; color: #718096; line-height: 1.6;">
             <strong style="color: #1a202c;">Profit Margin:</strong> <span id="costBreakdownMarginPercent" style="color: #10b981; font-weight: 600;">—</span><br>
@@ -783,7 +798,7 @@
       </div>
       <div class="form-group">
         <label>Facility Type</label>
-        <select id="propFacilityType">
+        <select id="propFacilityType" onchange="loadFacilityTaskTemplate(this.value)">
           <option value="office">Office</option>
           <option value="retail">Retail</option>
           <option value="warehouse">Warehouse</option>
@@ -907,6 +922,10 @@
     <h3 style="margin-bottom: 1.5rem;">Step 4: Frequency Matrix</h3>
     <p style="color: #718096; font-size: 13px; margin-bottom: 1.5rem;">Clarify what's recurring vs. periodic work.</p>
     <table class="freq-matrix" id="freqMatrix"></table>
+    <div class="matrix-actions">
+      <button class="action-button" onclick="addMatrixRow()" style="margin-top: 0;">+ Add Row</button>
+      <button class="action-button change-order-danger-button" onclick="deleteSelectedMatrixRows()" style="margin-top: 0;">Delete Selected Rows</button>
+    </div>
   </div>
 
   <div class="calculator" style="margin-top: 2rem;">
@@ -1716,35 +1735,72 @@ function useThisQuote() {
   const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
   const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
 
-  const { workerHoursPerVisit, crewDurationPerVisit, requiredPrice } = calculatePricing({
+  const {
+    workerHoursPerVisit, crewDurationPerVisit, requiredPrice,
+    totalCostPerVisit, profitPerVisit, marginPercent
+  } = calculatePricing({
     sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
     payrollBurden, suppliesPercent, overheadPerWorkerHour,
     travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
   });
 
-  const monthlyPrice = isOneTimeFrequency(frequency)
+  const isOneTime = isOneTimeFrequency(frequency);
+  const monthlyPrice = isOneTime
     ? Math.round(requiredPrice)
     : Math.round(requiredPrice * getVisitsPerMonth(frequency));
 
+  // Shared snapshot of everything the Calculator knows about this quote at
+  // the moment "Use This Quote" is clicked -- the single source the
+  // Proposal Builder fields below are populated from.
+  currentQuoteState = {
+    facilityType,
+    frequency,
+    jobType: isOneTime ? 'one-time' : 'recurring',
+    sqft,
+    crewSize,
+    baseWageRate,
+    billableLaborRate,
+    productionRate,
+    scopeComplexity,
+    payrollBurden,
+    suppliesPercent,
+    overheadPerWorkerHour,
+    travelCostPerVisit,
+    equipmentCostPerVisit,
+    targetMarginPercent,
+    workerHoursPerVisit,
+    crewDurationPerVisit,
+    recommendedPricePerVisit: requiredPrice,
+    totalCostPerVisit,
+    profitPerVisit,
+    marginPercent,
+    oneTimePrice: isOneTime ? monthlyPrice : null,
+    monthlyPrice: isOneTime ? null : monthlyPrice,
+  };
+
   // Pre-fill the Proposal Builder fields with the full set of calculator assumptions
-  document.getElementById('propSqft').value = sqft;
-  document.getElementById('propFacilityType').value = facilityType;
-  document.getElementById('propFrequency').value = frequency;
-  document.getElementById('propBaseWageRate').value = baseWageRate;
-  document.getElementById('propLaborRate').value = billableLaborRate;
-  document.getElementById('propProductionRate').value = productionRate;
-  document.getElementById('propScopeComplexity').value = scopeComplexity;
-  document.getElementById('propPayrollBurden').value = payrollBurden;
-  document.getElementById('propSuppliesPercent').value = suppliesPercent;
-  document.getElementById('propOverheadPerLaborHour').value = overheadPerWorkerHour;
-  document.getElementById('propTravelCost').value = travelCostPerVisit;
-  document.getElementById('propEquipmentCost').value = equipmentCostPerVisit;
-  document.getElementById('propTargetMargin').value = targetMarginPercent;
-  document.getElementById('propWorkerHoursPerVisit').value = Number(workerHoursPerVisit.toFixed(2));
-  document.getElementById('propCrewSize').value = crewSize;
-  document.getElementById('propCrewDuration').value = Number(crewDurationPerVisit.toFixed(2));
-  document.getElementById('propRecommendedPrice').value = Math.round(requiredPrice);
-  document.getElementById('propPrice').value = monthlyPrice;
+  document.getElementById('propSqft').value = currentQuoteState.sqft;
+  document.getElementById('propFacilityType').value = currentQuoteState.facilityType;
+  document.getElementById('propFrequency').value = currentQuoteState.frequency;
+  document.getElementById('propBaseWageRate').value = currentQuoteState.baseWageRate;
+  document.getElementById('propLaborRate').value = currentQuoteState.billableLaborRate;
+  document.getElementById('propProductionRate').value = currentQuoteState.productionRate;
+  document.getElementById('propScopeComplexity').value = currentQuoteState.scopeComplexity;
+  document.getElementById('propPayrollBurden').value = currentQuoteState.payrollBurden;
+  document.getElementById('propSuppliesPercent').value = currentQuoteState.suppliesPercent;
+  document.getElementById('propOverheadPerLaborHour').value = currentQuoteState.overheadPerWorkerHour;
+  document.getElementById('propTravelCost').value = currentQuoteState.travelCostPerVisit;
+  document.getElementById('propEquipmentCost').value = currentQuoteState.equipmentCostPerVisit;
+  document.getElementById('propTargetMargin').value = currentQuoteState.targetMarginPercent;
+  document.getElementById('propWorkerHoursPerVisit').value = Number(currentQuoteState.workerHoursPerVisit.toFixed(2));
+  document.getElementById('propCrewSize').value = currentQuoteState.crewSize;
+  document.getElementById('propCrewDuration').value = Number(currentQuoteState.crewDurationPerVisit.toFixed(2));
+  document.getElementById('propRecommendedPrice').value = Math.round(currentQuoteState.recommendedPricePerVisit);
+  document.getElementById('propPrice').value = currentQuoteState.oneTimePrice ?? currentQuoteState.monthlyPrice;
+
+  // Load the facility-specific scope template to match (respects any scope
+  // the contractor has already customized -- see loadFacilityTaskTemplate()).
+  loadFacilityTaskTemplate(currentQuoteState.facilityType);
 
   // Scroll to top and switch tab
   window.scrollTo(0, 0);
@@ -1755,11 +1811,15 @@ function useThisQuote() {
 function updateProposalFrequencyLabels() {
   const frequency = document.getElementById('propFrequency').value;
   const label = document.getElementById('propPriceLabel');
-  if (!label) return;
+  if (label) {
+    label.textContent = isOneTimeFrequency(frequency)
+      ? 'Total One-Time Job Price'
+      : "Monthly Investment (What you'll charge the client)";
+  }
 
-  label.textContent = isOneTimeFrequency(frequency)
-    ? 'Total One-Time Job Price'
-    : "Monthly Investment (What you'll charge the client)";
+  // The Frequency Matrix's column set (Included/Excluded/Optional vs.
+  // Daily/Weekly/.../As Needed) depends on this same frequency.
+  renderFrequencyMatrix();
 }
 
 // Format input value display (comma formatting for readability)
@@ -1990,18 +2050,113 @@ const DEFAULT_ROOMS = {
   'Hallways': ['Vacuuming', 'Mopping', 'Dust surfaces', 'Garbage'],
 };
 
+// Facility-specific starting scope for a new proposal. Keyed by the same
+// values as the Calculator's and Proposal Builder's facilityType selects.
+const FACILITY_TASK_TEMPLATES = {
+  warehouse: {
+    'High Dusting & Structure': [
+      'High dusting (>10 ft)'
+    ],
+    'Floor & Loading Areas': [
+      'Auto-scrub staging areas',
+      'Sweep loading docks'
+    ],
+    'Industrial Restrooms': [
+      'Industrial restroom sanitization'
+    ]
+  },
+
+  office: {
+    'Work Areas': [
+      'Workstation surface wiping',
+      'Conference room sanitization'
+    ],
+    'Break Room': [
+      'Break room/kitchenette cleaning'
+    ],
+    'Restrooms': [
+      'Restroom mopping/fixtures'
+    ]
+  },
+
+  medical: {
+    'Exam Areas': [
+      'Terminal cleaning exam rooms'
+    ],
+    'Waste & High-Touch Areas': [
+      'Biohazard trash removal',
+      'Waiting room chair disinfection'
+    ],
+    'Restrooms': [
+      'Touchless restroom sanitization'
+    ]
+  },
+
+  retail: {
+    'Sales Floor': [
+      'Sales floor high-shine buffing'
+    ],
+    'Fitting Rooms': [
+      'Fitting room mirrors/dust-mopping'
+    ],
+    'POS Areas': [
+      'POS/Cash wrap disinfection'
+    ]
+  }
+};
+
 let scopeItems = {};
 
+// True once a fresh/template scope has not yet been hand-edited (task
+// checked/unchecked, room or matrix row added/removed, or a matrix
+// selection changed). Facility-type changes auto-load a new template only
+// while this is true; once false, changing facility type prompts first so
+// custom work is never silently discarded.
+let scopeIsUntouched = true;
+
+// Snapshot of the Calculator's assumptions at the moment "Use This Quote"
+// last ran -- populated by useThisQuote(), read by the Proposal Builder.
+let currentQuoteState = null;
+
 function initializeScopes() {
-  scopeItems = {};
-  for (const [room, tasks] of Object.entries(DEFAULT_ROOMS)) {
-    scopeItems[room] = { expanded: false, tasks: {} };
-    tasks.forEach(task => {
-      scopeItems[room].tasks[task] = true;
-    });
+  const facilityType = document.getElementById('propFacilityType')?.value || 'office';
+  loadFacilityTaskTemplate(facilityType, { force: true });
+}
+
+// Loads the starting scope of work for a facility type into scopeItems,
+// replacing whatever is there now. If the current scope has already been
+// hand-edited (scopeIsUntouched === false) and force isn't set, asks for
+// confirmation first so custom rooms/rows and selections are never
+// silently discarded -- Cancel keeps the current scope exactly as-is.
+function loadFacilityTaskTemplate(facilityType, options = {}) {
+  const force = options.force === true;
+  const template = FACILITY_TASK_TEMPLATES[facilityType] || DEFAULT_ROOMS;
+
+  const applyTemplate = () => {
+    scopeItems = {};
+    for (const [area, tasks] of Object.entries(template)) {
+      scopeItems[area] = { expanded: false, tasks: {} };
+      tasks.forEach(task => {
+        scopeItems[area].tasks[task] = true;
+      });
+    }
+    scopeFrequencySelections = {};
+    customMatrixRowIds = new Set();
+    scopeIsUntouched = true;
+    renderScopeBuilder();
+    renderFrequencyMatrix();
+  };
+
+  if (force || scopeIsUntouched) {
+    applyTemplate();
+    return;
   }
-  renderScopeBuilder();
-  renderFrequencyMatrix();
+
+  const loadNewTemplate = confirm(
+    'Changing facility type may replace the default scope tasks. Keep your current scope or load the new facility template?\n\n' +
+    'Click OK to load the new facility template, or Cancel to keep your current scope.'
+  );
+  if (loadNewTemplate) applyTemplate();
 }
 
 function renderScopeBuilder() {
@@ -2028,22 +2183,192 @@ function renderScopeBuilder() {
   }).join('');
 }
 
+// DYNAMIC FREQUENCY MATRIX
+// Row identity: a stable id derived from area+task text (never the raw
+// text itself) so HTML attributes and radio group names are always safe,
+// regardless of what a contractor types into "Add Row" or a custom room
+// name. Selections are kept in scopeFrequencySelections (keyed by that
+// id), not read back from DOM state, so they survive re-renders triggered
+// by unrelated changes (checking a task, adding another row, etc).
+const MATRIX_SELECTION_LABELS = {
+  included: 'Included',
+  excluded: 'Excluded',
+  optional: 'Optional Add-On',
+  daily: 'Daily',
+  weekly: 'Weekly',
+  monthly: 'Monthly',
+  quarterly: 'Quarterly',
+  'semi-annually': 'Semi-Annually',
+  'as-needed': 'As Needed',
+};
+const ONE_TIME_MATRIX_SELECTIONS = ['included', 'excluded', 'optional'];
+const RECURRING_MATRIX_SELECTIONS = ['daily', 'weekly', 'monthly', 'quarterly', 'semi-annually', 'as-needed'];
+
+let scopeFrequencySelections = {};
+let customMatrixRowIds = new Set();
+
+function normalizeIdPart(text) {
+  const normalized = String(text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return normalized || 'row';
+}
+
+function getMatrixRowId(area, task) {
+  return normalizeIdPart(area) + '__' + normalizeIdPart(task);
+}
+
+function isMatrixOneTimeMode() {
+  const freqEl = document.getElementById('propFrequency');
+  return freqEl ? isOneTimeFrequency(freqEl.value) : false;
+}
+
 function renderFrequencyMatrix() {
   const table = document.getElementById('freqMatrix');
-  let html = '<tr><th>Area</th><th>Task</th><th style="width: 60px;">Daily</th><th style="width: 60px;">Weekly</th><th style="width: 60px;">Monthly</th><th style="width: 70px;">Quarterly</th></tr>';
+  if (!table) return;
 
-  Object.entries(scopeItems).forEach(([room, data]) => {
-    Object.entries(data.tasks).filter(([, checked]) => checked).forEach(([task]) => {
-      html += `<tr><td>${escapeHtml(room)}</td><td>${escapeHtml(task)}</td>
-        <td><input type="radio" name="freq-${room}-${task}" value="daily"></td>
-        <td><input type="radio" name="freq-${room}-${task}" value="weekly" checked></td>
-        <td><input type="radio" name="freq-${room}-${task}" value="monthly"></td>
-        <td><input type="radio" name="freq-${room}-${task}" value="quarterly"></td>
-      </tr>`;
+  const isOneTime = isMatrixOneTimeMode();
+  const selections = isOneTime ? ONE_TIME_MATRIX_SELECTIONS : RECURRING_MATRIX_SELECTIONS;
+  const defaultSelection = isOneTime ? 'included' : 'weekly';
+  const colCount = 2 + selections.length; // delete checkbox + task name + classification columns
+
+  const headerCells = selections.map(sel => `<th style="width: 60px;">${MATRIX_SELECTION_LABELS[sel]}</th>`).join('');
+  let html = `<tr><th style="width: 34px;"></th><th>Task</th>${headerCells}</tr>`;
+
+  Object.entries(scopeItems).forEach(([area, data]) => {
+    const checkedTasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
+    if (checkedTasks.length === 0) return;
+
+    html += `<tr class="matrix-category-row"><th colspan="${colCount}">${escapeHtml(area)}</th></tr>`;
+
+    checkedTasks.forEach(task => {
+      const id = getMatrixRowId(area, task);
+
+      let entry = scopeFrequencySelections[id];
+      if (!entry) {
+        entry = { area, task, selection: defaultSelection };
+        scopeFrequencySelections[id] = entry;
+      } else {
+        // Keep area/task text current (e.g. a room was renamed by
+        // deleting and re-adding), and fall back to this mode's default
+        // only if the stored selection doesn't belong to the current
+        // mode's set (a genuine one-time <-> recurring switch).
+        entry.area = area;
+        entry.task = task;
+        if (!selections.includes(entry.selection)) {
+          entry.selection = defaultSelection;
+        }
+      }
+
+      const radioCells = selections.map(sel => `
+        <td>
+          <input type="radio" name="freq-${id}" value="${sel}"
+            ${entry.selection === sel ? 'checked' : ''}
+            onchange="setMatrixRowSelection('${id}', '${sel}')">
+        </td>
+      `).join('');
+
+      html += `
+        <tr data-row-id="${id}">
+          <td><input type="checkbox" class="matrix-row-delete" data-row-id="${id}"></td>
+          <td>${escapeHtml(task)}</td>
+          ${radioCells}
+        </tr>
+      `;
     });
   });
 
   table.innerHTML = html;
+}
+
+function setMatrixRowSelection(id, selection) {
+  if (!scopeFrequencySelections[id]) {
+    scopeFrequencySelections[id] = { area: '', task: '', selection };
+  } else {
+    scopeFrequencySelections[id].selection = selection;
+  }
+  scopeIsUntouched = false;
+}
+
+// Reads a task's classification (one-time) or frequency (recurring) for
+// display in the proposal, falling back to this mode's default if the
+// task has no matrix entry yet (e.g. checked in Scope of Work but the
+// matrix was never opened).
+function getScopeTaskSelectionLabel(area, task, isOneTime) {
+  const id = getMatrixRowId(area, task);
+  const entry = scopeFrequencySelections[id];
+  const selection = entry ? entry.selection : (isOneTime ? 'included' : 'weekly');
+  return MATRIX_SELECTION_LABELS[selection] || selection;
+}
+
+function addMatrixRow() {
+  const area = prompt('Area/category name (e.g., "Storage", "Loading Area"):');
+  if (!area || !area.trim()) return;
+
+  const task = prompt('Task name for this area:');
+  if (!task || !task.trim()) return;
+
+  const areaName = area.trim();
+  const taskName = task.trim();
+
+  if (!scopeItems[areaName]) {
+    scopeItems[areaName] = { expanded: true, tasks: {} };
+  }
+  scopeItems[areaName].tasks[taskName] = true;
+
+  const id = getMatrixRowId(areaName, taskName);
+  customMatrixRowIds.add(id);
+  scopeFrequencySelections[id] = {
+    area: areaName,
+    task: taskName,
+    selection: isMatrixOneTimeMode() ? 'included' : 'weekly',
+  };
+
+  scopeIsUntouched = false;
+  renderScopeBuilder();
+  renderFrequencyMatrix();
+}
+
+function deleteSelectedMatrixRows() {
+  const table = document.getElementById('freqMatrix');
+  if (!table) return;
+
+  const selectedIds = Array.from(table.querySelectorAll('.matrix-row-delete:checked')).map(cb => cb.dataset.rowId);
+  if (selectedIds.length === 0) {
+    alert('Select at least one row to delete first.');
+    return;
+  }
+
+  const deletableIds = selectedIds.filter(id => customMatrixRowIds.has(id));
+  const protectedCount = selectedIds.length - deletableIds.length;
+
+  if (deletableIds.length === 0) {
+    alert('Only custom rows added via "Add Row" can be deleted here. To remove a built-in task, uncheck it in the Scope of Work section above.');
+    return;
+  }
+
+  const confirmMessage = protectedCount > 0
+    ? `Delete ${deletableIds.length} custom row(s)? ${protectedCount} built-in row(s) in your selection are protected and will be kept.`
+    : `Delete ${deletableIds.length} selected row(s)? This cannot be undone.`;
+  if (!confirm(confirmMessage)) return;
+
+  deletableIds.forEach(id => {
+    const entry = scopeFrequencySelections[id];
+    if (entry && scopeItems[entry.area]) {
+      delete scopeItems[entry.area].tasks[entry.task];
+      if (Object.keys(scopeItems[entry.area].tasks).length === 0) {
+        delete scopeItems[entry.area];
+      }
+    }
+    delete scopeFrequencySelections[id];
+    customMatrixRowIds.delete(id);
+  });
+
+  scopeIsUntouched = false;
+  renderScopeBuilder();
+  renderFrequencyMatrix();
 }
 
 function toggleScopeRoom(room) {
@@ -2053,6 +2378,7 @@ function toggleScopeRoom(room) {
 
 function updateScopeTask(room, task, checked) {
   scopeItems[room].tasks[task] = checked;
+  scopeIsUntouched = false;
   renderFrequencyMatrix();
 }
 
@@ -2060,6 +2386,7 @@ function addScopeRoom() {
   const newRoom = prompt('Room name (e.g., "Storage", "Loading Area"):');
   if (newRoom) {
     scopeItems[newRoom] = { expanded: true, tasks: { 'Cleaning': true } };
+    scopeIsUntouched = false;
     renderScopeBuilder();
     renderFrequencyMatrix();
   }
@@ -2133,7 +2460,7 @@ function generateProposal() {
       <div class="proposal-scope-item">
         <div class="proposal-scope-room">${escapeHtml(room)}</div>
         <div class="proposal-scope-tasks">
-          ${tasks.map(task => `• ${escapeHtml(task)}`).join('<br>')}
+          ${tasks.map(task => `• ${escapeHtml(task)} — ${escapeHtml(getScopeTaskSelectionLabel(room, task, isOneTime))}`).join('<br>')}
         </div>
       </div>
     `;
@@ -2519,7 +2846,9 @@ function sendProposal() {
   if (clientEmail) {
     const scopeText = Object.entries(scopeItems).map(([room, data]) => {
       const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
-      return tasks.length > 0 ? room + ': ' + tasks.join(', ') : '';
+      if (tasks.length === 0) return '';
+      const taskList = tasks.map(task => task + ' (' + getScopeTaskSelectionLabel(room, task, isOneTimeJob) + ')').join(', ');
+      return room + ': ' + taskList;
     }).filter(Boolean).join('\n');
 
     const emailData = {
