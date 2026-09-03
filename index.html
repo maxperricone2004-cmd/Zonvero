@@ -14,6 +14,11 @@
     nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
     nav button:hover { color: #10b981; }
     nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
+    .dropdown { position: relative; }
+    .dropdown-toggle { display: flex; align-items: center; gap: 0.25rem; }
+    .dropdown-menu { display: none; position: absolute; top: 100%; right: 0; margin-top: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 180px; padding: 0.5rem; z-index: 200; }
+    .dropdown-menu a { display: block; padding: 0.6rem 0.75rem; border-radius: 6px; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.15s, color 0.15s; }
+    .dropdown-menu a:hover { background: #f0fdf4; color: #10b981; }
     .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }
     .cta:hover { background: #059669; }
     .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
@@ -393,21 +398,27 @@
 <body>
 
 <header>
-  <button class="logo" onclick="switchTab('home')">✓ ConeQuotes</button>
-  <nav>
-    <button class="tab-btn" onclick="switchTab('calculator')">Calculator</button>
-    <button class="tab-btn" onclick="switchTab('proposal')">Proposal Builder</button>
-    <button class="tab-btn" onclick="switchTab('contracts')">Contracts</button>
-    <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
-    <button class="tab-btn" onclick="switchTab('crewIntelligence')">Crew Intelligence</button>
-    <button class="tab-btn" onclick="switchTab('scopeDetection')">Scope Detection</button>
+  <button class="logo" onclick="switchTab('calculator')">✓ ConeQuotes</button>
+  <nav class="tab-nav">
+    <button class="tab-btn" data-tab="calculator">Quote</button>
+    <button class="tab-btn" data-tab="proposal">Proposal</button>
+    <button class="tab-btn" data-tab="contracts">Contracts</button>
+    <div class="dropdown">
+      <button class="tab-btn dropdown-toggle">More ⋮</button>
+      <div class="dropdown-menu">
+        <a href="#" data-action="import">Import Contracts</a>
+        <a href="#" data-action="export">Export Data</a>
+        <a href="#" data-action="settings">Settings</a>
+        <a href="#" data-action="help">Help</a>
+      </div>
+    </div>
   </nav>
 </header>
 
 <main>
 
 <!-- HOME TAB -->
-<div id="home" class="tab-content active">
+<div id="home" class="tab-content" style="display:none;">
   <div style="max-width: 900px; margin: 0 auto;">
     <div style="padding: 3rem 1rem 3rem; text-align: center;">
       <div style="font-size: 12px; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 1rem;">The operating system for profitable cleaning</div>
@@ -1058,8 +1069,9 @@
     <div id="proposalPreview"></div>
   </div>
 
-  <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+  <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
     <button class="action-button" onclick="generateProposal()" style="flex: 1;">Preview Proposal</button>
+    <button class="action-button" onclick="previewProposalEmail()" style="flex: 1;">Preview Email</button>
     <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">Create Contract Baseline & Send Email</button>
   </div>
   <button class="action-button" onclick="exportQuotesToExcel()" style="margin-top: 1rem; width: 100%;">Export Quotes to Excel</button>
@@ -1078,7 +1090,7 @@
 </div>
 
 <!-- MARGIN GUARDIAN TAB -->
-<div id="margin" class="tab-content">
+<div id="margin" class="tab-content" style="display:none;">
   <h2>Margin Guardian Dashboard</h2>
   <p class="section-intro">
     Track logged labour and expenses against each contract's original baseline.
@@ -1125,7 +1137,7 @@
   </div>
 </div>
 
-<div id="crewIntelligence" class="tab-content">
+<div id="crewIntelligence" class="tab-content" style="display:none;">
   <h2>Crew Intelligence &amp; Profitability</h2>
   <p class="section-intro">Track which crews hit targets, run over, and are most profitable, based on each contract's own baseline.</p>
 
@@ -1141,7 +1153,7 @@
   </div>
 </div>
 
-<div id="scopeDetection" class="tab-content">
+<div id="scopeDetection" class="tab-content" style="display:none;">
   <h2>AI Scope Detection</h2>
   <p class="section-intro">Upload photos to detect scope deviations securely</p>
   <div class="photo-analysis-section">
@@ -2536,6 +2548,32 @@ function addScopeRoom() {
 }
 
 // Proposal Generation
+// Shared readers for the Step 3 "Access & Security Requirements" and
+// "Client Responsibilities" checklists -- used by the proposal preview and
+// the emailed proposal, so both always show the same, actually-checked
+// state instead of static placeholder text.
+function getAccessRequirements() {
+  return [
+    document.getElementById('propAccess').checked ? 'Client provides facility access' : '',
+    document.getElementById('propAlarm').checked ? 'Client manages security alarms' : '',
+    document.getElementById('propParking').checked ? 'Parking available' : '',
+  ].filter(Boolean);
+}
+
+function getClientResponsibilities() {
+  return [
+    document.getElementById('propClientAccess').checked ? 'Provide facility access' : '',
+    document.getElementById('propClientWater').checked ? 'Provide functioning water and electricity' : '',
+    document.getElementById('propClientRemove').checked ? 'Remove sensitive/personal items from surfaces' : '',
+    document.getElementById('propClientNotify').checked ? 'Notify contractor of hazardous conditions' : '',
+  ].filter(Boolean);
+}
+
+function capitalize(text) {
+  const s = String(text || '');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function generateProposal() {
   const clientName = document.getElementById('propClientName').value.trim();
   if (!clientName) {
@@ -2698,10 +2736,7 @@ function generateProposal() {
       <div class="proposal-section">
         <div class="proposal-section-title">Client Responsibilities</div>
         <div class="proposal-section-content">
-          • Provide facility access<br>
-          • Provide functioning water and electricity<br>
-          • Remove sensitive/personal items from surfaces<br>
-          • Notify contractor of hazardous conditions
+          ${getClientResponsibilities().map(item => `• ${escapeHtml(item)}`).join('<br>') || 'None specified'}
         </div>
       </div>
 
@@ -2776,6 +2811,357 @@ function generateProposal() {
   `;
 
   document.getElementById('proposalPreview').innerHTML = proposal;
+}
+
+// CLIENT-FACING PROPOSAL EMAIL
+// One data builder feeding two renderers (plaintext + responsive HTML
+// table layout), so the emailed proposal and its preview never drift
+// apart. Built from the same values sendProposal() already computed for
+// the contract baseline -- the client receives exactly what was reviewed.
+// scopeGroups/exclusion data is read live from scopeItems and the Step 5
+// checkboxes at call time via the passed-in isOneTimeJob/changeOrderTriggers,
+// so One-time vs. recurring task classifications always match the current
+// Frequency Matrix state.
+function buildProposalEmailData(fields) {
+  const {
+    proposalId, clientName, clientEmail, sqft, facilityType, freq, isOneTimeJob,
+    crewSize, workerHoursPerVisit, crewDurationPerVisit, serviceDays, serviceWindow,
+    suppliesBy, equipmentBy, price, recommendedPricePerVisit,
+    changeOrderTriggers, inclusionsText, exclusionsText,
+  } = fields;
+
+  const facilityTypeDisplay = { office: 'Office', retail: 'Retail', warehouse: 'Warehouse', medical: 'Medical/Healthcare' }[facilityType] || facilityType;
+
+  const scopeGroups = Object.entries(scopeItems).map(([area, data]) => {
+    const tasks = Object.entries(data.tasks)
+      .filter(([, checked]) => checked)
+      .map(([task]) => ({ task, label: getScopeTaskSelectionLabel(area, task, isOneTimeJob) }));
+    return { area, tasks };
+  }).filter(group => group.tasks.length > 0);
+
+  return {
+    proposalId,
+    dateIssued: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    clientName,
+    clientEmail,
+    facilityType: facilityTypeDisplay,
+    sqft,
+    frequencyLabel: getFrequencyLabel(freq),
+    isOneTimeJob,
+    // Per-visit figures, never scaled by visitsPerMonth -- a one-time job
+    // has visitsPerMonth === 1, so these already correctly describe the
+    // single visit rather than a recurring monthly total.
+    crewSize,
+    workerHoursPerVisit,
+    crewDurationPerVisit,
+    serviceDays: serviceDays || 'TBD',
+    serviceWindow: serviceWindow || 'TBD',
+    suppliesBy,
+    equipmentBy,
+    accessRequirements: getAccessRequirements(),
+    clientResponsibilities: getClientResponsibilities(),
+    scopeGroups,
+    exclusionTriggers: changeOrderTriggers,
+    exclusionsText,
+    inclusionsText,
+    priceLabel: isOneTimeJob ? 'Total One-Time Job Price' : 'Monthly Investment',
+    price,
+    recommendedPricePerVisit,
+    // No sales-tax rate is currently configured anywhere in ConeQuotes, so
+    // this is reported honestly as not applicable rather than a fabricated
+    // number -- Final Total is the price itself until a real tax rate
+    // exists to calculate from.
+    taxAmount: 0,
+    taxNote: 'Not applicable — no sales tax rate is currently configured for this quote.',
+    finalTotal: price,
+    paymentTerms: isOneTimeJob
+      ? 'Due upon completion of service.'
+      : 'Due upon completion of each billing cycle (Net 30 available upon request).',
+    quoteValidityDays: 30,
+  };
+}
+
+function buildProposalEmailText(d) {
+  const divider = '----------------------------------------';
+  const listOrNone = items => items.length ? items.map(x => '  - ' + x).join('\n') : '  (none specified)';
+
+  const scopeLines = d.scopeGroups.length > 0
+    ? d.scopeGroups.map(g => g.area + ':\n' + g.tasks.map(t => '  - ' + t.task + ' (' + t.label + ')').join('\n')).join('\n\n')
+    : '(No scope items selected)';
+
+  return [
+    'CLEANING SERVICES PROPOSAL',
+    'Proposal ID: ' + d.proposalId + '   Date: ' + d.dateIssued,
+    divider,
+    '',
+    'Hello ' + d.clientName + ',',
+    '',
+    'Thank you for the opportunity to provide a cleaning proposal for your facility. Full proposal details are documented below for your review.',
+    '',
+    divider,
+    'CLIENT & FACILITY',
+    divider,
+    'Client / Company: ' + d.clientName,
+    'Contact Email: ' + (d.clientEmail || 'TBD'),
+    'Facility Type: ' + d.facilityType,
+    'Total Square Footage: ' + d.sqft + ' sq ft',
+    '',
+    divider,
+    'SERVICE & OPERATIONAL ASSUMPTIONS',
+    divider,
+    'Service Type / Frequency: ' + d.frequencyLabel,
+    'Estimated Crew Size: ' + d.crewSize,
+    'Crew Duration per Visit: ' + d.crewDurationPerVisit + ' hours',
+    'Total Worker-Hours per Visit: ' + d.workerHoursPerVisit + ' hours',
+    'Service Days: ' + d.serviceDays,
+    'Service Window: ' + d.serviceWindow,
+    'Cleaning Supplies Provided By: ' + capitalize(d.suppliesBy),
+    'Equipment Provided By: ' + capitalize(d.equipmentBy),
+    '',
+    divider,
+    'SITE ACCESS & CLIENT RESPONSIBILITIES',
+    divider,
+    'Access Requirements:',
+    listOrNone(d.accessRequirements),
+    'Client Responsibilities:',
+    listOrNone(d.clientResponsibilities),
+    '',
+    divider,
+    'SCOPE OF WORK (BY AREA)',
+    divider,
+    scopeLines,
+    '',
+    divider,
+    'EXCLUSIONS & CHANGE ORDER POLICY',
+    divider,
+    'Explicit Exclusions:',
+    (d.exclusionsText ? d.exclusionsText : '- Carpet shampooing\n- Deep exterior cleaning\n- Repairs or maintenance'),
+    '',
+    'Out-of-Scope Triggers (require a written Change Order before work begins):',
+    listOrNone(d.exclusionTriggers),
+    '',
+    divider,
+    'PRICING & COMMERCIAL TERMS',
+    divider,
+    d.priceLabel + ': ' + formatCurrency(d.price),
+    'Applicable Taxes: ' + formatCurrency(d.taxAmount) + ' (' + d.taxNote + ')',
+    'Final Total: ' + formatCurrency(d.finalTotal),
+    'Payment Terms: ' + d.paymentTerms,
+    'Quote Validity: This proposal is valid for ' + d.quoteValidityDays + ' days from the date above.',
+    '',
+    divider,
+    '',
+    'Please review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written Change Order.',
+    '',
+    'Best regards,',
+    'ConeQuotes Team',
+    'conequotes.service@outlook.com',
+  ].join('\n');
+}
+
+function buildProposalEmailHtml(d) {
+  const listOrNone = items => items.length
+    ? items.map(x => '• ' + escapeHtml(x)).join('<br>')
+    : '<span style="color:#718096;">None specified</span>';
+
+  const scopeHtml = d.scopeGroups.length > 0
+    ? d.scopeGroups.map(g => `
+        <tr><td style="padding:12px 0 4px; font-weight:700; color:#1a202c; font-size:14px; border-bottom:2px solid #10b981;">${escapeHtml(g.area)}</td></tr>
+        <tr><td style="padding:4px 0 12px; font-size:13px; color:#4a5568; line-height:1.7;">
+          ${g.tasks.map(t => '• ' + escapeHtml(t.task) + ' — <strong>' + escapeHtml(t.label) + '</strong>').join('<br>')}
+        </td></tr>
+      `).join('')
+    : '<tr><td style="padding:8px 0; color:#718096;">No scope items selected</td></tr>';
+
+  const exclusionsHtml = d.exclusionsText
+    ? escapeHtml(d.exclusionsText).replace(/\n/g, '<br>')
+    : '• Carpet shampooing<br>• Deep exterior cleaning<br>• Repairs or maintenance';
+
+  const sectionHeader = title => `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
+      <tr><td style="font-size:13px; font-weight:700; color:#1a202c; text-transform:uppercase; letter-spacing:0.5px; padding-bottom:8px; border-bottom:2px solid #10b981;">${title}</td></tr>
+    </table>
+  `;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleaning Services Proposal — ${escapeHtml(d.proposalId)}</title>
+<style>
+  @media only screen and (max-width: 620px) {
+    .email-container { width: 100% !important; }
+    .email-padding { padding: 20px !important; }
+    .email-details-table td { display: block !important; width: 100% !important; padding: 6px 0 !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#f5f7fa; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f7fa; padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;">
+          <tr>
+            <td style="background-color:#10b981; padding:28px 32px; text-align:center;">
+              <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">CLEANING SERVICES PROPOSAL</div>
+              <div style="font-size:13px; color:#d1fae5; margin-top:6px;">Proposal ID: ${escapeHtml(d.proposalId)} &nbsp;|&nbsp; Date: ${escapeHtml(d.dateIssued)}</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="email-padding" style="padding:32px;">
+              <p style="margin:0 0 16px; font-size:14px; color:#1a202c;">Hello ${escapeHtml(d.clientName)},</p>
+              <p style="margin:0 0 24px; font-size:14px; color:#4a5568; line-height:1.6;">
+                Thank you for the opportunity to provide a cleaning proposal for your facility. Full proposal details are documented below for your review.
+              </p>
+
+              ${sectionHeader('Client &amp; Facility')}
+              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Client / Company:</strong><br>${escapeHtml(d.clientName)}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Contact Email:</strong><br>${escapeHtml(d.clientEmail || 'TBD')}</td>
+                </tr>
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Facility Type:</strong><br>${escapeHtml(d.facilityType)}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Total Square Footage:</strong><br>${escapeHtml(d.sqft)} sq ft</td>
+                </tr>
+              </table>
+
+              ${sectionHeader('Service &amp; Operational Assumptions')}
+              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Type / Frequency:</strong><br>${escapeHtml(d.frequencyLabel)}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Estimated Crew Size:</strong><br>${escapeHtml(d.crewSize)}</td>
+                </tr>
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Crew Duration per Visit:</strong><br>${escapeHtml(d.crewDurationPerVisit)} hours</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Total Worker-Hours per Visit:</strong><br>${escapeHtml(d.workerHoursPerVisit)} hours</td>
+                </tr>
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Days:</strong><br>${escapeHtml(d.serviceDays)}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Window:</strong><br>${escapeHtml(d.serviceWindow)}</td>
+                </tr>
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Supplies Provided By:</strong><br>${escapeHtml(capitalize(d.suppliesBy))}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Equipment Provided By:</strong><br>${escapeHtml(capitalize(d.equipmentBy))}</td>
+                </tr>
+              </table>
+
+              ${sectionHeader('Site Access &amp; Client Responsibilities')}
+              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
+                <tr>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Access Requirements:</strong><br>${listOrNone(d.accessRequirements)}</td>
+                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Client Responsibilities:</strong><br>${listOrNone(d.clientResponsibilities)}</td>
+                </tr>
+              </table>
+
+              ${sectionHeader('Scope of Work')}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                ${scopeHtml}
+              </table>
+
+              ${sectionHeader('Exclusions &amp; Change Order Policy')}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
+                <tr><td style="padding:6px 0;"><strong style="color:#1a202c;">Explicit Exclusions:</strong><br>${exclusionsHtml}</td></tr>
+                <tr><td style="padding:6px 0;"><strong style="color:#1a202c;">Out-of-Scope Triggers</strong> <span style="color:#718096;">(require a written Change Order before work begins):</span><br>${listOrNone(d.exclusionTriggers)}</td></tr>
+              </table>
+
+              ${sectionHeader('Pricing &amp; Commercial Terms')}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px; font-size:13px; color:#4a5568;">
+                <tr>
+                  <td style="padding:6px 0;">${escapeHtml(d.priceLabel)}</td>
+                  <td style="padding:6px 0; text-align:right; font-weight:600; color:#1a202c;">${escapeHtml(formatCurrency(d.price))}</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;">Applicable Taxes</td>
+                  <td style="padding:6px 0; text-align:right;">${escapeHtml(formatCurrency(d.taxAmount))}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="padding:0 0 10px; font-size:11px; color:#718096; font-style:italic;">${escapeHtml(d.taxNote)}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0 0; font-weight:700; color:#1a202c; border-top:2px solid #cbd5e0;">Final Total</td>
+                  <td style="padding:10px 0 0; text-align:right; font-weight:700; font-size:18px; color:#10b981; border-top:2px solid #cbd5e0;">${escapeHtml(formatCurrency(d.finalTotal))}</td>
+                </tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:12px; color:#718096; line-height:1.6;">
+                <tr><td style="padding:4px 0;"><strong>Payment Terms:</strong> ${escapeHtml(d.paymentTerms)}</td></tr>
+                <tr><td style="padding:4px 0;"><strong>Quote Validity:</strong> This proposal is valid for ${d.quoteValidityDays} days from the date above.</td></tr>
+              </table>
+
+              <p style="margin:24px 0 0; font-size:12px; color:#718096; line-height:1.6; border-top:1px solid #e2e8f0; padding-top:16px;">
+                Please review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written Change Order.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#f7fafc; padding:20px 32px; text-align:center; border-top:1px solid #e2e8f0;">
+              <div style="font-size:13px; color:#1a202c; font-weight:600;">ConeQuotes</div>
+              <div style="font-size:12px; color:#718096; margin-top:4px;">
+                <a href="mailto:conequotes.service@outlook.com" style="color:#10b981; text-decoration:none;">conequotes.service@outlook.com</a>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+// Opens the exact HTML the client would receive in a new window (same
+// pattern as printChangeOrder()), so the contractor can see the fully
+// rendered, styled proposal -- and, since actual HTML rendering in the
+// delivered email depends on the connected email provider's settings, can
+// always fall back to copying/printing/forwarding this directly.
+function previewProposalEmail() {
+  const clientName = document.getElementById('propClientName').value.trim();
+  if (!clientName) {
+    alert('Please enter client name first.');
+    return;
+  }
+
+  const freq = document.getElementById('propFrequency').value;
+  const isOneTimeJob = isOneTimeFrequency(freq);
+  const price = safeNumber(document.getElementById('propPrice').value, 0, 0, 10000000);
+
+  const data = buildProposalEmailData({
+    proposalId: generateProposalId(),
+    clientName,
+    clientEmail: document.getElementById('propClientEmail').value.trim(),
+    sqft: document.getElementById('propSqft').value,
+    facilityType: document.getElementById('propFacilityType').value,
+    freq,
+    isOneTimeJob,
+    crewSize: document.getElementById('propCrewSize').value,
+    workerHoursPerVisit: document.getElementById('propWorkerHoursPerVisit').value,
+    crewDurationPerVisit: document.getElementById('propCrewDuration').value,
+    serviceDays: document.getElementById('propServiceDays').value,
+    serviceWindow: document.getElementById('propServiceWindow').value,
+    suppliesBy: document.getElementById('propSuppliesBy').value,
+    equipmentBy: document.getElementById('propEquipmentBy').value,
+    price,
+    recommendedPricePerVisit: document.getElementById('propRecommendedPrice').value,
+    changeOrderTriggers: [
+      document.getElementById('outAdditionalRooms').checked ? 'Additional rooms/areas' : '',
+      document.getElementById('outFrequency').checked ? 'Increased service frequency' : '',
+      document.getElementById('outDeepClean').checked ? 'Floor stripping/waxing' : '',
+      document.getElementById('outCarpet').checked ? 'Carpet extraction' : '',
+      document.getElementById('outPostEvent').checked ? 'Post-event cleanup' : '',
+      document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
+    ].filter(Boolean),
+    inclusionsText: document.getElementById('propInclusions').value,
+    exclusionsText: document.getElementById('propExclusions').value,
+  });
+
+  const previewWindow = window.open('', '_blank');
+  if (!previewWindow) {
+    alert('Please allow pop-ups to preview the proposal email.');
+    return;
+  }
+  previewWindow.document.write(buildProposalEmailHtml(data));
+  previewWindow.document.close();
 }
 
 function sendProposal() {
@@ -2929,6 +3315,33 @@ function sendProposal() {
     scopeVersion: 'v1.0',
   };
 
+  // Built now, from the same local values and original_baseline fields
+  // above, rather than re-reading the DOM later -- propClientName/
+  // propClientEmail/propPrice get reset below once the contract is saved,
+  // so this must happen before that reset to avoid picking up cleared or
+  // placeholder values.
+  const proposalEmailData = buildProposalEmailData({
+    proposalId,
+    clientName,
+    clientEmail,
+    sqft,
+    facilityType,
+    freq,
+    isOneTimeJob,
+    crewSize,
+    workerHoursPerVisit,
+    crewDurationPerVisit,
+    serviceDays: original_baseline.service.days,
+    serviceWindow: original_baseline.service.window,
+    suppliesBy: original_baseline.serviceAssumptions.suppliesProvidedBy,
+    equipmentBy: original_baseline.serviceAssumptions.equipmentProvidedBy,
+    price,
+    recommendedPricePerVisit,
+    changeOrderTriggers,
+    inclusionsText: original_baseline.inclusions,
+    exclusionsText: original_baseline.exclusions,
+  });
+
   // CONTRACT OBJECT with baseline and tracking
   const contract = {
     id: Date.now(),
@@ -2987,17 +3400,14 @@ function sendProposal() {
   updateScopePhotoPricingWarning();
 
   if (clientEmail) {
-    const scopeText = Object.entries(scopeItems).map(([room, data]) => {
-      const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
-      if (tasks.length === 0) return '';
-      const taskList = tasks.map(task => task + ' (' + getScopeTaskSelectionLabel(room, task, isOneTimeJob) + ')').join(', ');
-      return room + ': ' + taskList;
-    }).filter(Boolean).join('\n');
-
+    // _subject (not "subject") is Formspree's reserved field name for a
+    // dynamic subject line -- the old unprefixed "subject" field was
+    // silently ignored, so the client saw Formspree's own generic form-
+    // submission subject instead of this proposal's real subject line.
     const emailData = {
       email: clientEmail,
-      subject: 'Cleaning Services Proposal - ' + clientName + ' [' + proposalId + ']',
-      message: `Hello ${clientName},\n\nThank you for the opportunity to provide a cleaning proposal for your facility.\n\nYour proposal summary is included below. Please review the documented service areas, tasks, frequency, pricing, inclusions and exclusions.\n\nPlease review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written scope change.\n\nProposal ID: ${proposalId}\n\nScope:\n${scopeText}\n\n${isOneTimeJob ? 'Total One-Time Job Price' : 'Monthly Investment'}: $${price}\n\nBest regards,\nConeQuotes Team`
+      _subject: 'Cleaning Services Proposal - ' + proposalId + ' | ' + clientName,
+      message: buildProposalEmailText(proposalEmailData),
     };
 
     fetch('https://formspree.io/f/xdenlden', {
@@ -4636,12 +5046,43 @@ document.addEventListener('DOMContentLoaded', function() {
   if (tabName && document.getElementById(tabName)) {
     switchTab(tabName);
   } else {
-    switchTab('home');
+    switchTab('calculator');
   }
+
+  // Tab nav buttons (data-tab) — kept separate from switchTab() itself so
+  // that function's other callers (e.g. useThisQuote(), sendProposal())
+  // are untouched.
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+  });
+
+  // Dropdown toggle
+  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const menu = btn.nextElementSibling;
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      menu.style.display = 'none';
+    });
+  });
+
+  // Placeholder actions (implement in Phase 2)
+  document.querySelectorAll('.dropdown-menu a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('This feature will be added in Phase 2: ' + e.target.textContent);
+    });
+  });
 });
 
 window.addEventListener('hashchange', function() {
-  const tabName = window.location.hash.slice(1) || 'home';
+  const tabName = window.location.hash.slice(1) || 'calculator';
   if (document.getElementById(tabName)) {
     switchTab(tabName);
   }
