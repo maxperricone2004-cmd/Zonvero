@@ -14,39 +14,6 @@
     nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
     nav button:hover { color: #10b981; }
     nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
-    .more-menu-wrapper { position: relative; }
-    .more-menu {
-      position: absolute; top: calc(100% + 0.75rem); right: 0; background: white;
-      border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-      min-width: 200px; padding: 0.5rem; z-index: 200;
-    }
-    .more-menu button {
-      display: block; width: 100%; text-align: left; padding: 0.6rem 0.75rem;
-      border-radius: 6px; font-size: 14px; color: #1a202c;
-    }
-    .more-menu button:hover { background: #f0fdf4; color: #10b981; }
-    @keyframes contractHighlightFlash {
-      0%, 100% { box-shadow: none; }
-      50% { box-shadow: 0 0 0 3px #10b981; }
-    }
-    .contract-card-highlight { animation: contractHighlightFlash 1s ease-in-out 2; }
-    .portfolio-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-    .portfolio-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-end; }
-    .portfolio-filters .form-group { min-width: 160px; margin-bottom: 0; }
-    .portfolio-row {
-      display: flex; align-items: center; gap: 1rem; background: white; border: 1px solid #e2e8f0;
-      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; cursor: pointer; transition: border-color 0.15s;
-    }
-    .portfolio-row:hover { border-color: #10b981; }
-    .portfolio-row-main { flex: 1; min-width: 0; }
-    .portfolio-row-name { font-weight: 600; color: #1a202c; font-size: 14px; }
-    .portfolio-row-meta { font-size: 12px; color: #718096; margin-top: 0.15rem; }
-    .portfolio-row-reason { font-size: 12px; color: #4a5568; margin-top: 0.35rem; }
-    .portfolio-row-figures { text-align: right; white-space: nowrap; }
-    .portfolio-row-value { font-weight: 600; color: #1a202c; font-size: 14px; }
-    .portfolio-row-margin { font-size: 12px; color: #718096; margin-top: 0.15rem; }
-    .portfolio-section { margin-top: 2.5rem; }
-    .portfolio-section-toggle { cursor: pointer; user-select: none; }
     .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }
     .cta:hover { background: #059669; }
     .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
@@ -412,12 +379,6 @@
       .recommended-price-card { position: static; }
       .matrix-actions { flex-direction: column; }
       .matrix-actions .action-button { width: 100%; }
-      .portfolio-tiles { grid-template-columns: repeat(2, 1fr); }
-      .portfolio-filters { flex-direction: column; align-items: stretch; }
-      .portfolio-filters .form-group { min-width: 0; }
-      .portfolio-row { flex-direction: column; align-items: flex-start; }
-      .portfolio-row-figures { text-align: left; }
-      .more-menu { right: auto; left: 0; min-width: 180px; }
     }
     .photo-analysis-section { background: #f7fafc; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
     .photo-upload-area { border: 2px dashed #cbd5e0; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
@@ -432,29 +393,21 @@
 <body>
 
 <header>
-  <button class="logo" onclick="switchTab('portfolio')">✓ ConeQuotes</button>
+  <button class="logo" onclick="switchTab('home')">✓ ConeQuotes</button>
   <nav>
-    <button class="tab-btn" onclick="switchTab('portfolio')">Portfolio</button>
-    <button class="tab-btn" onclick="switchTab('calculator')">Quote</button>
+    <button class="tab-btn" onclick="switchTab('calculator')">Calculator</button>
+    <button class="tab-btn" onclick="switchTab('proposal')">Proposal Builder</button>
     <button class="tab-btn" onclick="switchTab('contracts')">Contracts</button>
-    <div class="more-menu-wrapper">
-      <button class="tab-btn" onclick="toggleMoreMenu(event)">⋯</button>
-      <div id="moreMenu" class="more-menu" style="display: none;">
-        <button onclick="closeMoreMenu(); switchTab('proposal');">Proposal Builder</button>
-        <button onclick="closeMoreMenu(); switchTab('exportData');">Export Data</button>
-        <button onclick="closeMoreMenu(); showComingSoon('Import Contracts');">Import Contracts</button>
-        <button onclick="closeMoreMenu(); showComingSoon('Settings');">Settings</button>
-        <button onclick="closeMoreMenu(); showComingSoon('Roles &amp; Permissions');">Roles &amp; Permissions</button>
-        <button onclick="closeMoreMenu(); switchTab('helpSupport');">Help/Support</button>
-      </div>
-    </div>
+    <button class="tab-btn" onclick="switchTab('margin')">Margin Guardian</button>
+    <button class="tab-btn" onclick="switchTab('crewIntelligence')">Crew Intelligence</button>
+    <button class="tab-btn" onclick="switchTab('scopeDetection')">Scope Detection</button>
   </nav>
 </header>
 
 <main>
 
 <!-- HOME TAB -->
-<div id="home" class="tab-content">
+<div id="home" class="tab-content active">
   <div style="max-width: 900px; margin: 0 auto;">
     <div style="padding: 3rem 1rem 3rem; text-align: center;">
       <div style="font-size: 12px; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 1rem;">The operating system for profitable cleaning</div>
@@ -563,75 +516,7 @@
   </div>
 </div>
 
-<!-- PORTFOLIO TAB (new default landing view) -->
-<div id="portfolio" class="tab-content active">
-  <h2>Portfolio</h2>
-  <p class="section-intro">Exactly which contracts are making you money, which are losing you money, and why -- at a glance.</p>
-
-  <div class="portfolio-tiles">
-    <div class="stat-card">
-      <div class="stat-label">Total Contracts</div>
-      <div class="stat-value" id="portfolioStatTotal">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Healthy</div>
-      <div class="stat-value" id="portfolioStatGreen">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Watch List</div>
-      <div class="stat-value" id="portfolioStatYellow">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">At Risk</div>
-      <div class="stat-value" id="portfolioStatRed">0</div>
-    </div>
-  </div>
-
-  <div class="portfolio-filters">
-    <div class="form-group">
-      <label>Status</label>
-      <select id="portfolioFilterStatus" onchange="setPortfolioFilter('status', this.value)">
-        <option value="all">All statuses</option>
-        <option value="green">Green</option>
-        <option value="yellow">Yellow</option>
-        <option value="red">Red</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Facility Type</label>
-      <select id="portfolioFilterFacility" onchange="setPortfolioFilter('facilityType', this.value)">
-        <option value="all">All facility types</option>
-        <option value="office">Office</option>
-        <option value="retail">Retail</option>
-        <option value="warehouse">Warehouse</option>
-        <option value="medical">Medical/Healthcare</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Job Type</label>
-      <select id="portfolioFilterJobType" onchange="setPortfolioFilter('jobType', this.value)">
-        <option value="all">All job types</option>
-        <option value="recurring">Recurring</option>
-        <option value="one-time">One-time</option>
-      </select>
-    </div>
-  </div>
-
-  <div id="portfolioContractList"></div>
-
-  <div class="portfolio-section">
-    <h3 style="margin-bottom: 0.5rem;">Margin Leak Inbox</h3>
-    <p class="section-intro">Portfolio-wide leaks flagged across all contracts.</p>
-    <div id="marginLeakInboxContainer"></div>
-  </div>
-
-  <div class="portfolio-section">
-    <h3 style="margin-bottom: 0.5rem;">Weekly Margin Review</h3>
-    <div id="weeklyReviewContainer"></div>
-  </div>
-</div>
-
-<!-- CALCULATOR TAB (nav label: "Quote") -->
+<!-- CALCULATOR TAB -->
 <div id="calculator" class="tab-content">
   <h2>Build a profitable bid</h2>
   <p class="section-intro">Estimate your quote, labour cost, operating costs, and expected margin before you bid.</p>
@@ -742,7 +627,6 @@
         <div class="output-label">Recommended Price per Visit</div>
         <div class="output-value" id="recommendedPriceOutput">—</div>
         <div class="output-unit">planning benchmark, not guaranteed</div>
-        <div id="bidHealthWarning" style="margin-top: 0.5rem; font-size: 12px; font-weight: 600;"></div>
       </div>
       <div class="output-box">
         <div class="output-label" id="monthlyOutputLabel">Monthly Revenue</div>
@@ -945,7 +829,6 @@
       <input type="file" id="scopePhotoInput" accept="image/*" multiple>
     </div>
     <button class="action-button" onclick="addScopePhotos()" style="margin-top: 1rem;">Add Walkthrough Photos</button>
-    <button class="action-button" onclick="switchTab('scopeDetection')" style="margin-top: 1rem; background: #4a5568;">AI Scope Detection →</button>
     <div id="scopePhotoPricingWarning" class="scope-note" style="display: none; margin-top: 1.5rem; background: #fee2e2; border-left-color: #ef4444; color: #7f1d1d;">
       This walkthrough item may affect labour, equipment, travel, or scope assumptions. Review the quote before sending.
     </div>
@@ -1175,9 +1058,8 @@
     <div id="proposalPreview"></div>
   </div>
 
-  <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+  <div style="margin-top: 2rem; display: flex; gap: 1rem;">
     <button class="action-button" onclick="generateProposal()" style="flex: 1;">Preview Proposal</button>
-    <button class="action-button" onclick="previewProposalEmail()" style="flex: 1;">Preview Email</button>
     <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">Create Contract Baseline & Send Email</button>
   </div>
   <button class="action-button" onclick="exportQuotesToExcel()" style="margin-top: 1rem; width: 100%;">Export Quotes to Excel</button>
@@ -1195,6 +1077,70 @@
   <div id="contractsList"></div>
 </div>
 
+<!-- MARGIN GUARDIAN TAB -->
+<div id="margin" class="tab-content">
+  <h2>Margin Guardian Dashboard</h2>
+  <p class="section-intro">
+    Track logged labour and expenses against each contract's original baseline.
+  </p>
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+    <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0;">Export Margin Report to Excel</button>
+    <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0;">Export Labour and Expenses to Excel</button>
+    <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0;">Export Change Orders to Excel</button>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Active Contracts</div>
+      <div class="stat-value" id="statActiveContracts">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Healthy</div>
+      <div class="stat-value" id="statHealthy">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Watch List</div>
+      <div class="stat-value" id="statWatch">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">At Risk</div>
+      <div class="stat-value" id="statRisk">0</div>
+    </div>
+  </div>
+  <div class="mg-subnav">
+    <button class="mg-subnav-tab active" id="mgSubNavInbox" onclick="switchMarginSubTab('inbox')">Inbox</button>
+    <button class="mg-subnav-tab" id="mgSubNavWeekly" onclick="switchMarginSubTab('weekly')">Weekly Review</button>
+    <button class="mg-subnav-tab" id="mgSubNavContracts" onclick="switchMarginSubTab('contracts')">Contracts</button>
+  </div>
+
+  <div id="marginSubTabInbox" class="mg-subtab-content" style="display: block;">
+    <div id="marginLeakInboxContainer"></div>
+  </div>
+
+  <div id="marginSubTabWeekly" class="mg-subtab-content" style="display: none;">
+    <div id="weeklyReviewContainer"></div>
+  </div>
+
+  <div id="marginSubTabContracts" class="mg-subtab-content" style="display: none;">
+    <div id="contractsContainer"></div>
+  </div>
+</div>
+
+<div id="crewIntelligence" class="tab-content">
+  <h2>Crew Intelligence &amp; Profitability</h2>
+  <p class="section-intro">Track which crews hit targets, run over, and are most profitable, based on each contract's own baseline.</p>
+
+  <div style="margin-bottom: 2rem;">
+    <label style="font-weight: 600; display: block; margin-bottom: 0.75rem;">Select Contract:</label>
+    <select id="crewAnalysisSelect" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; width: 100%; max-width: 400px;" onchange="renderCrewIntelligence()">
+      <option value="">-- Choose a contract --</option>
+    </select>
+  </div>
+
+  <div id="crewIntelligenceContent">
+    <p style="color: #718096; font-size: 13px;">Select a contract with time logs to see crew performance data.</p>
+  </div>
+</div>
+
 <div id="scopeDetection" class="tab-content">
   <h2>AI Scope Detection</h2>
   <p class="section-intro">Upload photos to detect scope deviations securely</p>
@@ -1207,53 +1153,6 @@
     <input type="file" id="photoUpload" style="display: none;" accept="image/*" onchange="handlePhotoUpload(event)">
     <img id="photoPreview" class="photo-preview">
     <div id="analysisResult"></div>
-  </div>
-</div>
-
-<!-- MORE MENU: EXPORT DATA -->
-<div id="exportData" class="tab-content">
-  <h2>Export Data</h2>
-  <p class="section-intro">Download your quotes, contracts, and margin data as Excel-compatible CSV files.</p>
-  <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 420px;">
-    <button class="action-button" onclick="exportQuotesToExcel()" style="margin-top: 0;">Export Quotes to Excel</button>
-    <button class="action-button" onclick="exportContractsToExcel()" style="margin-top: 0;">Export Contracts to Excel</button>
-    <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0;">Export Margin Report to Excel</button>
-    <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0;">Export Labour and Expenses to Excel</button>
-    <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0;">Export Change Orders to Excel</button>
-  </div>
-</div>
-
-<!-- MORE MENU: HELP / SUPPORT -->
-<div id="helpSupport" class="tab-content">
-  <h2>Help &amp; Support</h2>
-  <p class="section-intro">Quick answers and how to reach us.</p>
-
-  <div class="contract-section">
-    <h3>Getting Started</h3>
-    <p style="font-size: 13px; color: #4a5568; line-height: 1.7;">
-      Build a quote in the Quote tab, click "Use This Quote" to transfer it into a full proposal, then send it to your client.
-      Once a contract is created, track everything about it -- margin, crew performance, change orders -- from its card in the Contracts tab.
-      The Portfolio tab shows which contracts across your whole book are healthy, on watch, or at risk, at a glance.
-    </p>
-  </div>
-
-  <div class="contract-section">
-    <h3>Frequently Asked Questions</h3>
-    <p style="font-size: 13px; color: #4a5568; line-height: 1.7; margin-bottom: 1rem;">
-      <strong>Where did Margin Guardian and Crew Intelligence go?</strong><br>
-      Their content now lives inside each contract's card in the Contracts tab. Portfolio-wide margin status (the leak inbox and weekly review) moved to the Portfolio tab.
-    </p>
-    <p style="font-size: 13px; color: #4a5568; line-height: 1.7;">
-      <strong>My contract data disappeared.</strong><br>
-      ConeQuotes stores contracts in this browser's local storage only -- clearing your browser data removes them. Export regularly from Export Data in the ⋯ menu.
-    </p>
-  </div>
-
-  <div class="contract-section">
-    <h3>Contact</h3>
-    <p style="font-size: 13px; color: #4a5568;">
-      <a href="mailto:conequotes.service@outlook.com" style="color: #10b981;">conequotes.service@outlook.com</a>
-    </p>
   </div>
 </div>
 
@@ -1676,33 +1575,9 @@ function switchTab(tabName) {
   tabEl.classList.add('active');
   window.location.hash = tabName;
 
-  if (tabName === 'portfolio') renderPortfolio();
+  if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
-}
-
-// TOP NAV "MORE" MENU
-function toggleMoreMenu(event) {
-  if (event) event.stopPropagation();
-  const menu = document.getElementById('moreMenu');
-  if (!menu) return;
-  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-}
-
-function closeMoreMenu() {
-  const menu = document.getElementById('moreMenu');
-  if (menu) menu.style.display = 'none';
-}
-
-document.addEventListener('click', (event) => {
-  const wrapper = document.querySelector('.more-menu-wrapper');
-  if (wrapper && !wrapper.contains(event.target)) closeMoreMenu();
-});
-
-// Honest placeholder for More-menu items that aren't built yet (Import
-// Contracts, Settings, Roles & Permissions) -- no fabricated UI standing
-// in for a feature that doesn't exist.
-function showComingSoon(featureName) {
-  alert(featureName + ' is coming soon.');
+  if (tabName === 'crewIntelligence') populateCrewAnalysisSelect();
 }
 
 // Calculator
@@ -1801,26 +1676,6 @@ function updateCalc() {
     marginOutputEl.style.color = '#10b981';
   }
   marginOutputEl.textContent = actualMargin + '%';
-
-  // Bid Health -- a condensed version of the same margin-status check
-  // above, shown right under Recommended Price so a losing or thin bid is
-  // visible before scrolling down to the full margin alert banner.
-  const bidHealthEl = document.getElementById('bidHealthWarning');
-  if (bidHealthEl) {
-    if (actualMargin < 0) {
-      bidHealthEl.style.color = '#dc2626';
-      bidHealthEl.textContent = '⚠️ This bid loses money at this price.';
-    } else if (actualMargin < targetMarginPercent - 5) {
-      bidHealthEl.style.color = '#dc2626';
-      bidHealthEl.textContent = '⚠️ Bid Health: Below target margin.';
-    } else if (actualMargin < targetMarginPercent) {
-      bidHealthEl.style.color = '#b45309';
-      bidHealthEl.textContent = '⚡ Bid Health: Close to target margin.';
-    } else {
-      bidHealthEl.style.color = '#059669';
-      bidHealthEl.textContent = '✓ Bid Health: On target.';
-    }
-  }
 
   // Margin alert banner
   const alertEl = document.getElementById('marginAlert');
@@ -2681,32 +2536,6 @@ function addScopeRoom() {
 }
 
 // Proposal Generation
-// Shared readers for the Step 3 "Access & Security Requirements" and
-// "Client Responsibilities" checklists -- used by the proposal preview and
-// the emailed proposal, so both always show the same, actually-checked
-// state instead of static placeholder text.
-function getAccessRequirements() {
-  return [
-    document.getElementById('propAccess').checked ? 'Client provides facility access' : '',
-    document.getElementById('propAlarm').checked ? 'Client manages security alarms' : '',
-    document.getElementById('propParking').checked ? 'Parking available' : '',
-  ].filter(Boolean);
-}
-
-function getClientResponsibilities() {
-  return [
-    document.getElementById('propClientAccess').checked ? 'Provide facility access' : '',
-    document.getElementById('propClientWater').checked ? 'Provide functioning water and electricity' : '',
-    document.getElementById('propClientRemove').checked ? 'Remove sensitive/personal items from surfaces' : '',
-    document.getElementById('propClientNotify').checked ? 'Notify contractor of hazardous conditions' : '',
-  ].filter(Boolean);
-}
-
-function capitalize(text) {
-  const s = String(text || '');
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 function generateProposal() {
   const clientName = document.getElementById('propClientName').value.trim();
   if (!clientName) {
@@ -2869,7 +2698,10 @@ function generateProposal() {
       <div class="proposal-section">
         <div class="proposal-section-title">Client Responsibilities</div>
         <div class="proposal-section-content">
-          ${getClientResponsibilities().map(item => `• ${escapeHtml(item)}`).join('<br>') || 'None specified'}
+          • Provide facility access<br>
+          • Provide functioning water and electricity<br>
+          • Remove sensitive/personal items from surfaces<br>
+          • Notify contractor of hazardous conditions
         </div>
       </div>
 
@@ -2944,357 +2776,6 @@ function generateProposal() {
   `;
 
   document.getElementById('proposalPreview').innerHTML = proposal;
-}
-
-// CLIENT-FACING PROPOSAL EMAIL
-// One data builder feeding two renderers (plaintext + responsive HTML
-// table layout), so the emailed proposal and its preview never drift
-// apart. Built from the same values sendProposal() already computed for
-// the contract baseline -- the client receives exactly what was reviewed.
-// scopeGroups/exclusion data is read live from scopeItems and the Step 5
-// checkboxes at call time via the passed-in isOneTimeJob/changeOrderTriggers,
-// so One-time vs. recurring task classifications always match the current
-// Frequency Matrix state.
-function buildProposalEmailData(fields) {
-  const {
-    proposalId, clientName, clientEmail, sqft, facilityType, freq, isOneTimeJob,
-    crewSize, workerHoursPerVisit, crewDurationPerVisit, serviceDays, serviceWindow,
-    suppliesBy, equipmentBy, price, recommendedPricePerVisit,
-    changeOrderTriggers, inclusionsText, exclusionsText,
-  } = fields;
-
-  const facilityTypeDisplay = { office: 'Office', retail: 'Retail', warehouse: 'Warehouse', medical: 'Medical/Healthcare' }[facilityType] || facilityType;
-
-  const scopeGroups = Object.entries(scopeItems).map(([area, data]) => {
-    const tasks = Object.entries(data.tasks)
-      .filter(([, checked]) => checked)
-      .map(([task]) => ({ task, label: getScopeTaskSelectionLabel(area, task, isOneTimeJob) }));
-    return { area, tasks };
-  }).filter(group => group.tasks.length > 0);
-
-  return {
-    proposalId,
-    dateIssued: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    clientName,
-    clientEmail,
-    facilityType: facilityTypeDisplay,
-    sqft,
-    frequencyLabel: getFrequencyLabel(freq),
-    isOneTimeJob,
-    // Per-visit figures, never scaled by visitsPerMonth -- a one-time job
-    // has visitsPerMonth === 1, so these already correctly describe the
-    // single visit rather than a recurring monthly total.
-    crewSize,
-    workerHoursPerVisit,
-    crewDurationPerVisit,
-    serviceDays: serviceDays || 'TBD',
-    serviceWindow: serviceWindow || 'TBD',
-    suppliesBy,
-    equipmentBy,
-    accessRequirements: getAccessRequirements(),
-    clientResponsibilities: getClientResponsibilities(),
-    scopeGroups,
-    exclusionTriggers: changeOrderTriggers,
-    exclusionsText,
-    inclusionsText,
-    priceLabel: isOneTimeJob ? 'Total One-Time Job Price' : 'Monthly Investment',
-    price,
-    recommendedPricePerVisit,
-    // No sales-tax rate is currently configured anywhere in ConeQuotes, so
-    // this is reported honestly as not applicable rather than a fabricated
-    // number -- Final Total is the price itself until a real tax rate
-    // exists to calculate from.
-    taxAmount: 0,
-    taxNote: 'Not applicable — no sales tax rate is currently configured for this quote.',
-    finalTotal: price,
-    paymentTerms: isOneTimeJob
-      ? 'Due upon completion of service.'
-      : 'Due upon completion of each billing cycle (Net 30 available upon request).',
-    quoteValidityDays: 30,
-  };
-}
-
-function buildProposalEmailText(d) {
-  const divider = '----------------------------------------';
-  const listOrNone = items => items.length ? items.map(x => '  - ' + x).join('\n') : '  (none specified)';
-
-  const scopeLines = d.scopeGroups.length > 0
-    ? d.scopeGroups.map(g => g.area + ':\n' + g.tasks.map(t => '  - ' + t.task + ' (' + t.label + ')').join('\n')).join('\n\n')
-    : '(No scope items selected)';
-
-  return [
-    'CLEANING SERVICES PROPOSAL',
-    'Proposal ID: ' + d.proposalId + '   Date: ' + d.dateIssued,
-    divider,
-    '',
-    'Hello ' + d.clientName + ',',
-    '',
-    'Thank you for the opportunity to provide a cleaning proposal for your facility. Full proposal details are documented below for your review.',
-    '',
-    divider,
-    'CLIENT & FACILITY',
-    divider,
-    'Client / Company: ' + d.clientName,
-    'Contact Email: ' + (d.clientEmail || 'TBD'),
-    'Facility Type: ' + d.facilityType,
-    'Total Square Footage: ' + d.sqft + ' sq ft',
-    '',
-    divider,
-    'SERVICE & OPERATIONAL ASSUMPTIONS',
-    divider,
-    'Service Type / Frequency: ' + d.frequencyLabel,
-    'Estimated Crew Size: ' + d.crewSize,
-    'Crew Duration per Visit: ' + d.crewDurationPerVisit + ' hours',
-    'Total Worker-Hours per Visit: ' + d.workerHoursPerVisit + ' hours',
-    'Service Days: ' + d.serviceDays,
-    'Service Window: ' + d.serviceWindow,
-    'Cleaning Supplies Provided By: ' + capitalize(d.suppliesBy),
-    'Equipment Provided By: ' + capitalize(d.equipmentBy),
-    '',
-    divider,
-    'SITE ACCESS & CLIENT RESPONSIBILITIES',
-    divider,
-    'Access Requirements:',
-    listOrNone(d.accessRequirements),
-    'Client Responsibilities:',
-    listOrNone(d.clientResponsibilities),
-    '',
-    divider,
-    'SCOPE OF WORK (BY AREA)',
-    divider,
-    scopeLines,
-    '',
-    divider,
-    'EXCLUSIONS & CHANGE ORDER POLICY',
-    divider,
-    'Explicit Exclusions:',
-    (d.exclusionsText ? d.exclusionsText : '- Carpet shampooing\n- Deep exterior cleaning\n- Repairs or maintenance'),
-    '',
-    'Out-of-Scope Triggers (require a written Change Order before work begins):',
-    listOrNone(d.exclusionTriggers),
-    '',
-    divider,
-    'PRICING & COMMERCIAL TERMS',
-    divider,
-    d.priceLabel + ': ' + formatCurrency(d.price),
-    'Applicable Taxes: ' + formatCurrency(d.taxAmount) + ' (' + d.taxNote + ')',
-    'Final Total: ' + formatCurrency(d.finalTotal),
-    'Payment Terms: ' + d.paymentTerms,
-    'Quote Validity: This proposal is valid for ' + d.quoteValidityDays + ' days from the date above.',
-    '',
-    divider,
-    '',
-    'Please review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written Change Order.',
-    '',
-    'Best regards,',
-    'ConeQuotes Team',
-    'conequotes.service@outlook.com',
-  ].join('\n');
-}
-
-function buildProposalEmailHtml(d) {
-  const listOrNone = items => items.length
-    ? items.map(x => '• ' + escapeHtml(x)).join('<br>')
-    : '<span style="color:#718096;">None specified</span>';
-
-  const scopeHtml = d.scopeGroups.length > 0
-    ? d.scopeGroups.map(g => `
-        <tr><td style="padding:12px 0 4px; font-weight:700; color:#1a202c; font-size:14px; border-bottom:2px solid #10b981;">${escapeHtml(g.area)}</td></tr>
-        <tr><td style="padding:4px 0 12px; font-size:13px; color:#4a5568; line-height:1.7;">
-          ${g.tasks.map(t => '• ' + escapeHtml(t.task) + ' — <strong>' + escapeHtml(t.label) + '</strong>').join('<br>')}
-        </td></tr>
-      `).join('')
-    : '<tr><td style="padding:8px 0; color:#718096;">No scope items selected</td></tr>';
-
-  const exclusionsHtml = d.exclusionsText
-    ? escapeHtml(d.exclusionsText).replace(/\n/g, '<br>')
-    : '• Carpet shampooing<br>• Deep exterior cleaning<br>• Repairs or maintenance';
-
-  const sectionHeader = title => `
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
-      <tr><td style="font-size:13px; font-weight:700; color:#1a202c; text-transform:uppercase; letter-spacing:0.5px; padding-bottom:8px; border-bottom:2px solid #10b981;">${title}</td></tr>
-    </table>
-  `;
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cleaning Services Proposal — ${escapeHtml(d.proposalId)}</title>
-<style>
-  @media only screen and (max-width: 620px) {
-    .email-container { width: 100% !important; }
-    .email-padding { padding: 20px !important; }
-    .email-details-table td { display: block !important; width: 100% !important; padding: 6px 0 !important; }
-  }
-</style>
-</head>
-<body style="margin:0; padding:0; background-color:#f5f7fa; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f7fa; padding:24px 0;">
-    <tr>
-      <td align="center">
-        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;">
-          <tr>
-            <td style="background-color:#10b981; padding:28px 32px; text-align:center;">
-              <div style="font-size:22px; font-weight:700; color:#ffffff; letter-spacing:0.5px;">CLEANING SERVICES PROPOSAL</div>
-              <div style="font-size:13px; color:#d1fae5; margin-top:6px;">Proposal ID: ${escapeHtml(d.proposalId)} &nbsp;|&nbsp; Date: ${escapeHtml(d.dateIssued)}</div>
-            </td>
-          </tr>
-          <tr>
-            <td class="email-padding" style="padding:32px;">
-              <p style="margin:0 0 16px; font-size:14px; color:#1a202c;">Hello ${escapeHtml(d.clientName)},</p>
-              <p style="margin:0 0 24px; font-size:14px; color:#4a5568; line-height:1.6;">
-                Thank you for the opportunity to provide a cleaning proposal for your facility. Full proposal details are documented below for your review.
-              </p>
-
-              ${sectionHeader('Client &amp; Facility')}
-              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Client / Company:</strong><br>${escapeHtml(d.clientName)}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Contact Email:</strong><br>${escapeHtml(d.clientEmail || 'TBD')}</td>
-                </tr>
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Facility Type:</strong><br>${escapeHtml(d.facilityType)}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Total Square Footage:</strong><br>${escapeHtml(d.sqft)} sq ft</td>
-                </tr>
-              </table>
-
-              ${sectionHeader('Service &amp; Operational Assumptions')}
-              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Type / Frequency:</strong><br>${escapeHtml(d.frequencyLabel)}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Estimated Crew Size:</strong><br>${escapeHtml(d.crewSize)}</td>
-                </tr>
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Crew Duration per Visit:</strong><br>${escapeHtml(d.crewDurationPerVisit)} hours</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Total Worker-Hours per Visit:</strong><br>${escapeHtml(d.workerHoursPerVisit)} hours</td>
-                </tr>
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Days:</strong><br>${escapeHtml(d.serviceDays)}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Service Window:</strong><br>${escapeHtml(d.serviceWindow)}</td>
-                </tr>
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Supplies Provided By:</strong><br>${escapeHtml(capitalize(d.suppliesBy))}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Equipment Provided By:</strong><br>${escapeHtml(capitalize(d.equipmentBy))}</td>
-                </tr>
-              </table>
-
-              ${sectionHeader('Site Access &amp; Client Responsibilities')}
-              <table role="presentation" class="email-details-table" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
-                <tr>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Access Requirements:</strong><br>${listOrNone(d.accessRequirements)}</td>
-                  <td style="width:50%; padding:6px 0; vertical-align:top;"><strong style="color:#1a202c;">Client Responsibilities:</strong><br>${listOrNone(d.clientResponsibilities)}</td>
-                </tr>
-              </table>
-
-              ${sectionHeader('Scope of Work')}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-                ${scopeHtml}
-              </table>
-
-              ${sectionHeader('Exclusions &amp; Change Order Policy')}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:13px; color:#4a5568;">
-                <tr><td style="padding:6px 0;"><strong style="color:#1a202c;">Explicit Exclusions:</strong><br>${exclusionsHtml}</td></tr>
-                <tr><td style="padding:6px 0;"><strong style="color:#1a202c;">Out-of-Scope Triggers</strong> <span style="color:#718096;">(require a written Change Order before work begins):</span><br>${listOrNone(d.exclusionTriggers)}</td></tr>
-              </table>
-
-              ${sectionHeader('Pricing &amp; Commercial Terms')}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px; font-size:13px; color:#4a5568;">
-                <tr>
-                  <td style="padding:6px 0;">${escapeHtml(d.priceLabel)}</td>
-                  <td style="padding:6px 0; text-align:right; font-weight:600; color:#1a202c;">${escapeHtml(formatCurrency(d.price))}</td>
-                </tr>
-                <tr>
-                  <td style="padding:6px 0;">Applicable Taxes</td>
-                  <td style="padding:6px 0; text-align:right;">${escapeHtml(formatCurrency(d.taxAmount))}</td>
-                </tr>
-                <tr>
-                  <td colspan="2" style="padding:0 0 10px; font-size:11px; color:#718096; font-style:italic;">${escapeHtml(d.taxNote)}</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px 0 0; font-weight:700; color:#1a202c; border-top:2px solid #cbd5e0;">Final Total</td>
-                  <td style="padding:10px 0 0; text-align:right; font-weight:700; font-size:18px; color:#10b981; border-top:2px solid #cbd5e0;">${escapeHtml(formatCurrency(d.finalTotal))}</td>
-                </tr>
-              </table>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; font-size:12px; color:#718096; line-height:1.6;">
-                <tr><td style="padding:4px 0;"><strong>Payment Terms:</strong> ${escapeHtml(d.paymentTerms)}</td></tr>
-                <tr><td style="padding:4px 0;"><strong>Quote Validity:</strong> This proposal is valid for ${d.quoteValidityDays} days from the date above.</td></tr>
-              </table>
-
-              <p style="margin:24px 0 0; font-size:12px; color:#718096; line-height:1.6; border-top:1px solid #e2e8f0; padding-top:16px;">
-                Please review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written Change Order.
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color:#f7fafc; padding:20px 32px; text-align:center; border-top:1px solid #e2e8f0;">
-              <div style="font-size:13px; color:#1a202c; font-weight:600;">ConeQuotes</div>
-              <div style="font-size:12px; color:#718096; margin-top:4px;">
-                <a href="mailto:conequotes.service@outlook.com" style="color:#10b981; text-decoration:none;">conequotes.service@outlook.com</a>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
-}
-
-// Opens the exact HTML the client would receive in a new window (same
-// pattern as printChangeOrder()), so the contractor can see the fully
-// rendered, styled proposal -- and, since actual HTML rendering in the
-// delivered email depends on the connected email provider's settings, can
-// always fall back to copying/printing/forwarding this directly.
-function previewProposalEmail() {
-  const clientName = document.getElementById('propClientName').value.trim();
-  if (!clientName) {
-    alert('Please enter client name first.');
-    return;
-  }
-
-  const freq = document.getElementById('propFrequency').value;
-  const isOneTimeJob = isOneTimeFrequency(freq);
-  const price = safeNumber(document.getElementById('propPrice').value, 0, 0, 10000000);
-
-  const data = buildProposalEmailData({
-    proposalId: generateProposalId(),
-    clientName,
-    clientEmail: document.getElementById('propClientEmail').value.trim(),
-    sqft: document.getElementById('propSqft').value,
-    facilityType: document.getElementById('propFacilityType').value,
-    freq,
-    isOneTimeJob,
-    crewSize: document.getElementById('propCrewSize').value,
-    workerHoursPerVisit: document.getElementById('propWorkerHoursPerVisit').value,
-    crewDurationPerVisit: document.getElementById('propCrewDuration').value,
-    serviceDays: document.getElementById('propServiceDays').value,
-    serviceWindow: document.getElementById('propServiceWindow').value,
-    suppliesBy: document.getElementById('propSuppliesBy').value,
-    equipmentBy: document.getElementById('propEquipmentBy').value,
-    price,
-    recommendedPricePerVisit: document.getElementById('propRecommendedPrice').value,
-    changeOrderTriggers: [
-      document.getElementById('outAdditionalRooms').checked ? 'Additional rooms/areas' : '',
-      document.getElementById('outFrequency').checked ? 'Increased service frequency' : '',
-      document.getElementById('outDeepClean').checked ? 'Floor stripping/waxing' : '',
-      document.getElementById('outCarpet').checked ? 'Carpet extraction' : '',
-      document.getElementById('outPostEvent').checked ? 'Post-event cleanup' : '',
-      document.getElementById('outConstruction').checked ? 'Construction cleanup' : '',
-    ].filter(Boolean),
-    inclusionsText: document.getElementById('propInclusions').value,
-    exclusionsText: document.getElementById('propExclusions').value,
-  });
-
-  const previewWindow = window.open('', '_blank');
-  if (!previewWindow) {
-    alert('Please allow pop-ups to preview the proposal email.');
-    return;
-  }
-  previewWindow.document.write(buildProposalEmailHtml(data));
-  previewWindow.document.close();
 }
 
 function sendProposal() {
@@ -3448,33 +2929,6 @@ function sendProposal() {
     scopeVersion: 'v1.0',
   };
 
-  // Built now, from the same local values and original_baseline fields
-  // above, rather than re-reading the DOM later -- propClientName/
-  // propClientEmail/propPrice get reset below once the contract is saved,
-  // so this must happen before that reset to avoid picking up cleared or
-  // placeholder values.
-  const proposalEmailData = buildProposalEmailData({
-    proposalId,
-    clientName,
-    clientEmail,
-    sqft,
-    facilityType,
-    freq,
-    isOneTimeJob,
-    crewSize,
-    workerHoursPerVisit,
-    crewDurationPerVisit,
-    serviceDays: original_baseline.service.days,
-    serviceWindow: original_baseline.service.window,
-    suppliesBy: original_baseline.serviceAssumptions.suppliesProvidedBy,
-    equipmentBy: original_baseline.serviceAssumptions.equipmentProvidedBy,
-    price,
-    recommendedPricePerVisit,
-    changeOrderTriggers,
-    inclusionsText: original_baseline.inclusions,
-    exclusionsText: original_baseline.exclusions,
-  });
-
   // CONTRACT OBJECT with baseline and tracking
   const contract = {
     id: Date.now(),
@@ -3533,14 +2987,17 @@ function sendProposal() {
   updateScopePhotoPricingWarning();
 
   if (clientEmail) {
-    // _subject (not "subject") is Formspree's reserved field name for a
-    // dynamic subject line -- the old unprefixed "subject" field was
-    // silently ignored, so the client saw Formspree's own generic form-
-    // submission subject instead of this proposal's real subject line.
+    const scopeText = Object.entries(scopeItems).map(([room, data]) => {
+      const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
+      if (tasks.length === 0) return '';
+      const taskList = tasks.map(task => task + ' (' + getScopeTaskSelectionLabel(room, task, isOneTimeJob) + ')').join(', ');
+      return room + ': ' + taskList;
+    }).filter(Boolean).join('\n');
+
     const emailData = {
       email: clientEmail,
-      _subject: 'Cleaning Services Proposal - ' + proposalId + ' | ' + clientName,
-      message: buildProposalEmailText(proposalEmailData),
+      subject: 'Cleaning Services Proposal - ' + clientName + ' [' + proposalId + ']',
+      message: `Hello ${clientName},\n\nThank you for the opportunity to provide a cleaning proposal for your facility.\n\nYour proposal summary is included below. Please review the documented service areas, tasks, frequency, pricing, inclusions and exclusions.\n\nPlease review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written scope change.\n\nProposal ID: ${proposalId}\n\nScope:\n${scopeText}\n\n${isOneTimeJob ? 'Total One-Time Job Price' : 'Monthly Investment'}: $${price}\n\nBest regards,\nConeQuotes Team`
     };
 
     fetch('https://formspree.io/f/xdenlden', {
@@ -3611,7 +3068,7 @@ function renderContractsList() {
     const isOneTime = isOneTimeContract(contract);
 
     return `
-      <div class="contract-card" id="contractCard-${contract.id}">
+      <div class="contract-card">
         <div class="contract-header">
           <div>
             <div class="contract-name">${escapeHtml(getContractClientName(contract))}</div>
@@ -3768,23 +3225,11 @@ function renderContractsList() {
           <div style="white-space: pre-wrap; font-size: 13px; color: #4a5568;">${escapeHtml(baseline.exclusions) || 'Not specified'}</div>
         </div>
 
-        <!-- CHANGE ORDER TRIGGERS (out-of-scope tags) -->
+        <!-- CHANGE ORDER TRIGGERS -->
         <div class="contract-section">
           <h3>Change Order Triggers</h3>
           <div style="font-size: 13px; color: #4a5568;">${changeOrdersHtml}</div>
         </div>
-
-        <!-- RENEWAL DATE -->
-        <div class="contract-section">
-          <h3>Renewal Date</h3>
-          <div style="font-size: 13px; color: #718096;">Not configured — ConeQuotes does not currently track contract term length or renewal dates.</div>
-        </div>
-
-        <!-- MARGIN SNAPSHOT (moved from Margin Guardian) -->
-        ${buildMarginSnapshotSection(contract)}
-
-        <!-- CREW PERFORMANCE (moved from Crew Intelligence) -->
-        ${buildCrewPerformanceSection(contract)}
 
         <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
           <p style="font-size: 12px; color: #718096;">
@@ -3794,12 +3239,6 @@ function renderContractsList() {
       </div>
     `;
   }).join('');
-
-  // Wire up each card's crew-select dropdown and crew-hours breakdown now
-  // that the markup above exists in the DOM (same two-pass render
-  // Margin Guardian always used: build the HTML, then populate the bits
-  // that need live DOM elements to already exist).
-  contracts.forEach(contract => populateContractCrewControls(contract));
 }
 
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
@@ -3851,6 +3290,7 @@ function isOneTimeContract(contract) {
 
 const MARGIN_LEAK_RECOMPUTE_THROTTLE_MS = 5 * 60 * 1000;
 let showDismissedLeaks = false;
+let activeMarginSubTab = 'inbox';
 let selectedWeeklyReviewWeekStartMs = null;
 
 function detectMarginLeaks(contracts) {
@@ -4043,7 +3483,7 @@ function toggleShowDismissedLeaks(checked) {
 }
 
 function scrollToContractCard(contractId) {
-  switchTab('contracts');
+  switchMarginSubTab('contracts');
   setTimeout(() => {
     const card = document.getElementById('contractCard-' + contractId);
     if (!card) return;
@@ -4312,6 +3752,17 @@ function copyWeeklyReviewSummary() {
     .catch(() => alert('Could not copy to clipboard. Please copy manually:\n\n' + text));
 }
 
+function switchMarginSubTab(tab) {
+  activeMarginSubTab = tab;
+  ['inbox', 'weekly', 'contracts'].forEach(t => {
+    const suffix = t.charAt(0).toUpperCase() + t.slice(1);
+    const panel = document.getElementById('marginSubTab' + suffix);
+    const btn = document.getElementById('mgSubNav' + suffix);
+    if (panel) panel.style.display = t === tab ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+}
+
 // LIVE MARGIN ALERT (Feature 1 -- per-card, real-time labour-overage banner)
 function calculateLiveMarginAlert(contract) {
   const baseline = getContractBaseline(contract);
@@ -4420,28 +3871,43 @@ function calculateCrewPerformance(contract) {
   return crews;
 }
 
-// Crew Intelligence's per-contract stats, extracted for the same reason
-// as buildMarginSnapshotSection(): calculateCrewPerformance() is reused
-// completely unchanged, just rendered directly for the one contract whose
-// card it's embedded in, instead of behind a separate contract-picker tab.
-function buildCrewPerformanceSection(contract) {
-  if (!contract.weeklylogs || contract.weeklylogs.length === 0) {
-    return `
-      <div class="contract-section">
-        <h3>Crew Performance</h3>
-        <p style="color: #718096; font-size: 13px;">No time logs yet for this contract.</p>
-      </div>
-    `;
+function populateCrewAnalysisSelect() {
+  const select = document.getElementById('crewAnalysisSelect');
+  if (!select) return;
+
+  const previousValue = select.value;
+  const contracts = getContracts().filter(c => c.original_baseline);
+
+  select.innerHTML = '<option value="">-- Choose a contract --</option>' +
+    contracts.map(c => `<option value="${c.id}">${escapeHtml(c.clientName)}</option>`).join('');
+
+  if (contracts.some(c => String(c.id) === previousValue)) {
+    select.value = previousValue;
+  }
+
+  renderCrewIntelligence();
+}
+
+function renderCrewIntelligence() {
+  const contractId = document.getElementById('crewAnalysisSelect').value;
+  const content = document.getElementById('crewIntelligenceContent');
+
+  if (!contractId) {
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">Select a contract with time logs to see crew performance data.</p>';
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => String(c.id) === contractId);
+  if (!contract || !contract.weeklylogs || contract.weeklylogs.length === 0) {
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">This contract has no time logs yet.</p>';
+    return;
   }
 
   const crews = calculateCrewPerformance(contract);
   if (Object.keys(crews).length === 0) {
-    return `
-      <div class="contract-section">
-        <h3>Crew Performance</h3>
-        <p style="color: #718096; font-size: 13px;">No crew data.</p>
-      </div>
-    `;
+    content.innerHTML = '<p style="color: #718096; font-size: 13px;">No crew data.</p>';
+    return;
   }
 
   const rankIcon = { excellent: '⭐', good: '✓', warning: '⚠️', risk: '🚨' };
@@ -4469,161 +3935,31 @@ function buildCrewPerformanceSection(contract) {
     </div>
   `).join('');
 
-  return `
-    <div class="contract-section">
-      <h3>Crew Performance</h3>
-      <div class="crew-grid">${cardsHtml}</div>
-    </div>
-  `;
+  content.innerHTML = `<div class="crew-grid">${cardsHtml}</div>`;
 }
 
 // MARGIN GUARDIAN (updated to read baseline)
-// PORTFOLIO TAB
-// Built entirely from calculateContractMarginSnapshot() -- no second
-// margin calculation. Status thresholds are in terms of margin points
-// below target, which is exactly what marginVariancePoints already is
-// (actualMargin - targetMargin), so "margin >= target - 5" is just
-// "marginVariancePoints >= -5".
-function getContractStatusInfo(contract) {
-  const snapshot = calculateContractMarginSnapshot(contract);
-  const targetMargin = snapshot.targetMargin;
+function renderMarginGuardian() {
+  const contracts = getContracts();
+  const container = document.getElementById('contractsContainer');
 
-  if (snapshot.actualMargin === null) {
-    return {
-      status: 'pending',
-      statusClass: 'status-watch',
-      statusLabel: 'Awaiting Data',
-      marginPercent: null,
-      targetMargin,
-      reason: 'No hours or expenses logged yet',
-      snapshot,
-    };
-  }
-
-  const marginPercent = snapshot.actualMargin;
-  const marginVariancePoints = snapshot.marginVariancePoints;
-  const isNegativeProfit = marginPercent < 0;
-
-  let status, statusClass, statusLabel;
-  if (isNegativeProfit || marginVariancePoints < -15) {
-    status = 'red'; statusClass = 'status-risk'; statusLabel = 'At Risk';
-  } else if (marginVariancePoints < -5) {
-    status = 'yellow'; statusClass = 'status-watch'; statusLabel = 'Watch';
-  } else {
-    status = 'green'; statusClass = 'status-healthy'; statusLabel = 'Healthy';
-  }
-
-  // One-line reason, most-significant issue first. costVariance covers
-  // travel + equipment + supplies together (calculateContractMarginSnapshot()
-  // does not isolate supplies alone), so it's labeled "Other Costs" rather
-  // than mislabeling combined non-labour cost variance as "Supplies".
-  let reason = 'On track';
-  const labourVariancePercent = snapshot.baselineHours > 0
-    ? (snapshot.labourVarianceHours / snapshot.baselineHours) * 100
-    : 0;
-  const costVariancePercent = snapshot.baselineCost > 0
-    ? (snapshot.costVariance / snapshot.baselineCost) * 100
-    : 0;
-
-  if (labourVariancePercent > 10) {
-    reason = 'Labour +' + Math.round(labourVariancePercent) + '% vs baseline';
-  } else if (costVariancePercent > 10) {
-    reason = 'Other Costs +' + Math.round(costVariancePercent) + '%';
-  } else if (snapshot.absorbedCost > 0) {
-    reason = 'Absorbed CO $' + Math.round(snapshot.absorbedCost);
-  } else if (marginVariancePoints < 0) {
-    reason = 'Margin ' + Math.round(marginVariancePoints) + ' pts vs target';
-  } else if (status !== 'green') {
-    reason = 'Below target margin';
-  }
-
-  return { status, statusClass, statusLabel, marginPercent, targetMargin, reason, snapshot };
-}
-
-let portfolioFilters = { status: 'all', facilityType: 'all', jobType: 'all' };
-
-function setPortfolioFilter(key, value) {
-  portfolioFilters[key] = value;
-  renderPortfolio();
-}
-
-function renderPortfolio() {
-  const contracts = getContracts().filter(c => getContractBaseline(c));
-  const infos = contracts.map(contract => ({ contract, info: getContractStatusInfo(contract) }));
-
-  const counts = { total: infos.length, green: 0, yellow: 0, red: 0 };
-  infos.forEach(({ info }) => {
-    if (info.status === 'green') counts.green++;
-    else if (info.status === 'yellow') counts.yellow++;
-    else if (info.status === 'red') counts.red++;
-  });
-
-  document.getElementById('portfolioStatTotal').textContent = counts.total;
-  document.getElementById('portfolioStatGreen').textContent = counts.green;
-  document.getElementById('portfolioStatYellow').textContent = counts.yellow;
-  document.getElementById('portfolioStatRed').textContent = counts.red;
-
-  const filtered = infos.filter(({ contract, info }) => {
-    if (portfolioFilters.status !== 'all' && info.status !== portfolioFilters.status) return false;
-    if (portfolioFilters.facilityType !== 'all') {
-      const baseline = getContractBaseline(contract);
-      if ((baseline?.facility?.type || '') !== portfolioFilters.facilityType) return false;
-    }
-    if (portfolioFilters.jobType !== 'all') {
-      const jobType = isOneTimeContract(contract) ? 'one-time' : 'recurring';
-      if (jobType !== portfolioFilters.jobType) return false;
-    }
-    return true;
-  });
-
-  const listEl = document.getElementById('portfolioContractList');
-  if (contracts.length === 0) {
-    listEl.innerHTML = '<div class="empty-state">No contracts yet. Create one from the Quote tab.</div>';
-  } else if (filtered.length === 0) {
-    listEl.innerHTML = '<div class="empty-state">No contracts match the selected filters.</div>';
-  } else {
-    listEl.innerHTML = filtered.map(({ contract, info }) => {
-      const isOneTime = isOneTimeContract(contract);
-      const value = formatCurrency(getContractMonthlyPrice(contract));
-      const marginText = info.marginPercent === null ? '—' : info.marginPercent.toFixed(1) + '%';
-      const facilityType = getContractBaseline(contract)?.facility?.type ?? '';
-      return `
-        <div class="portfolio-row" onclick="scrollToContractCard(${contract.id})">
-          <div class="portfolio-row-main">
-            <div class="portfolio-row-name">${escapeHtml(getContractClientName(contract))}</div>
-            <div class="portfolio-row-meta">${isOneTime ? 'One-time' : 'Recurring'}${facilityType ? ' • ' + escapeHtml(facilityType) : ''}</div>
-            <div class="portfolio-row-reason">${escapeHtml(info.reason)}</div>
-          </div>
-          <div class="portfolio-row-figures">
-            <div class="portfolio-row-value">${value}</div>
-            <div class="portfolio-row-margin">${marginText} margin (target ${info.targetMargin}%)</div>
-            <span class="status-badge ${info.statusClass}" style="margin-top: 0.35rem; display: inline-block;">${info.statusLabel}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  // Portfolio-level margin status: the leak inbox and weekly review are
-  // already portfolio-wide (across every contract), just relocated here
-  // from the old Margin Guardian tab -- unchanged otherwise.
-  const allContracts = getContracts();
-  const leaks = recomputeMarginLeaks(allContracts);
+  const leaks = recomputeMarginLeaks(contracts);
   renderMarginLeakInbox(leaks);
-  renderWeeklyReview(computeWeeklyReview(allContracts, leaks, currentWeeklyReviewWeekStart(), currentWeeklyReviewWeekEnd()));
-}
+  renderWeeklyReview(computeWeeklyReview(contracts, leaks, currentWeeklyReviewWeekStart(), currentWeeklyReviewWeekEnd()));
 
+  if (contracts.length === 0) {
+    container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>';
+    updateStats(contracts);
+    return;
+  }
 
-// Margin Guardian's per-contract card, extracted so the Contracts tab can
-// embed it directly in each contract's detail view instead of requiring a
-// separate tab -- same calculateContractMarginSnapshot()-driven math and
-// markup as before, just without the outer card wrapper (the Contracts
-// tab's own card already provides the header/status badge).
-function buildMarginSnapshotSection(contract) {
+  container.innerHTML = contracts.map(contract => {
     const baseline = getContractBaseline(contract);
-    if (!baseline) return '';
+
+    if (!baseline) return ''; // Skip old contracts without baseline
 
     const snapshot = calculateContractMarginSnapshot(contract);
+    const contractFrequency = getContractFrequency(contract);
     const isOneTime = isOneTimeContract(contract);
     const actualHours = snapshot.actualHours;
     const plannedWeeklyHours = snapshot.baselineHours;
@@ -4681,15 +4017,18 @@ function buildMarginSnapshotSection(contract) {
     ` : '';
 
     return `
-      <div class="contract-section">
-        <h3>
-          Margin Snapshot
-          <span class="status-badge ${statusClass}" style="margin-left: 0.5rem;">
+      <div class="contract-card" id="contractCard-${contract.id}">
+        <div class="contract-header">
+          <div>
+            <div class="contract-name">${escapeHtml(getContractClientName(contract))}</div>
+            <div class="contract-freq">${escapeHtml(getFrequencyLabel(contractFrequency))} • ${escapeHtml(baseline.facility?.sqft ?? '')} sq ft • ${escapeHtml(contract.proposalId)}</div>
+          </div>
+          <span class="status-badge ${statusClass}">
             ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : actualHours === 0 ? '⏳' : '🔴'} ${status}
           </span>
-        </h3>
+        </div>
 
-        ${isOneTime ? '<div class="scope-note" style="margin-top: 0; margin-bottom: 1rem;">One-time job tracking — figures below are for this single job, not a recurring month.</div>' : ''}
+        ${isOneTime ? '<div class="scope-note" style="margin-top: 1rem; margin-bottom: 0;">One-time job tracking — figures below are for this single job, not a recurring month.</div>' : ''}
 
         ${liveMarginAlertHtml}
 
@@ -4817,33 +4156,35 @@ function buildMarginSnapshotSection(contract) {
         </div>
       </div>
     `;
-}
+  }).join('');
 
-// After renderContractsList() writes the card markup (including the crew-
-// select and #crewBreakdown-<id> elements buildMarginSnapshotSection()
-// just generated), this populates each contract's crew dropdown and
-// renders its labour-by-crew breakdown. Called once per contract, same as
-// it always was, just from the Contracts tab's render pass now.
-function populateContractCrewControls(contract) {
-  if (!contract.original_baseline) return;
+  // Populate crew dropdowns and render crew breakdowns
+  contracts.forEach(contract => {
+    if (!contract.original_baseline) return;
+    
+    const crewSelect = document.getElementById('crew-' + contract.id);
+    if (crewSelect) {
+      // Add existing crews to dropdown
+      const crews = contract.crews || [];
+      crews.forEach(crew => {
+        const option = document.createElement('option');
+        option.value = crew.name;
+        option.textContent = crew.name;
+        crewSelect.appendChild(option);
+      });
+      
+      // Add "Create New" option
+      const newOption = document.createElement('option');
+      newOption.value = 'new-crew';
+      newOption.textContent = '+ Create New Crew';
+      crewSelect.appendChild(newOption);
+    }
+    
+    // Render crew breakdown
+    renderCrewBreakdown(contract);
+  });
 
-  const crewSelect = document.getElementById('crew-' + contract.id);
-  if (crewSelect) {
-    const crews = contract.crews || [];
-    crews.forEach(crew => {
-      const option = document.createElement('option');
-      option.value = crew.name;
-      option.textContent = crew.name;
-      crewSelect.appendChild(option);
-    });
-
-    const newOption = document.createElement('option');
-    newOption.value = 'new-crew';
-    newOption.textContent = '+ Create New Crew';
-    crewSelect.appendChild(newOption);
-  }
-
-  renderCrewBreakdown(contract);
+  updateStats(contracts);
 }
 
 function renderCrewBreakdown(contract) {
@@ -4892,7 +4233,7 @@ function handleCrewSelect(contractId) {
           saveContracts(contracts);
           // Reset and re-render
           crewSelect.value = '';
-          renderContractsList();
+          renderMarginGuardian();
         }
       }
     } else {
@@ -4936,7 +4277,7 @@ function logHours(contractId) {
     recomputeMarginLeaks(contracts, { force: true });
     hoursInput.value = '';
     if (crewSelect) crewSelect.value = '';
-    renderContractsList();
+    renderMarginGuardian();
   }
 }
 
@@ -4962,7 +4303,7 @@ function addExpense(contractId) {
     saveContracts(contracts);
     recomputeMarginLeaks(contracts, { force: true });
     document.getElementById('expAmount-' + contractId).value = '';
-    renderContractsList();
+    renderMarginGuardian();
   }
 }
 
@@ -5143,7 +4484,7 @@ function createChangeOrder(contractId) {
 
   alert('Change order calculated.\nRecommended customer price: ' + formatCurrency(recommendedPrice));
 
-  renderContractsList();
+  renderMarginGuardian();
 }
 
 function updateChangeOrderStatus(contractId, changeOrderId, status) {
@@ -5161,7 +4502,7 @@ function updateChangeOrderStatus(contractId, changeOrderId, status) {
 
   saveContracts(contracts);
   recomputeMarginLeaks(contracts, { force: true });
-  renderContractsList();
+  renderMarginGuardian();
 }
 
 function absorbChangeOrder(contractId, changeOrderId) {
@@ -5181,7 +4522,7 @@ function absorbChangeOrder(contractId, changeOrderId) {
 
   saveContracts(contracts);
   recomputeMarginLeaks(contracts, { force: true });
-  renderContractsList();
+  renderMarginGuardian();
 }
 
 function copyChangeOrderSummary(contractId, changeOrderId) {
@@ -5261,6 +4602,30 @@ function printChangeOrder(contractId, changeOrderId) {
   printWindow.print();
 }
 
+function updateStats(contracts) {
+  let healthy = 0, watch = 0, risk = 0;
+
+  contracts.forEach(contract => {
+    const baseline = getContractBaseline(contract);
+    if (!baseline) return; // Skip old contracts
+
+    const snapshot = calculateContractMarginSnapshot(contract);
+    const actualHours = snapshot.actualHours;
+    const plannedWeeklyHours = snapshot.baselineHours;
+    const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
+
+    if (actualHours === 0) return; // Don't count contracts without data
+    if (efficiency > 120) risk++;
+    else if (efficiency > 110) watch++;
+    else healthy++;
+  });
+
+  document.getElementById('statActiveContracts').textContent = contracts.filter(c => getContractBaseline(c)).length;
+  document.getElementById('statHealthy').textContent = healthy;
+  document.getElementById('statWatch').textContent = watch;
+  document.getElementById('statRisk').textContent = risk;
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
   initializeScopes();
@@ -5271,12 +4636,12 @@ document.addEventListener('DOMContentLoaded', function() {
   if (tabName && document.getElementById(tabName)) {
     switchTab(tabName);
   } else {
-    switchTab('portfolio');
+    switchTab('home');
   }
 });
 
 window.addEventListener('hashchange', function() {
-  const tabName = window.location.hash.slice(1) || 'portfolio';
+  const tabName = window.location.hash.slice(1) || 'home';
   if (document.getElementById(tabName)) {
     switchTab(tabName);
   }
