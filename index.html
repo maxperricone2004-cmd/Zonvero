@@ -526,6 +526,7 @@
       <div class="form-group">
         <label>Service Frequency</label>
         <select id="frequency" onchange="updateCalc()">
+          <option value="one-time">One-time clean</option>
           <option value="daily">Daily (5x/week)</option>
           <option value="3x">3x per week</option>
           <option value="weekly" selected>Weekly</option>
@@ -613,9 +614,9 @@
         <div class="output-unit">planning benchmark, not guaranteed</div>
       </div>
       <div class="output-box">
-        <div class="output-label">Monthly Revenue</div>
+        <div class="output-label" id="monthlyOutputLabel">Monthly Revenue</div>
         <div class="output-value" id="monthlyOutput">—</div>
-        <div class="output-unit">4.33 weeks</div>
+        <div class="output-unit" id="monthlyOutputUnit">4.33 weeks</div>
       </div>
       <div class="output-box">
         <div class="output-label">Worker-Hours per Visit</div>
@@ -944,7 +945,8 @@
     <div class="calc-row">
       <div class="form-group">
         <label>Service Frequency</label>
-        <select id="propFrequency">
+        <select id="propFrequency" onchange="updateProposalFrequencyLabels()">
+          <option value="one-time">One-time clean</option>
           <option value="daily">Daily (5x/week)</option>
           <option value="3x">3x per week</option>
           <option value="weekly" selected>Weekly</option>
@@ -1013,7 +1015,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label>Monthly Investment (What you'll charge the client)</label>
+      <label id="propPriceLabel">Monthly Investment (What you'll charge the client)</label>
       <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000">
     </div>
   </div>
@@ -1060,7 +1062,11 @@
   <p class="section-intro">
     Track logged labour and expenses against each contract's original baseline.
   </p>
-  <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-bottom: 1.5rem;">Export Margin Report to Excel</button>
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+    <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0;">Export Margin Report to Excel</button>
+    <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0;">Export Labour and Expenses to Excel</button>
+    <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0;">Export Change Orders to Excel</button>
+  </div>
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Active Contracts</div>
@@ -1432,6 +1438,20 @@ function getContractChangeOrders(contract) {
     : [];
 }
 
+function getContractWeeklyLogs(contract) {
+  return Array.isArray(contract?.weeklylogs)
+    ? contract.weeklylogs
+    : Array.isArray(contract?.weeklyLogs)
+      ? contract.weeklyLogs
+      : [];
+}
+
+function getContractExpenseEntries(contract) {
+  return Array.isArray(contract?.expenses)
+    ? contract.expenses
+    : [];
+}
+
 // Shared margin math used by Margin Guardian cards, leak detection, Weekly
 // Review, and both the Contracts and Margin Report Excel exports, so all
 // four always agree with each other. Does not change the pricing calculator
@@ -1440,8 +1460,15 @@ function getContractChangeOrders(contract) {
 function calculateContractMarginSnapshot(contract) {
   const baseline = getContractBaseline(contract);
   const frequency = getContractFrequency(contract);
+  // weeklyFrequency drives baselineHours, which the rest of the app treats
+  // as "planned labour for the period being compared to logged hours" (a
+  // week for recurring jobs, the whole job for one-time — both cases are
+  // exactly MARGIN_LEAK_FREQUENCY_MAP[frequency], which is 1 for one-time).
+  // visitsPerMonth (never *4.33 for one-time) drives baselineCost, which is
+  // always a monthly-cost assumption for recurring jobs and a single-job
+  // cost for one-time jobs.
   const weeklyFrequency = MARGIN_LEAK_FREQUENCY_MAP[frequency] || 1;
-  const visitsPerMonth = weeklyFrequency * 4.33;
+  const visitsPerMonth = getVisitsPerMonth(frequency);
 
   const baselineHours = baseline ? getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency : 0;
   const actualHours = getContractActualHours(contract);
@@ -1478,6 +1505,8 @@ function calculateContractMarginSnapshot(contract) {
     .filter(co => co.status === 'Absorbed')
     .reduce((sum, co) => sum + (parseFloat(co.totalCost) || 0), 0);
 
+  const isOneTime = isOneTimeContract(contract);
+
   return {
     baselineHours,
     actualHours,
@@ -1492,6 +1521,11 @@ function calculateContractMarginSnapshot(contract) {
     changeOrdersCount,
     changeOrdersValue,
     absorbedCost,
+    // Display-safe descriptors of the period the figures above cover --
+    // purely additive, every field above is unchanged. For a one-time job
+    // that period is the single job itself, not a recurring month.
+    periodType: isOneTime ? 'one-time' : 'monthly',
+    periodLabel: isOneTime ? 'single job' : 'month',
   };
 }
 
@@ -1527,9 +1561,9 @@ function updateCalc() {
   const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
   const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
 
-  // Frequency multiplier
-  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
-  const frequency = frequencyMap[document.getElementById('frequency').value] || 1;
+  // Job type / frequency
+  const frequencyValue = document.getElementById('frequency').value;
+  const isOneTime = isOneTimeFrequency(frequencyValue);
 
   const {
     workerHoursPerVisit,
@@ -1551,7 +1585,9 @@ function updateCalc() {
     travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
   });
 
-  const monthlyRevenue = revenuePerVisit * frequency * 4.33;
+  const revenueDisplay = isOneTime
+    ? requiredPrice
+    : requiredPrice * getVisitsPerMonth(frequencyValue);
 
   // Multi-factor risk scenarios, calculated from the live values above
   const laborRiskBaseWages = baseWagesPerVisit * 1.2;
@@ -1584,7 +1620,9 @@ function updateCalc() {
   document.getElementById('recommendedPriceOutput').textContent = formatCurrency(requiredPrice);
   document.getElementById('quotePriceOutput').textContent = formatCurrency(requiredPrice);
   document.getElementById('requiredPriceOutput').textContent = formatCurrency(requiredPrice);
-  document.getElementById('monthlyOutput').textContent = formatCurrency(monthlyRevenue);
+  document.getElementById('monthlyOutputLabel').textContent = isOneTime ? 'Total One-Time Job Revenue' : 'Monthly Revenue';
+  document.getElementById('monthlyOutputUnit').textContent = isOneTime ? 'single job' : '4.33 weeks';
+  document.getElementById('monthlyOutput').textContent = formatCurrency(revenueDisplay);
   document.getElementById('plannedHoursOutput').textContent = workerHoursPerVisit.toFixed(2) + ' hrs';
   document.getElementById('crewDurationOutput').textContent = crewDurationPerVisit.toFixed(2) + ' hrs';
   document.getElementById('estimatedLaborCostOutput').textContent = formatCurrency(fullyLoadedLaborCostPerVisit);
@@ -1659,16 +1697,15 @@ function useThisQuote() {
   const equipmentCostPerVisit = safeNumber(document.getElementById('equipmentCostPerVisit').value, 0, 0, 100000);
   const targetMarginPercent = safeNumber(document.getElementById('targetMargin').value, 25, 0, 95);
 
-  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
-  const freq = frequencyMap[frequency] || 1;
-
   const { workerHoursPerVisit, crewDurationPerVisit, requiredPrice } = calculatePricing({
     sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
     payrollBurden, suppliesPercent, overheadPerWorkerHour,
     travelCostPerVisit, equipmentCostPerVisit, targetMarginPercent
   });
 
-  const monthlyPrice = Math.round(requiredPrice * freq * 4.33);
+  const monthlyPrice = isOneTimeFrequency(frequency)
+    ? Math.round(requiredPrice)
+    : Math.round(requiredPrice * getVisitsPerMonth(frequency));
 
   // Pre-fill the Proposal Builder fields with the full set of calculator assumptions
   document.getElementById('propSqft').value = sqft;
@@ -1693,6 +1730,17 @@ function useThisQuote() {
   // Scroll to top and switch tab
   window.scrollTo(0, 0);
   switchTab('proposal');
+  updateProposalFrequencyLabels();
+}
+
+function updateProposalFrequencyLabels() {
+  const frequency = document.getElementById('propFrequency').value;
+  const label = document.getElementById('propPriceLabel');
+  if (!label) return;
+
+  label.textContent = isOneTimeFrequency(frequency)
+    ? 'Total One-Time Job Price'
+    : "Monthly Investment (What you'll charge the client)";
 }
 
 // Format input value display (comma formatting for readability)
@@ -2037,7 +2085,8 @@ function generateProposal() {
   const exclusions = document.getElementById('propExclusions').value;
 
   const facilityTypeDisplay = { office: 'Office', retail: 'Retail', warehouse: 'Warehouse', medical: 'Medical/Healthcare' }[facilityType] || facilityType;
-  const freqDisplay = { 'daily': 'Daily (5x/week)', '3x': '3x per week', 'weekly': 'Weekly', 'biweekly': 'Bi-weekly' }[freq];
+  const freqDisplay = getFrequencyLabel(freq);
+  const isOneTime = isOneTimeFrequency(freq);
   const proposalId = generateProposalId();
 
   const safeClientName = escapeHtml(clientName);
@@ -2124,7 +2173,7 @@ function generateProposal() {
           <div class="proposal-detail-value">${freqDisplay}</div>
         </div>
         <div class="proposal-detail">
-          <div class="proposal-detail-label">Monthly Investment</div>
+          <div class="proposal-detail-label">${isOneTime ? 'Total One-Time Job Price' : 'Monthly Investment'}</div>
           <div class="proposal-detail-value">${formatCurrency(price)}</div>
         </div>
         <div class="proposal-detail">
@@ -2186,9 +2235,9 @@ function generateProposal() {
       </div>
 
       <div class="proposal-price">
-        <div class="proposal-price-label">Monthly Investment</div>
+        <div class="proposal-price-label">${isOneTime ? 'Total One-Time Job Price' : 'Monthly Investment'}</div>
         <div class="proposal-price-value">${formatCurrency(price)}</div>
-        <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">Billed monthly • Includes specified supplies</div>
+        <div style="font-size: 12px; color: #718096; margin-top: 0.5rem;">${isOneTime ? 'One-time job • Includes specified supplies' : 'Billed monthly • Includes specified supplies'}</div>
       </div>
 
       <div class="proposal-section">
@@ -2288,11 +2337,14 @@ function sendProposal() {
     }
   }
 
-  const frequencyMap = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
   const frequencyValue = document.getElementById('propFrequency').value;
-  const frequency = frequencyMap[frequencyValue] || 1;
+  const isOneTimeJob = isOneTimeFrequency(frequencyValue);
+  const visitsPerMonth = getVisitsPerMonth(frequencyValue);
 
-  const plannedHours = Number((workerHoursPerVisit * frequency * 4.33).toFixed(1));
+  // For a one-time job, planned/logged labour is compared against the single
+  // job, not a 4.33-week month -- visitsPerMonth is 1 for one-time so this
+  // still reads correctly as "hours for the job" rather than "hours/month".
+  const plannedHours = Number((workerHoursPerVisit * visitsPerMonth).toFixed(1));
 
   const baseWagesPerVisit = workerHoursPerVisit * baseWageRate;
   const payrollBurdenCostPerVisit = baseWagesPerVisit * (payrollBurden / 100);
@@ -2334,9 +2386,16 @@ function sendProposal() {
       frequency: freq,
       days: document.getElementById('propServiceDays').value,
       window: document.getElementById('propServiceWindow').value,
+      jobType: isOneTimeJob ? 'one-time' : 'recurring',
+      visitsPerMonth: visitsPerMonth,
     },
     pricing: {
+      // Kept for every contract regardless of job type -- Margin Guardian,
+      // leak detection, Weekly Review, and the exports all read this as the
+      // contract's price for the period covered by service.visitsPerMonth.
+      // For a one-time job that period is the single job, not a month.
       monthlyPrice: price,
+      oneTimePrice: isOneTimeJob ? price : null,
       recommendedPricePerVisit: recommendedPricePerVisit,
       baseWageRate: baseWageRate,
       billableLaborRate: billableLaborRate,
@@ -2413,6 +2472,9 @@ function sendProposal() {
     plannedHours: plannedHours,
     sqft: sqft,
     frequency: freq,
+    jobType: isOneTimeJob ? 'one-time' : 'recurring',
+    visitsPerMonth: visitsPerMonth,
+    oneTimePrice: isOneTimeJob ? price : null,
     weeklylogs: [],
     expenses: [],
     changeOrders: [],
@@ -2444,7 +2506,7 @@ function sendProposal() {
     const emailData = {
       email: clientEmail,
       subject: 'Cleaning Services Proposal - ' + clientName + ' [' + proposalId + ']',
-      message: `Hello ${clientName},\n\nThank you for the opportunity to provide a cleaning proposal for your facility.\n\nYour proposal summary is included below. Please review the documented service areas, tasks, frequency, pricing, inclusions and exclusions.\n\nPlease review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written scope change.\n\nProposal ID: ${proposalId}\n\nScope:\n${scopeText}\n\nMonthly Investment: $${price}\n\nBest regards,\nConeQuotes Team`
+      message: `Hello ${clientName},\n\nThank you for the opportunity to provide a cleaning proposal for your facility.\n\nYour proposal summary is included below. Please review the documented service areas, tasks, frequency, pricing, inclusions and exclusions.\n\nPlease review the scope carefully to ensure it reflects your requirements. Any services outside the documented scope can be quoted separately and added through a written scope change.\n\nProposal ID: ${proposalId}\n\nScope:\n${scopeText}\n\n${isOneTimeJob ? 'Total One-Time Job Price' : 'Monthly Investment'}: $${price}\n\nBest regards,\nConeQuotes Team`
     };
 
     fetch('https://formspree.io/f/xdenlden', {
@@ -2512,6 +2574,8 @@ function renderContractsList() {
       ? baseline.changeOrderTriggers.map(item => `• ${item}`).join('<br>')
       : '(None specified)';
 
+    const isOneTime = isOneTimeContract(contract);
+
     return `
       <div class="contract-card">
         <div class="contract-header">
@@ -2550,12 +2614,12 @@ function renderContractsList() {
             </div>
             <div>
               <div class="contract-info-row">
-                <span class="contract-info-label">Monthly Contract Value</span>
+                <span class="contract-info-label">${isOneTime ? 'Total One-Time Job Value' : 'Monthly Contract Value'}</span>
                 <span class="contract-info-value">${formatCurrency(getContractMonthlyPrice(contract))}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Frequency</span>
-                <span class="contract-info-value">${escapeHtml(getContractFrequency(contract).charAt(0).toUpperCase() + getContractFrequency(contract).slice(1))}</span>
+                <span class="contract-info-value">${escapeHtml(getFrequencyLabel(getContractFrequency(contract)))}</span>
               </div>
               <div class="contract-info-row">
                 <span class="contract-info-label">Service Days</span>
@@ -2581,7 +2645,7 @@ function renderContractsList() {
           <div class="contract-info-grid">
             <div>
               <div class="contract-info-row">
-                <span class="contract-info-label">Monthly Revenue</span>
+                <span class="contract-info-label">${isOneTime ? 'Total One-Time Job Value' : 'Monthly Revenue'}</span>
                 <span class="contract-info-value">${formatCurrency(getContractMonthlyPrice(contract))}</span>
               </div>
               <div class="contract-info-row">
@@ -2589,8 +2653,8 @@ function renderContractsList() {
                 <span class="contract-info-value">${formatCurrency(getBaselineBillableRate(baseline))}/hr</span>
               </div>
               <div class="contract-info-row">
-                <span class="contract-info-label">Planned Hours</span>
-                <span class="contract-info-value">${baseline.labour?.plannedHours ?? 0}h/month</span>
+                <span class="contract-info-label">${isOneTime ? 'Planned Labour for This Job' : 'Planned Hours'}</span>
+                <span class="contract-info-value">${baseline.labour?.plannedHours ?? 0}h${isOneTime ? '' : '/month'}</span>
               </div>
             </div>
             <div>
@@ -2687,7 +2751,52 @@ function renderContractsList() {
 }
 
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
-const MARGIN_LEAK_FREQUENCY_MAP = { daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+const MARGIN_LEAK_FREQUENCY_MAP = { 'one-time': 1, daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
+
+// JOB-TYPE HELPERS (One-time clean)
+// 'one-time' is a distinct job type, not a weekly-visit frequency -- never
+// multiply its revenue by 4.33. MARGIN_LEAK_FREQUENCY_MAP['one-time'] exists
+// only so old code paths that blindly index the map don't produce NaN; the
+// actual one-time semantics always go through isOneTimeFrequency()/getVisitsPerMonth().
+function isOneTimeFrequency(frequency) {
+  return frequency === 'one-time';
+}
+
+function getFrequencyLabel(frequency) {
+  const labels = {
+    'one-time': 'One-time clean',
+    daily: 'Daily (5x/week)',
+    '3x': '3x per week',
+    weekly: 'Weekly',
+    biweekly: 'Bi-weekly'
+  };
+
+  return labels[frequency] || frequency;
+}
+
+function getVisitsPerMonth(frequency) {
+  if (frequency === 'one-time') {
+    return 1;
+  }
+
+  const weeklyVisits = {
+    daily: 5,
+    '3x': 3,
+    weekly: 1,
+    biweekly: 0.5
+  }[frequency] || 1;
+
+  return weeklyVisits * 4.33;
+}
+
+// Single source of truth for "is this contract a one-time job" -- used by
+// Contract cards, Contract overview, Financial baseline, Margin Guardian,
+// and the shared margin snapshot, so wording and math never disagree about
+// a contract's job type.
+function isOneTimeContract(contract) {
+  return isOneTimeFrequency(getContractFrequency(contract));
+}
+
 const MARGIN_LEAK_RECOMPUTE_THROTTLE_MS = 5 * 60 * 1000;
 let showDismissedLeaks = false;
 let activeMarginSubTab = 'inbox';
@@ -3359,6 +3468,8 @@ function renderMarginGuardian() {
     if (!baseline) return ''; // Skip old contracts without baseline
 
     const snapshot = calculateContractMarginSnapshot(contract);
+    const contractFrequency = getContractFrequency(contract);
+    const isOneTime = isOneTimeContract(contract);
     const actualHours = snapshot.actualHours;
     const plannedWeeklyHours = snapshot.baselineHours;
     const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
@@ -3419,28 +3530,30 @@ function renderMarginGuardian() {
         <div class="contract-header">
           <div>
             <div class="contract-name">${escapeHtml(getContractClientName(contract))}</div>
-            <div class="contract-freq">${escapeHtml(getContractFrequency(contract).charAt(0).toUpperCase() + getContractFrequency(contract).slice(1))} • ${escapeHtml(baseline.facility?.sqft ?? '')} sq ft • ${escapeHtml(contract.proposalId)}</div>
+            <div class="contract-freq">${escapeHtml(getFrequencyLabel(contractFrequency))} • ${escapeHtml(baseline.facility?.sqft ?? '')} sq ft • ${escapeHtml(contract.proposalId)}</div>
           </div>
           <span class="status-badge ${statusClass}">
             ${status === 'Healthy' ? '✓' : status === 'Watch' ? '⚠️' : actualHours === 0 ? '⏳' : '🔴'} ${status}
           </span>
         </div>
 
+        ${isOneTime ? '<div class="scope-note" style="margin-top: 1rem; margin-bottom: 0;">One-time job tracking — figures below are for this single job, not a recurring month.</div>' : ''}
+
         ${liveMarginAlertHtml}
 
         <div class="margin-metric">
           <div class="metric-box">
-            <div class="metric-label">Contract Revenue</div>
+            <div class="metric-label">${isOneTime ? 'Total One-Time Job Value' : 'Contract Revenue'}</div>
             <div class="metric-value">${formatCurrency(snapshot.monthlyPrice)}</div>
-            <div class="metric-variance">per month</div>
+            <div class="metric-variance">${isOneTime ? 'one-time' : 'per month'}</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Planned Labour This Week</div>
+            <div class="metric-label">${isOneTime ? 'Planned Labour for This Job' : 'Planned Labour This Week'}</div>
             <div class="metric-value">${plannedWeeklyHours.toFixed(1)}h</div>
             <div class="metric-variance">@ baseline</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Actual Labour</div>
+            <div class="metric-label">${isOneTime ? 'Actual Labour for This Job' : 'Actual Labour'}</div>
             <div class="metric-value">${actualHours}h</div>
             <div class="metric-variance ${laborShiftPercent > 0 ? 'variance-negative' : 'variance-positive'}">${laborShiftPercent > 0 ? '+' : ''}${laborShiftPercent}%</div>
           </div>
@@ -3452,12 +3565,12 @@ function renderMarginGuardian() {
             <div class="metric-value">${getBaselineTargetMargin(baseline).toFixed(1)}%</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Margin on Logged Costs</div>
+            <div class="metric-label">${isOneTime ? 'Margin on Logged Job Costs' : 'Margin on Logged Costs'}</div>
             <div class="metric-value ${currentMargin >= getBaselineTargetMargin(baseline) ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : currentMargin + '%'}</div>
             ${actualHours === 0 ? '<div class="metric-variance">awaiting data</div>' : (currentMargin >= getBaselineTargetMargin(baseline) ? '<div class="metric-variance variance-positive">protected</div>' : '<div class="metric-variance variance-negative">at risk</div>')}
           </div>
           <div class="metric-box">
-            <div class="metric-label">Profit After Logged Costs</div>
+            <div class="metric-label">${isOneTime ? 'Profit After Logged Job Costs' : 'Profit After Logged Costs'}</div>
             <div class="metric-value ${grossProfit >= 0 ? '' : 'variance-negative'}">${actualHours === 0 ? '—' : '$' + Math.round(grossProfit)}</div>
           </div>
         </div>
@@ -3468,7 +3581,7 @@ function renderMarginGuardian() {
 
         <div style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
           <div style="margin-bottom: 1rem;">
-            <label style="font-size: 13px; font-weight: 600; color: #1a202c;">Log Hours This Week</label>
+            <label style="font-size: 13px; font-weight: 600; color: #1a202c;">${isOneTime ? 'Log Hours for This Job' : 'Log Hours This Week'}</label>
             <div class="mg-inline-grid" style="gap: 1rem; margin-top: 0.75rem;">
               <select id="crew-${contract.id}" onchange="handleCrewSelect(${contract.id})" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px;">
                 <option value="">Select Crew (optional)</option>
@@ -4005,9 +4118,9 @@ function updateStats(contracts) {
     const baseline = getContractBaseline(contract);
     if (!baseline) return; // Skip old contracts
 
-    const actualHours = getContractActualHours(contract);
-    const weeklyFrequency = MARGIN_LEAK_FREQUENCY_MAP[getContractFrequency(contract)] || 1;
-    const plannedWeeklyHours = getBaselineWorkerHoursPerVisit(baseline) * weeklyFrequency;
+    const snapshot = calculateContractMarginSnapshot(contract);
+    const actualHours = snapshot.actualHours;
+    const plannedWeeklyHours = snapshot.baselineHours;
     const efficiency = plannedWeeklyHours > 0 ? (actualHours / plannedWeeklyHours) * 100 : 0;
 
     if (actualHours === 0) return; // Don't count contracts without data
@@ -4144,33 +4257,38 @@ function exportQuotesToExcel() {
   const rows = contracts.map(contract => {
     const baseline = getContractBaseline(contract);
     const frequency = getContractFrequency(contract);
-    const visitsPerMonth = (MARGIN_LEAK_FREQUENCY_MAP[frequency] || 1) * 4.33;
-    const monthlyPrice = getContractMonthlyPrice(contract);
-    const pricePerVisit = (monthlyPrice > 0 && visitsPerMonth > 0)
-      ? Math.round((monthlyPrice / visitsPerMonth) * 100) / 100
-      : '';
+    const isOneTimeJob = isOneTimeFrequency(frequency);
+    const visitsPerMonth = getVisitsPerMonth(frequency);
+    // Whatever the job type, the agreed price is always stored in this
+    // field (kept for backward compatibility): the one-time price for a
+    // one-time job, the monthly price for a recurring one.
+    const agreedPrice = getContractMonthlyPrice(contract);
+    const pricePerJob = isOneTimeJob
+      ? agreedPrice
+      : (agreedPrice > 0 && visitsPerMonth > 0 ? Math.round((agreedPrice / visitsPerMonth) * 100) / 100 : '');
 
     return {
       ProposalID: contract.proposalId ?? '',
       ClientName: getContractClientName(contract),
       ClientEmail: getContractClientEmail(contract),
-      SquareFootage: baseline.facility?.sqft ?? '',
+      JobType: isOneTimeJob ? 'One-time' : 'Recurring',
+      Frequency: getFrequencyLabel(frequency),
       FacilityType: baseline.facility?.type ?? '',
-      Frequency: frequency,
-      PricePerVisit: pricePerVisit,
-      MonthlyPrice: monthlyPrice,
+      SquareFootage: baseline.facility?.sqft ?? '',
+      PricePerJob: pricePerJob,
+      // A one-time job has no recurring monthly revenue -- leave this blank
+      // instead of implying the one-time price repeats every month.
+      MonthlyPrice: isOneTimeJob ? '' : agreedPrice,
       CrewSize: baseline.labour?.crewSize ?? '',
       WorkerHoursPerVisit: getBaselineWorkerHoursPerVisit(baseline),
       BaseWageRate: baseline.pricing?.baseWageRate ?? '',
       BillableLaborRate: getBaselineBillableRate(baseline),
-      ProductionRate: baseline.estimating?.productionRate ?? '',
       PayrollBurdenPercent: baseline.estimating?.payrollBurden ?? '',
       SuppliesPercent: baseline.estimating?.suppliesPercent ?? '',
       OverheadPerWorkerHour: baseline.estimating?.overheadPerWorkerHour ?? '',
       TravelCostPerVisit: baseline.estimating?.travelCostPerVisit ?? '',
       EquipmentCostPerVisit: baseline.estimating?.equipmentCostPerVisit ?? '',
       TargetMarginPercent: getBaselineTargetMargin(baseline),
-      RecommendedPricePerVisit: baseline.pricing?.recommendedPricePerVisit ?? '',
       CreatedAt: baseline.proposalCreatedAt ?? contract.proposalSentAt ?? '',
     };
   });
@@ -4183,38 +4301,33 @@ function exportContractsToExcel() {
   const contracts = getContracts().filter(c => getContractBaseline(c));
 
   const rows = contracts.map(contract => {
-    const baseline = getContractBaseline(contract);
     const frequency = getContractFrequency(contract);
-    const weeklyFrequency = MARGIN_LEAK_FREQUENCY_MAP[frequency] || 1;
-    const visitsPerMonth = weeklyFrequency * 4.33;
-    const workerHoursPerVisit = getBaselineWorkerHoursPerVisit(baseline);
-    const billableRate = getBaselineBillableRate(baseline);
+    const isOneTimeJob = isOneTimeFrequency(frequency);
     const snapshot = calculateContractMarginSnapshot(contract);
-
-    // Distinct from snapshot.baselineHours/baselineCost, which track weekly
-    // labour vs. the monthly price for margin purposes -- these columns are
-    // a separate monthly-normalized view of the baseline assumptions.
-    const baselineLabourCostPerMonth = workerHoursPerVisit * visitsPerMonth * billableRate;
 
     return {
       ContractID: contract.id ?? '',
       ProposalID: contract.proposalId ?? '',
       ClientName: getContractClientName(contract),
-      StartDate: contract.proposalSentAt ?? baseline.proposalCreatedAt ?? '',
-      Frequency: frequency,
-      BaselineWorkerHoursPerVisit: workerHoursPerVisit,
-      BaselineVisitsPerMonth: Math.round(visitsPerMonth * 100) / 100,
-      BaselineLabourCostPerMonth: Math.round(baselineLabourCostPerMonth * 100) / 100,
-      BaselineOtherCostPerMonth: Math.round(snapshot.baselineCost * 100) / 100,
+      JobType: isOneTimeJob ? 'One-time' : 'Recurring',
+      Frequency: getFrequencyLabel(frequency),
+      StartDate: contract.proposalSentAt ?? getContractBaseline(contract)?.proposalCreatedAt ?? '',
+      AgreedPrice: snapshot.monthlyPrice,
+      // A one-time job has no recurring monthly revenue -- leave this blank
+      // instead of implying the one-time price repeats every month.
+      MonthlyPrice: isOneTimeJob ? '' : snapshot.monthlyPrice,
+      BaselineWorkerHours: Math.round(snapshot.baselineHours * 100) / 100,
+      ActualWorkerHours: Math.round(snapshot.actualHours * 100) / 100,
+      LabourVarianceHours: Math.round(snapshot.labourVarianceHours * 100) / 100,
+      BaselineCosts: Math.round(snapshot.baselineCost * 100) / 100,
+      ActualExpenses: Math.round(snapshot.actualCost * 100) / 100,
+      CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
-      AgreedMonthlyPrice: snapshot.monthlyPrice,
-      CurrentLabourHoursLogged: Math.round(snapshot.actualHours * 100) / 100,
-      CurrentExpensesLogged: Math.round(snapshot.actualCost * 100) / 100,
-      CurrentEstimatedMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
+      ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
-      ChangeOrdersCount: snapshot.changeOrdersCount,
-      ChangeOrdersTotalValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
-      AbsorbedCostTotal: Math.round(snapshot.absorbedCost * 100) / 100,
+      ChangeOrderCount: snapshot.changeOrdersCount,
+      ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
+      AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
       Status: contract.current_state?.status ?? contract.status ?? '',
     };
   });
@@ -4223,31 +4336,121 @@ function exportContractsToExcel() {
   exportToCSV(rows, `ConeQuotes_Contracts_${today}.csv`);
 }
 
+function exportLabourExpensesToExcel() {
+  const contracts = getContracts();
+  const rows = [];
+
+  contracts.forEach(contract => {
+    const contractId = contract.id ?? '';
+    const proposalId = contract.proposalId ?? '';
+    const clientName = getContractClientName(contract);
+
+    getContractWeeklyLogs(contract).forEach(log => {
+      rows.push({
+        ContractID: contractId,
+        ProposalID: proposalId,
+        ClientName: clientName,
+        ActivityType: 'Labour',
+        ActivityDate: log?.date ?? '',
+        Crew: log?.crew ?? '',
+        ExpenseType: '',
+        Hours: log?.hours ?? '',
+        // Billable rate is a baseline pricing assumption, not a cost
+        // recorded against an individual logged-hours entry, so there is
+        // no meaningful per-row dollar amount for a labour activity.
+        Amount: '',
+        Notes: '',
+      });
+    });
+
+    getContractExpenseEntries(contract).forEach(expense => {
+      rows.push({
+        ContractID: contractId,
+        ProposalID: proposalId,
+        ClientName: clientName,
+        ActivityType: 'Expense',
+        ActivityDate: expense?.date ?? '',
+        Crew: '',
+        ExpenseType: expense?.type ?? '',
+        Hours: '',
+        Amount: expense?.amount ?? '',
+        Notes: '',
+      });
+    });
+  });
+
+  const today = new Date().toISOString().slice(0, 10);
+  exportToCSV(rows, `ConeQuotes_LabourExpenses_${today}.csv`);
+}
+
+function exportChangeOrdersToExcel() {
+  const contracts = getContracts();
+  const rows = [];
+
+  contracts.forEach(contract => {
+    const contractId = contract.id ?? '';
+    const proposalId = contract.proposalId ?? '';
+    const clientName = getContractClientName(contract);
+
+    getContractChangeOrders(contract).forEach(order => {
+      rows.push({
+        ContractID: contractId,
+        ProposalID: proposalId,
+        ClientName: clientName,
+        ChangeOrderID: order?.id ?? '',
+        CreatedAt: order?.createdAt ?? '',
+        Description: order?.description ?? '',
+        Area: order?.area ?? '',
+        LabourHours: order?.labourHours ?? '',
+        TotalInternalCost: order?.totalCost ?? '',
+        RecommendedCustomerPrice: order?.recommendedPrice ?? '',
+        TargetMarginPercent: order?.targetMargin ?? '',
+        Status: order?.status ?? '',
+        ApprovedAt: order?.approvedAt ?? '',
+        CompletedAt: order?.completedAt ?? '',
+        InvoicedAt: order?.invoicedAt ?? '',
+        AbsorbedReason: order?.absorbedReason ?? '',
+      });
+    });
+  });
+
+  const today = new Date().toISOString().slice(0, 10);
+  exportToCSV(rows, `ConeQuotes_ChangeOrders_${today}.csv`);
+}
+
 function exportMarginReportToExcel() {
   const contracts = getContracts().filter(c => getContractBaseline(c));
+  const today = new Date().toISOString().slice(0, 10);
 
   const rows = contracts.map(contract => {
+    const frequency = getContractFrequency(contract);
+    const isOneTimeJob = isOneTimeFrequency(frequency);
     const snapshot = calculateContractMarginSnapshot(contract);
 
     return {
       ContractID: contract.id ?? '',
+      ProposalID: contract.proposalId ?? '',
       ClientName: getContractClientName(contract),
+      // The app tracks cumulative totals from contract start rather than
+      // resettable time-boxed periods, so the period is "contract start
+      // through report generation date."
+      PeriodStart: contract.proposalSentAt ?? getContractBaseline(contract)?.proposalCreatedAt ?? '',
+      PeriodEnd: today,
+      JobType: isOneTimeJob ? 'One-time' : 'Recurring',
       BaselineLabourHours: Math.round(snapshot.baselineHours * 100) / 100,
       ActualLabourHours: Math.round(snapshot.actualHours * 100) / 100,
       LabourVarianceHours: Math.round(snapshot.labourVarianceHours * 100) / 100,
       BaselineCost: Math.round(snapshot.baselineCost * 100) / 100,
       ActualCost: Math.round(snapshot.actualCost * 100) / 100,
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
-      ChangeOrdersAdded: snapshot.changeOrdersCount,
-      ChangeOrdersValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
-      AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
+      ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
+      AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
     };
   });
 
-  const today = new Date().toISOString().slice(0, 10);
   exportToCSV(rows, `ConeQuotes_MarginReport_${today}.csv`);
 }
 </script>
