@@ -14,11 +14,6 @@
     nav button { background: none; border: none; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
     nav button:hover { color: #10b981; }
     nav button.active { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 0.5rem; }
-    .dropdown { position: relative; }
-    .dropdown-toggle { display: flex; align-items: center; gap: 0.25rem; }
-    .dropdown-menu { display: none; position: absolute; top: 100%; right: 0; margin-top: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 180px; padding: 0.5rem; z-index: 200; }
-    .dropdown-menu a { display: block; padding: 0.6rem 0.75rem; border-radius: 6px; color: #4a5568; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.15s, color 0.15s; }
-    .dropdown-menu a:hover { background: #f0fdf4; color: #10b981; }
     .cta { background: #10b981; color: white !important; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; border: none; cursor: pointer; }
     .cta:hover { background: #059669; }
     .hero { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
@@ -414,15 +409,7 @@
     <button class="tab-btn" data-tab="calculator">Quote</button>
     <button class="tab-btn" data-tab="proposal">Proposal</button>
     <button class="tab-btn" data-tab="contracts">Contracts</button>
-    <div class="dropdown">
-      <button class="tab-btn dropdown-toggle">More ⋮</button>
-      <div class="dropdown-menu">
-        <a href="#" data-action="import">Import Contracts</a>
-        <a href="#" data-action="export">Export Data</a>
-        <a href="#" data-action="settings">Settings</a>
-        <a href="#" data-action="help">Help</a>
-      </div>
-    </div>
+    <button class="tab-btn" data-tab="reports">Reports</button>
   </nav>
 </header>
 
@@ -1099,9 +1086,11 @@
 <div id="contracts" class="tab-content">
   <h2>Your Contracts</h2>
   <p class="section-intro">View contract baselines and track performance.</p>
-  <div class="scope-note">
-    Prototype mode: contracts are currently stored in this browser only.
-    Do not rely on this version for permanent business records.
+  <div style="padding:1rem; background:#f7fafc; border:1px solid #e2e8f0; border-radius:6px; margin-bottom:1.5rem;">
+    <p style="font-size:13px; color:#4a5568; margin:0;">
+      <strong style="color:#2d3748;">Your data is stored locally.</strong>
+      Export your contracts regularly to keep a backup. All exports are available in the Reports tab.
+    </p>
   </div>
   <button class="action-button" onclick="exportContractsToExcel()" style="margin-bottom: 0.35rem;">Export Contracts to CSV</button>
   <p class="input-help" style="margin-bottom: 1.5rem;">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
@@ -1155,6 +1144,79 @@
   </div>
 
   <div id="contractsList"></div>
+</div>
+
+<!-- REPORTS TAB -->
+<div id="reports" class="tab-content" style="display:none;">
+  <h2>Reports & Exports</h2>
+  <p class="section-intro">Export your data and review portfolio performance.</p>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:2rem;">
+    <div class="stat-card" style="padding:1.5rem; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+      <div class="stat-label" style="font-size:13px; color:#718096; margin-bottom:0.5rem;">Total Contracts</div>
+      <div class="stat-value" id="reportTotalContracts" style="font-size:32px; font-weight:700; color:#1a202c;">0</div>
+    </div>
+    <div class="stat-card status-healthy" style="padding:1.5rem; border:1px solid #c6f6d5; border-radius:8px; text-align:center; background:#f0fff4;">
+      <div class="stat-label" style="font-size:13px; color:#276749; margin-bottom:0.5rem;">Healthy</div>
+      <div class="stat-value" id="reportHealthyCount" style="font-size:32px; font-weight:700; color:#276749;">0</div>
+    </div>
+    <div class="stat-card status-watch" style="padding:1.5rem; border:1px solid #feebc8; border-radius:8px; text-align:center; background:#fffaf0;">
+      <div class="stat-label" style="font-size:13px; color:#c05621; margin-bottom:0.5rem;">Watch List</div>
+      <div class="stat-value" id="reportWatchCount" style="font-size:32px; font-weight:700; color:#c05621;">0</div>
+    </div>
+    <div class="stat-card status-risk" style="padding:1.5rem; border:1px solid #fed7d7; border-radius:8px; text-align:center; background:#fff5f5;">
+      <div class="stat-label" style="font-size:13px; color:#c53030; margin-bottom:0.5rem;">At Risk</div>
+      <div class="stat-value" id="reportAtRiskCount" style="font-size:32px; font-weight:700; color:#c53030;">0</div>
+    </div>
+  </div>
+
+  <!-- Export Buttons -->
+  <div style="margin-bottom:2rem;">
+    <h3 style="margin-bottom:1rem;">Export Data</h3>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+      <button class="action-button" onclick="exportContractsToExcel()">Export Contracts CSV</button>
+      <button class="action-button" onclick="exportMarginReportToExcel()">Export Margin Report CSV</button>
+      <button class="action-button" onclick="exportLabourExpensesToExcel()">Export Labour & Expenses CSV</button>
+      <button class="action-button" onclick="exportChangeOrdersToExcel()">Export Change Orders CSV</button>
+      <button class="action-button" onclick="exportQuotesToExcel()">Export Quotes CSV</button>
+    </div>
+    <p style="font-size:12px; color:#718096; margin-top:0.5rem;">
+      All files download as CSV and open in Excel, Google Sheets, or Numbers.
+    </p>
+  </div>
+
+  <!-- Portfolio Summary Table -->
+  <div style="margin-bottom:2rem;">
+    <h3 style="margin-bottom:1rem;">Portfolio Summary</h3>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead>
+          <tr style="background:#f7fafc; border-bottom:2px solid #e2e8f0;">
+            <th style="padding:0.75rem; text-align:left; font-weight:600;">Client</th>
+            <th style="padding:0.75rem; text-align:left; font-weight:600;">Type</th>
+            <th style="padding:0.75rem; text-align:right; font-weight:600;">Monthly Value</th>
+            <th style="padding:0.75rem; text-align:right; font-weight:600;">Margin %</th>
+            <th style="padding:0.75rem; text-align:left; font-weight:600;">Status</th>
+            <th style="padding:0.75rem; text-align:left; font-weight:600;">Reason</th>
+          </tr>
+        </thead>
+        <tbody id="portfolioSummaryTable">
+          <!-- Rows rendered by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Utilities (moved here from the former "More" menu) -->
+  <div style="padding-top:1.5rem; border-top:1px solid #e2e8f0;">
+    <h3 style="margin-bottom:1rem;">Utilities</h3>
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:14px;">
+      <a href="#" id="reportsImportLink" style="color:#4a5568; text-decoration:none;">Import Contracts</a>
+      <a href="#" id="reportsSettingsLink" style="color:#4a5568; text-decoration:none;">Settings</a>
+      <a href="#" id="reportsHelpLink" style="color:#4a5568; text-decoration:none;">Help</a>
+    </div>
+  </div>
 </div>
 
 <!-- MARGIN GUARDIAN TAB -->
@@ -1760,6 +1822,7 @@ function switchTab(tabName) {
   if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
   if (tabName === 'crewIntelligence') populateCrewAnalysisSelect();
+  if (tabName === 'reports') renderReportsTab();
 }
 
 // Calculator
@@ -3994,6 +4057,63 @@ function renderPortfolioDashboard() {
   });
 }
 
+// REPORTS TAB -- same single-source-of-truth helpers as the Portfolio
+// Dashboard (getPortfolioStatus/getContractOneLineReason), not a third
+// re-implementation of the Green/Yellow/Red thresholds.
+function renderReportsTab() {
+  const contracts = getContracts().filter(c => getContractBaseline(c));
+
+  let healthy = 0, watch = 0, atRisk = 0;
+  const statusLabels = { Green: 'Healthy', Yellow: 'Watch List', Red: 'At Risk' };
+  const statusColors = { Green: '#276749', Yellow: '#c05621', Red: '#c53030' };
+  const tableRows = [];
+
+  contracts.forEach(contract => {
+    const snapshot = calculateContractMarginSnapshot(contract);
+    const status = getPortfolioStatus(snapshot);
+
+    if (status === 'Green') healthy++;
+    else if (status === 'Yellow') watch++;
+    else atRisk++;
+
+    const frequency = getContractFrequency(contract);
+    const isOneTime = isOneTimeFrequency(frequency);
+
+    tableRows.push({
+      clientName: getContractClientName(contract),
+      type: isOneTime ? 'One-time' : 'Recurring',
+      value: snapshot.monthlyPrice,
+      margin: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
+      statusLabel: statusLabels[status],
+      statusColor: statusColors[status],
+      reason: getContractOneLineReason(snapshot)
+    });
+  });
+
+  // Update summary tiles
+  document.getElementById('reportTotalContracts').textContent = contracts.length;
+  document.getElementById('reportHealthyCount').textContent = healthy;
+  document.getElementById('reportWatchCount').textContent = watch;
+  document.getElementById('reportAtRiskCount').textContent = atRisk;
+
+  // Render table
+  const tbody = document.getElementById('portfolioSummaryTable');
+  tbody.innerHTML = tableRows.map(row => `
+    <tr style="border-bottom:1px solid #e2e8f0;">
+      <td style="padding:0.75rem;">${escapeHtml(row.clientName)}</td>
+      <td style="padding:0.75rem;">${escapeHtml(row.type)}</td>
+      <td style="padding:0.75rem; text-align:right;">$${Math.round(row.value).toLocaleString()}</td>
+      <td style="padding:0.75rem; text-align:right;">${row.margin}%</td>
+      <td style="padding:0.75rem;">
+        <span style="display:inline-block; padding:0.25rem 0.75rem; border-radius:9999px; font-size:12px; font-weight:600; background:${row.statusColor}20; color:${row.statusColor};">
+          ${row.statusLabel}
+        </span>
+      </td>
+      <td style="padding:0.75rem; font-size:13px; color:#718096;">${escapeHtml(row.reason)}</td>
+    </tr>
+  `).join('');
+}
+
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
 const MARGIN_LEAK_FREQUENCY_MAP = { 'one-time': 1, daily: 5, '3x': 3, weekly: 1, biweekly: 0.5 };
 
@@ -5399,29 +5519,40 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
   });
 
-  // Dropdown toggle
-  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const menu = btn.nextElementSibling;
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    });
-  });
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', () => {
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-      menu.style.display = 'none';
-    });
-  });
-
-  // Placeholder actions (implement in Phase 2)
-  document.querySelectorAll('.dropdown-menu a').forEach(link => {
-    link.addEventListener('click', (e) => {
+  // Reports-tab utility links (formerly the "More" dropdown, which was
+  // removed -- these three items moved here instead of being dropped).
+  const importLink = document.getElementById('reportsImportLink');
+  if (importLink) {
+    importLink.addEventListener('click', (e) => {
       e.preventDefault();
-      alert('This feature will be added in Phase 2: ' + e.target.textContent);
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.csv';
+      input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          alert('CSV import selected: ' + file.name + '\n\nImport logic will be implemented in the next phase.');
+        }
+      });
+      input.click();
     });
-  });
+  }
+
+  const settingsLink = document.getElementById('reportsSettingsLink');
+  if (settingsLink) {
+    settingsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Settings panel will be implemented in the next phase.\n\nFor now, adjust Calculator inputs directly.');
+    });
+  }
+
+  const helpLink = document.getElementById('reportsHelpLink');
+  if (helpLink) {
+    helpLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'mailto:conequotes.service@outlook.com?subject=ConeQuotes Help Request';
+    });
+  }
 });
 
 window.addEventListener('hashchange', function() {
@@ -5641,10 +5772,11 @@ function exportContractsToExcel() {
       ActualExpenses: Math.round(snapshot.actualCost * 100) / 100,
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
-      // ActualMarginPercent is this contract's current margin -- the same
-      // value "CurrentMarginPercent" would report, so it is not duplicated
-      // under a second column name.
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
+      // Explicitly requested alongside ActualMarginPercent (which already
+      // carries the same figure) -- kept as its own column, formatted per
+      // spec, for anyone reading by this exact column name.
+      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderCount: snapshot.changeOrdersCount,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
@@ -5825,10 +5957,8 @@ function exportMarginReportToExcel() {
       ActualCost: Math.round(snapshot.actualCost * 100) / 100,
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
-      // ActualMarginPercent already reports this contract's current margin
-      // (the "CurrentMarginPercent" the spec asks for), so it is not
-      // duplicated under a second column name.
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
+      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
       AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
