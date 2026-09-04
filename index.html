@@ -664,6 +664,12 @@
       </div>
     </div>
 
+    <!-- BID HEALTH -->
+    <div id="bidHealthBanner" style="margin-top:1rem; padding:1rem; border-radius:6px; border:1px solid #f59e0b; background:#fef3c7; display:none;">
+      <div id="bidHealthMessage" style="font-size:14px; color:#92400e; margin-bottom:0.5rem;"></div>
+      <button id="useTargetMarginPrice" style="padding:0.5rem 1rem; background:#10b981; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px;" data-target-price="0">Use Target-Margin Price</button>
+    </div>
+
     <!-- Legacy fields, hidden: no external code reads them, kept only for id compatibility. The recommended price above already reflects the target margin. -->
     <div style="display: none;">
       <span id="quotePriceOutput">—</span>
@@ -1047,12 +1053,6 @@
       <label id="propPriceLabel">Monthly Investment (What you'll charge the client)</label>
       <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000" oninput="handlePropPriceManualInput()">
       <div class="input-help" id="realizedMarginIndicator" style="display: none;"></div>
-    </div>
-
-    <!-- BID HEALTH -->
-    <div id="bidHealthBanner" class="bid-health-banner" style="margin-top:1rem;padding:1rem;border-radius:6px;background:#fef3c7;border:1px solid #f59e0b;display:none;">
-      <div id="bidHealthMessage"></div>
-      <button type="button" id="useTargetMarginPrice" onclick="applyTargetMarginPrice()" style="margin-top:0.5rem;padding:0.5rem 1rem;background:#10b981;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px;">Use Target-Margin Price</button>
     </div>
   </div>
 
@@ -1891,6 +1891,102 @@ function updateCalc() {
   document.getElementById('riskCombinedMargin').textContent = combinedMargin.toFixed(1) + '%';
   document.getElementById('riskCombinedProfit').textContent = formatCurrency(combinedProfit);
   document.getElementById('riskCombinedImpact').textContent = (combinedImpact >= 0 ? '+' : '-') + formatCurrency(Math.abs(combinedImpact)) + ' vs. baseline profit';
+
+  updateBidHealth();
+}
+
+// BID HEALTH -- reuses calculatePricing() (the same formula the rest of
+// updateCalc() uses; called here twice more, once with targetMarginPercent
+// 0 for break-even and once at the entered target margin, not a second
+// pricing formula) against the Calculator tab's own fields.
+function updateBidHealth() {
+  const banner = document.getElementById('bidHealthBanner');
+  const message = document.getElementById('bidHealthMessage');
+  const button = document.getElementById('useTargetMarginPrice');
+
+  if (!banner || !message || !button) return;
+
+  // Get current calculator values
+  const sqft = parseFloat(document.getElementById('sqft').value) || 25000;
+  const crewSize = parseFloat(document.getElementById('crewSize').value) || 3;
+  const baseWageRate = parseFloat(document.getElementById('baseWageRate').value) || 22;
+  const productionRate = parseFloat(document.getElementById('productionRate').value) || 4250;
+  const scopeComplexity = parseFloat(document.getElementById('scopeComplexity').value) || 1;
+  const payrollBurden = parseFloat(document.getElementById('payrollBurden').value) || 25;
+  const suppliesPercent = parseFloat(document.getElementById('suppliesPercent').value) || 4;
+  const overheadPerWorkerHour = parseFloat(document.getElementById('overheadPerLaborHour').value) || 6;
+  const travelCostPerVisit = parseFloat(document.getElementById('travelCostPerVisit').value) || 0;
+  const equipmentCostPerVisit = parseFloat(document.getElementById('equipmentCostPerVisit').value) || 0;
+  const targetMarginPercent = parseFloat(document.getElementById('targetMargin').value) || 25;
+  const frequency = document.getElementById('frequency').value;
+
+  // Calculate break-even & target pricing -- calculatePricing() takes a
+  // single inputs object (see its definition above), not positional
+  // arguments, so both calls are built that way.
+  const pricingInputs = {
+    sqft, crewSize, baseWageRate, productionRate, scopeComplexity,
+    payrollBurden, suppliesPercent, overheadPerWorkerHour,
+    travelCostPerVisit, equipmentCostPerVisit
+  };
+  const breakEvenPricing = calculatePricing({ ...pricingInputs, targetMarginPercent: 0 });
+  const targetPricing = calculatePricing({ ...pricingInputs, targetMarginPercent });
+
+  // monthlyOutput (what enteredPrice reads below) shows the same
+  // isOneTime-aware scaled total updateCalc() itself computes for
+  // revenueDisplay -- getVisitsPerMonth() (never *4.33 for one-time) is
+  // the one place that scaling logic lives, reused here rather than a
+  // second, inconsistent frequency-to-visits mapping.
+  const isOneTime = isOneTimeFrequency(frequency);
+  const visitsPerMonth = getVisitsPerMonth(frequency);
+  const breakEvenPrice = isOneTime ? breakEvenPricing.requiredPrice : breakEvenPricing.requiredPrice * visitsPerMonth;
+  const targetMarginPrice = isOneTime ? targetPricing.requiredPrice : targetPricing.requiredPrice * visitsPerMonth;
+
+  // Save current calculated price to dataset (FIX: prevents closure bug)
+  button.dataset.targetPrice = Math.round(targetMarginPrice).toString();
+
+  // Get entered price
+  const enteredPriceInput = document.getElementById('monthlyOutput');
+  const enteredPrice = parseFloat(enteredPriceInput?.textContent?.replace(/[^0-9.-]/g, '')) || 0;
+
+  // Calculate margin at entered price
+  const periodCost = targetPricing.totalCostPerVisit * visitsPerMonth;
+  const marginAtEntered = enteredPrice > 0 ? ((enteredPrice - periodCost) / enteredPrice * 100) : 0;
+
+  banner.style.display = 'block';
+
+  if (enteredPrice <= 0) {
+    banner.style.background = '#fef3c7';
+    banner.style.borderColor = '#f59e0b';
+    message.textContent = 'Enter a price to see its margin health.';
+    button.style.display = 'none';
+  } else if (enteredPrice < breakEvenPrice) {
+    banner.style.background = '#fef2f2';
+    banner.style.borderColor = '#ef4444';
+    message.textContent = `⚠️ This price loses money. Break-even: $${Math.round(breakEvenPrice).toLocaleString()}. At this price, margin: ${marginAtEntered.toFixed(1)}%. To avoid losses, quote at least $${Math.round(breakEvenPrice).toLocaleString()}.`;
+    button.style.display = 'inline-block';
+  } else if (marginAtEntered < targetMarginPercent - 5) {
+    banner.style.background = '#fef3c7';
+    banner.style.borderColor = '#f59e0b';
+    message.textContent = `⚠️ Below target margin. At $${Math.round(enteredPrice).toLocaleString()} you're at ${marginAtEntered.toFixed(1)}% margin. To reach ${targetMarginPercent}% target, quote $${Math.round(targetMarginPrice).toLocaleString()}.`;
+    button.style.display = 'inline-block';
+  } else {
+    banner.style.background = '#ecfdf5';
+    banner.style.borderColor = '#10b981';
+    message.textContent = `✓ Near or above target margin. Current: ${marginAtEntered.toFixed(1)}%. Target: ${targetMarginPercent}%.`;
+    button.style.display = 'inline-block';
+  }
+
+  // Wire up button safely (FIX: read from dataset, not closure)
+  if (!window.bidHealthButtonInitialized) {
+    button.addEventListener('click', () => {
+      const priceToApply = parseFloat(button.dataset.targetPrice) || 0;
+      if (document.getElementById('monthlyOutput') && priceToApply > 0) {
+        document.getElementById('monthlyOutput').textContent = '$' + priceToApply.toLocaleString();
+      }
+      updateCalc();
+    });
+    window.bidHealthButtonInitialized = true;
+  }
 }
 
 // STEP 6 LIVE PRICING ENGINE (Proposal Builder)
@@ -1957,7 +2053,6 @@ function recalcProposalPricing() {
     // touching the total price field (nothing valid to compute yet).
     recommendedPriceEl.value = '';
     hideRealizedMarginIndicator();
-    updateBidHealth();
     return;
   }
 
@@ -1977,7 +2072,6 @@ function recalcProposalPricing() {
   }
 
   refreshRealizedMarginIndicator(snap);
-  updateBidHealth();
 }
 
 // Bound to propPrice's oninput -- fires only on a genuine keystroke, never
@@ -1990,7 +2084,6 @@ function handlePropPriceManualInput() {
 
   isManualPriceOverride = true;
   refreshRealizedMarginIndicator(getProposalPricingSnapshot());
-  updateBidHealth();
 }
 
 function refreshRealizedMarginIndicator(snap) {
@@ -2016,70 +2109,6 @@ function refreshRealizedMarginIndicator(snap) {
 function hideRealizedMarginIndicator() {
   const el = document.getElementById('realizedMarginIndicator');
   if (el) el.style.display = 'none';
-}
-
-// BID HEALTH -- reuses calculatePricing() (the same formula updateCalc()
-// uses; called here once more with targetMarginPercent: 0 to get the
-// break-even price, not a second pricing formula) and the same
-// entered-price-vs-cost math refreshRealizedMarginIndicator() already uses,
-// so the "Monthly Investment" field always shows whether the current price
-// is safe, not just after a manual override.
-function updateBidHealth() {
-  const banner = document.getElementById('bidHealthBanner');
-  const message = document.getElementById('bidHealthMessage');
-  if (!banner || !message) return;
-
-  const snap = getProposalPricingSnapshot();
-  if (snap.sqft <= 0) {
-    banner.style.display = 'none';
-    return;
-  }
-
-  const breakEvenPerVisit = calculatePricing({
-    sqft: snap.sqft,
-    crewSize: safeNumber(document.getElementById('propCrewSize').value, 3, 1, 100),
-    baseWageRate: safeNumber(document.getElementById('propBaseWageRate').value, 22, 0, 500),
-    productionRate: safeNumber(document.getElementById('propProductionRate').value, 4250, 1, 1000000),
-    scopeComplexity: safeNumber(document.getElementById('propScopeComplexity').value, 1, 0.5, 3),
-    payrollBurden: safeNumber(document.getElementById('propPayrollBurden').value, 25, 0, 100),
-    suppliesPercent: safeNumber(document.getElementById('propSuppliesPercent').value, 4, 0, 50),
-    overheadPerWorkerHour: safeNumber(document.getElementById('propOverheadPerLaborHour').value, 6, 0, 1000),
-    travelCostPerVisit: safeNumber(document.getElementById('propTravelCost').value, 0, 0, 100000),
-    equipmentCostPerVisit: safeNumber(document.getElementById('propEquipmentCost').value, 0, 0, 100000),
-    targetMarginPercent: 0
-  }).requiredPrice;
-
-  const breakEvenPrice = snap.isOneTime ? breakEvenPerVisit : breakEvenPerVisit * snap.visitsPerMonth;
-  const targetMarginPrice = snap.isOneTime ? snap.requiredPrice : snap.requiredPrice * snap.visitsPerMonth;
-  const enteredPrice = safeNumber(document.getElementById('propPrice').value, 0, 0, 100000000);
-  const targetMargin = safeNumber(document.getElementById('propTargetMargin').value, 25, 0, 95);
-  const periodCost = snap.totalCostPerVisit * snap.visitsPerMonth;
-  const marginAtEntered = enteredPrice > 0 ? ((enteredPrice - periodCost) / enteredPrice) * 100 : 0;
-
-  banner.style.display = 'block';
-
-  if (enteredPrice <= 0) {
-    banner.style.background = '#fef3c7';
-    banner.style.borderColor = '#f59e0b';
-    message.textContent = 'Enter a price to see its margin health.';
-  } else if (enteredPrice < breakEvenPrice) {
-    banner.style.background = '#fef2f2';
-    banner.style.borderColor = '#ef4444';
-    message.textContent = `⚠️ This price loses money. Break-even: ${formatCurrency(breakEvenPrice)}. At this price, margin: ${marginAtEntered.toFixed(1)}%. To avoid losses, quote at least ${formatCurrency(breakEvenPrice)}.`;
-  } else if (marginAtEntered < targetMargin - 5) {
-    banner.style.background = '#fef3c7';
-    banner.style.borderColor = '#f59e0b';
-    message.textContent = `⚠️ Below target margin. At ${formatCurrency(enteredPrice)} you're at ${marginAtEntered.toFixed(1)}% margin. To reach ${targetMargin}% target, quote ${formatCurrency(targetMarginPrice)}.`;
-  } else {
-    banner.style.background = '#ecfdf5';
-    banner.style.borderColor = '#10b981';
-    message.textContent = `✓ Near or above target margin. Current: ${marginAtEntered.toFixed(1)}%. Target: ${targetMargin}%.`;
-  }
-}
-
-function applyTargetMarginPrice() {
-  isManualPriceOverride = false;
-  recalcProposalPricing();
 }
 
 function useThisQuote() {
