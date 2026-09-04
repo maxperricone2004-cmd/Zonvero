@@ -132,6 +132,16 @@
     .status-healthy { background: #dcfce7; color: #166534; }
     .status-watch { background: #fef3c7; color: #92400e; }
     .status-risk { background: #fee2e2; color: #991b1b; }
+    .portfolio-summary { margin-bottom: 2rem; }
+    .portfolio-summary h2 { margin-bottom: 1rem; }
+    .summary-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .portfolio-filters { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .portfolio-filters select { padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #4a5568; background: white; }
+    .contract-list .contract-card { margin-bottom: 1rem; }
+    .contract-list .contract-details { font-size: 13px; color: #4a5568; }
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 1000; pointer-events: none; }
+    .toast { background: #1a202c; color: white; padding: 0.75rem 1rem; border-radius: 6px; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); opacity: 0; transform: translateY(8px); transition: opacity 0.25s ease, transform 0.25s ease; max-width: 320px; }
+    .toast.toast-visible { opacity: 1; transform: translateY(0); }
     .margin-metric { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
     .metric-box { background: #f7fafc; padding: 1.5rem; border-radius: 6px; border: 1px solid #e2e8f0; }
     .metric-label { font-size: 12px; color: #718096; text-transform: uppercase; margin-bottom: 0.5rem; }
@@ -347,6 +357,7 @@
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .stats-grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .summary-tiles { grid-template-columns: repeat(2, 1fr); }
       .margin-metric { grid-template-columns: 1fr; }
       .proposal-details { grid-template-columns: repeat(2, 1fr); }
       .assumptions-grid { grid-template-columns: 1fr; }
@@ -1050,6 +1061,12 @@
       <input type="number" id="propPrice" value="11000" placeholder="e.g., 11000" oninput="handlePropPriceManualInput()">
       <div class="input-help" id="realizedMarginIndicator" style="display: none;"></div>
     </div>
+
+    <!-- BID HEALTH -->
+    <div id="bidHealthBanner" class="bid-health-banner" style="margin-top:1rem;padding:1rem;border-radius:6px;background:#fef3c7;border:1px solid #f59e0b;display:none;">
+      <div id="bidHealthMessage"></div>
+      <button type="button" id="useTargetMarginPrice" onclick="applyTargetMarginPrice()" style="margin-top:0.5rem;padding:0.5rem 1rem;background:#10b981;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px;">Use Target-Margin Price</button>
+    </div>
   </div>
 
   <div class="calculator" style="margin-top: 2rem;">
@@ -1074,7 +1091,8 @@
     <button class="action-button" onclick="previewProposalEmail()" style="flex: 1;">Preview Email</button>
     <button class="action-button" onclick="sendProposal()" style="flex: 1; background: #059669;">Create Contract Baseline & Send Email</button>
   </div>
-  <button class="action-button" onclick="exportQuotesToExcel()" style="margin-top: 1rem; width: 100%;">Export Quotes to Excel</button>
+  <button class="action-button" onclick="exportQuotesToExcel()" style="margin-top: 1rem; width: 100%;">Export Quotes to CSV</button>
+  <p class="input-help" style="text-align: center;">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
 </div>
 
 <!-- CONTRACTS TAB -->
@@ -1085,7 +1103,57 @@
     Prototype mode: contracts are currently stored in this browser only.
     Do not rely on this version for permanent business records.
   </div>
-  <button class="action-button" onclick="exportContractsToExcel()" style="margin-bottom: 1.5rem;">Export Contracts to Excel</button>
+  <button class="action-button" onclick="exportContractsToExcel()" style="margin-bottom: 0.35rem;">Export Contracts to CSV</button>
+  <p class="input-help" style="margin-bottom: 1.5rem;">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
+
+  <!-- PORTFOLIO DASHBOARD -->
+  <div class="portfolio-summary">
+    <h2>Portfolio Overview</h2>
+    <div class="summary-tiles">
+      <div class="stat-card">
+        <div class="stat-label">Total Contracts</div>
+        <div class="stat-value" id="totalContracts">0</div>
+      </div>
+      <div class="stat-card status-healthy">
+        <div class="stat-label">Healthy</div>
+        <div class="stat-value" id="healthyCount">0</div>
+      </div>
+      <div class="stat-card status-watch">
+        <div class="stat-label">Watch List</div>
+        <div class="stat-value" id="watchCount">0</div>
+      </div>
+      <div class="stat-card status-risk">
+        <div class="stat-label">At Risk</div>
+        <div class="stat-value" id="atRiskCount">0</div>
+      </div>
+    </div>
+
+    <div class="portfolio-filters">
+      <select id="statusFilter" onchange="renderPortfolioDashboard()">
+        <option value="all">All Statuses</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="red">Red</option>
+      </select>
+      <select id="facilityFilter" onchange="renderPortfolioDashboard()">
+        <option value="all">All Facility Types</option>
+        <option value="office">Office</option>
+        <option value="warehouse">Warehouse</option>
+        <option value="medical">Medical</option>
+        <option value="retail">Retail</option>
+      </select>
+      <select id="jobTypeFilter" onchange="renderPortfolioDashboard()">
+        <option value="all">All Job Types</option>
+        <option value="one-time">One-time</option>
+        <option value="recurring">Recurring</option>
+      </select>
+    </div>
+
+    <div id="portfolioContractList" class="contract-list">
+      <!-- Contract cards rendered here -->
+    </div>
+  </div>
+
   <div id="contractsList"></div>
 </div>
 
@@ -1096,9 +1164,18 @@
     Track logged labour and expenses against each contract's original baseline.
   </p>
   <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
-    <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0;">Export Margin Report to Excel</button>
-    <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0;">Export Labour and Expenses to Excel</button>
-    <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0;">Export Change Orders to Excel</button>
+    <div style="flex: 1; min-width: 220px;">
+      <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0; width: 100%;">Export Margin Report to CSV</button>
+      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
+    </div>
+    <div style="flex: 1; min-width: 220px;">
+      <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0; width: 100%;">Export Labour and Expenses to CSV</button>
+      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
+    </div>
+    <div style="flex: 1; min-width: 220px;">
+      <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0; width: 100%;">Export Change Orders to CSV</button>
+      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
+    </div>
   </div>
   <div class="stats-grid">
     <div class="stat-card">
@@ -1575,6 +1652,99 @@ function calculateContractMarginSnapshot(contract) {
   };
 }
 
+// PORTFOLIO STATUS -- single source of truth for Green/Yellow/Red, built
+// entirely from calculateContractMarginSnapshot()'s own fields. Used by
+// renderPortfolioDashboard() and every export that needs a PortfolioStatus
+// column, so the dashboard and every export always agree.
+function getPortfolioStatus(snapshot) {
+  const targetMargin = snapshot.targetMargin;
+  const actualMargin = snapshot.actualMargin;
+
+  if (actualMargin === null || actualMargin < 0) return 'Red';
+  if (actualMargin >= targetMargin - 5) return 'Green';
+  if (actualMargin >= targetMargin - 15) return 'Yellow';
+  return 'Red';
+}
+
+// One-line reason for a contract's margin snapshot, for exports that need a
+// human-readable explanation alongside PortfolioStatus (Contracts export,
+// Margin Report export). Same variance thresholds renderPortfolioDashboard()
+// already uses for its own card reason text, plus the two extra fallback
+// branches (margin-variance-only, and "On target") the export columns need.
+function getContractOneLineReason(snapshot) {
+  if (snapshot.baselineHours > 0 && snapshot.labourVarianceHours / snapshot.baselineHours > 0.10) {
+    return `Labour +${Math.round(snapshot.labourVarianceHours / snapshot.baselineHours * 100)}% vs baseline`;
+  }
+  if (snapshot.baselineCost > 0 && snapshot.costVariance / snapshot.baselineCost > 0.15) {
+    return `Costs +${Math.round(snapshot.costVariance / snapshot.baselineCost * 100)}% vs baseline`;
+  }
+  if (snapshot.absorbedCost > 0) {
+    return `Absorbed CO $${Math.round(snapshot.absorbedCost)}`;
+  }
+  if (snapshot.marginVariancePoints !== null && snapshot.marginVariancePoints < -10) {
+    return `Margin ${Math.round(snapshot.marginVariancePoints * 10) / 10} pts vs target`;
+  }
+  return 'On target';
+}
+
+// BID HEALTH for a saved contract's own baseline assumptions -- reuses
+// calculatePricing() exactly the way updateBidHealth() does for the live
+// Proposal Builder form (called once more with targetMarginPercent: 0 for
+// the break-even price), just sourced from the contract's stored baseline
+// instead of the current form's DOM fields, since exportQuotesToExcel()
+// runs over every saved quote, not only the one currently being edited.
+// Not a second pricing formula -- same calculatePricing(), same thresholds
+// as the live Bid Health banner.
+function getBaselineBidHealth(contract) {
+  const baseline = getContractBaseline(contract);
+  const sqft = baseline?.facility?.sqft;
+
+  if (!baseline || !sqft || sqft <= 0) return null;
+
+  const frequency = getContractFrequency(contract);
+  const isOneTimeJob = isOneTimeFrequency(frequency);
+  const visitsPerMonth = getVisitsPerMonth(frequency);
+  const targetMargin = getBaselineTargetMargin(baseline);
+
+  const pricingInputs = {
+    sqft,
+    crewSize: baseline.labour?.crewSize ?? 3,
+    baseWageRate: baseline.pricing?.baseWageRate ?? 22,
+    productionRate: baseline.estimating?.productionRate ?? 4250,
+    scopeComplexity: baseline.estimating?.scopeComplexity ?? 1,
+    payrollBurden: baseline.estimating?.payrollBurden ?? 25,
+    suppliesPercent: baseline.estimating?.suppliesPercent ?? 4,
+    overheadPerWorkerHour: baseline.estimating?.overheadPerWorkerHour ?? 6,
+    travelCostPerVisit: baseline.estimating?.travelCostPerVisit ?? 0,
+    equipmentCostPerVisit: baseline.estimating?.equipmentCostPerVisit ?? 0,
+    targetMarginPercent: targetMargin
+  };
+
+  const atTargetPricing = calculatePricing(pricingInputs);
+  const breakEvenPerVisit = calculatePricing({ ...pricingInputs, targetMarginPercent: 0 }).requiredPrice;
+
+  const breakEvenPrice = isOneTimeJob ? breakEvenPerVisit : breakEvenPerVisit * visitsPerMonth;
+  const targetMarginPrice = isOneTimeJob ? atTargetPricing.requiredPrice : atTargetPricing.requiredPrice * visitsPerMonth;
+  const enteredPrice = getContractMonthlyPrice(contract);
+  const periodCost = atTargetPricing.totalCostPerVisit * visitsPerMonth;
+  const marginAtEntered = enteredPrice > 0 ? ((enteredPrice - periodCost) / enteredPrice) * 100 : null;
+
+  // Same three states, same thresholds, as the live Bid Health banner's
+  // updateBidHealth() -- "Safe" is that banner's "near or above target".
+  let bidHealthStatus = '';
+  if (enteredPrice > 0) {
+    if (enteredPrice < breakEvenPrice) {
+      bidHealthStatus = 'Loses Money';
+    } else if (marginAtEntered !== null && marginAtEntered < targetMargin - 5) {
+      bidHealthStatus = 'Below Target';
+    } else {
+      bidHealthStatus = 'Safe';
+    }
+  }
+
+  return { breakEvenPrice, targetMarginPrice, enteredPrice, marginAtEntered, targetMargin, bidHealthStatus };
+}
+
 // Tabs
 function switchTab(tabName) {
   const tabEl = document.getElementById(tabName);
@@ -1797,6 +1967,7 @@ function recalcProposalPricing() {
     // touching the total price field (nothing valid to compute yet).
     recommendedPriceEl.value = '';
     hideRealizedMarginIndicator();
+    updateBidHealth();
     return;
   }
 
@@ -1816,6 +1987,7 @@ function recalcProposalPricing() {
   }
 
   refreshRealizedMarginIndicator(snap);
+  updateBidHealth();
 }
 
 // Bound to propPrice's oninput -- fires only on a genuine keystroke, never
@@ -1828,6 +2000,7 @@ function handlePropPriceManualInput() {
 
   isManualPriceOverride = true;
   refreshRealizedMarginIndicator(getProposalPricingSnapshot());
+  updateBidHealth();
 }
 
 function refreshRealizedMarginIndicator(snap) {
@@ -1853,6 +2026,70 @@ function refreshRealizedMarginIndicator(snap) {
 function hideRealizedMarginIndicator() {
   const el = document.getElementById('realizedMarginIndicator');
   if (el) el.style.display = 'none';
+}
+
+// BID HEALTH -- reuses calculatePricing() (the same formula updateCalc()
+// uses; called here once more with targetMarginPercent: 0 to get the
+// break-even price, not a second pricing formula) and the same
+// entered-price-vs-cost math refreshRealizedMarginIndicator() already uses,
+// so the "Monthly Investment" field always shows whether the current price
+// is safe, not just after a manual override.
+function updateBidHealth() {
+  const banner = document.getElementById('bidHealthBanner');
+  const message = document.getElementById('bidHealthMessage');
+  if (!banner || !message) return;
+
+  const snap = getProposalPricingSnapshot();
+  if (snap.sqft <= 0) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  const breakEvenPerVisit = calculatePricing({
+    sqft: snap.sqft,
+    crewSize: safeNumber(document.getElementById('propCrewSize').value, 3, 1, 100),
+    baseWageRate: safeNumber(document.getElementById('propBaseWageRate').value, 22, 0, 500),
+    productionRate: safeNumber(document.getElementById('propProductionRate').value, 4250, 1, 1000000),
+    scopeComplexity: safeNumber(document.getElementById('propScopeComplexity').value, 1, 0.5, 3),
+    payrollBurden: safeNumber(document.getElementById('propPayrollBurden').value, 25, 0, 100),
+    suppliesPercent: safeNumber(document.getElementById('propSuppliesPercent').value, 4, 0, 50),
+    overheadPerWorkerHour: safeNumber(document.getElementById('propOverheadPerLaborHour').value, 6, 0, 1000),
+    travelCostPerVisit: safeNumber(document.getElementById('propTravelCost').value, 0, 0, 100000),
+    equipmentCostPerVisit: safeNumber(document.getElementById('propEquipmentCost').value, 0, 0, 100000),
+    targetMarginPercent: 0
+  }).requiredPrice;
+
+  const breakEvenPrice = snap.isOneTime ? breakEvenPerVisit : breakEvenPerVisit * snap.visitsPerMonth;
+  const targetMarginPrice = snap.isOneTime ? snap.requiredPrice : snap.requiredPrice * snap.visitsPerMonth;
+  const enteredPrice = safeNumber(document.getElementById('propPrice').value, 0, 0, 100000000);
+  const targetMargin = safeNumber(document.getElementById('propTargetMargin').value, 25, 0, 95);
+  const periodCost = snap.totalCostPerVisit * snap.visitsPerMonth;
+  const marginAtEntered = enteredPrice > 0 ? ((enteredPrice - periodCost) / enteredPrice) * 100 : 0;
+
+  banner.style.display = 'block';
+
+  if (enteredPrice <= 0) {
+    banner.style.background = '#fef3c7';
+    banner.style.borderColor = '#f59e0b';
+    message.textContent = 'Enter a price to see its margin health.';
+  } else if (enteredPrice < breakEvenPrice) {
+    banner.style.background = '#fef2f2';
+    banner.style.borderColor = '#ef4444';
+    message.textContent = `⚠️ This price loses money. Break-even: ${formatCurrency(breakEvenPrice)}. At this price, margin: ${marginAtEntered.toFixed(1)}%. To avoid losses, quote at least ${formatCurrency(breakEvenPrice)}.`;
+  } else if (marginAtEntered < targetMargin - 5) {
+    banner.style.background = '#fef3c7';
+    banner.style.borderColor = '#f59e0b';
+    message.textContent = `⚠️ Below target margin. At ${formatCurrency(enteredPrice)} you're at ${marginAtEntered.toFixed(1)}% margin. To reach ${targetMargin}% target, quote ${formatCurrency(targetMarginPrice)}.`;
+  } else {
+    banner.style.background = '#ecfdf5';
+    banner.style.borderColor = '#10b981';
+    message.textContent = `✓ Near or above target margin. Current: ${marginAtEntered.toFixed(1)}%. Target: ${targetMargin}%.`;
+  }
+}
+
+function applyTargetMarginPrice() {
+  isManualPriceOverride = false;
+  recalcProposalPricing();
 }
 
 function useThisQuote() {
@@ -3478,7 +3715,7 @@ function renderContractsList() {
     const isOneTime = isOneTimeContract(contract);
 
     return `
-      <div class="contract-card">
+      <div class="contract-card" id="portfolioContractCard-${contract.id}">
         <div class="contract-header">
           <div>
             <div class="contract-name">${escapeHtml(getContractClientName(contract))}</div>
@@ -3649,6 +3886,112 @@ function renderContractsList() {
       </div>
     `;
   }).join('');
+
+  renderPortfolioDashboard();
+}
+
+// PORTFOLIO DASHBOARD (top of Contracts tab) -- pure presentation layer over
+// calculateContractMarginSnapshot(); no new margin math here.
+function renderPortfolioDashboard() {
+  const contracts = getContracts().filter(c => getContractBaseline(c));
+
+  let healthy = 0, watch = 0, atRisk = 0;
+  const contractCards = [];
+
+  contracts.forEach(contract => {
+    const baseline = getContractBaseline(contract);
+    const snapshot = calculateContractMarginSnapshot(contract);
+    const targetMargin = snapshot.targetMargin;
+    const actualMargin = snapshot.actualMargin;
+
+    // Single source of truth for Green/Yellow/Red -- same helper the
+    // exports use, kept lowercase here only to match this function's own
+    // pre-existing status-filter/statusClass convention.
+    const status = getPortfolioStatus(snapshot).toLowerCase();
+    const statusClass = status === 'green' ? 'status-healthy' : status === 'yellow' ? 'status-watch' : 'status-risk';
+    if (status === 'green') healthy++;
+    else if (status === 'yellow') watch++;
+    else atRisk++;
+
+    // Determine one-line reason
+    let reason = '';
+    if (snapshot.baselineHours > 0 && snapshot.labourVarianceHours / snapshot.baselineHours > 0.1) {
+      reason = `Labour +${Math.round(snapshot.labourVarianceHours / snapshot.baselineHours * 100)}% vs baseline`;
+    } else if (snapshot.baselineCost > 0 && snapshot.costVariance / snapshot.baselineCost > 0.15) {
+      reason = `Costs +${Math.round(snapshot.costVariance / snapshot.baselineCost * 100)}% vs baseline`;
+    } else if (snapshot.absorbedCost > 0) {
+      reason = `Absorbed CO $${Math.round(snapshot.absorbedCost)}`;
+    }
+
+    const frequency = getContractFrequency(contract);
+    contractCards.push({
+      id: contract.id,
+      clientName: getContractClientName(contract),
+      type: frequency === 'one-time' ? 'One-time' : 'Recurring',
+      jobType: frequency === 'one-time' ? 'one-time' : 'recurring',
+      facilityType: baseline.facility?.type || '',
+      value: snapshot.monthlyPrice,
+      actualMargin,
+      targetMargin,
+      status,
+      statusClass,
+      reason
+    });
+  });
+
+  // Update summary tiles
+  document.getElementById('totalContracts').textContent = contracts.length;
+  document.getElementById('healthyCount').textContent = healthy;
+  document.getElementById('watchCount').textContent = watch;
+  document.getElementById('atRiskCount').textContent = atRisk;
+
+  // Apply filters
+  const statusFilter = document.getElementById('statusFilter').value;
+  const facilityFilter = document.getElementById('facilityFilter').value;
+  const jobTypeFilter = document.getElementById('jobTypeFilter').value;
+  const filteredCards = contractCards.filter(card => {
+    if (statusFilter !== 'all' && card.status !== statusFilter) return false;
+    if (facilityFilter !== 'all' && card.facilityType !== facilityFilter) return false;
+    if (jobTypeFilter !== 'all' && card.jobType !== jobTypeFilter) return false;
+    return true;
+  });
+
+  // Render contract list
+  const container = document.getElementById('portfolioContractList');
+  if (filteredCards.length === 0) {
+    container.innerHTML = '<div class="empty-state">No contracts match the selected filters.</div>';
+  } else {
+    container.innerHTML = filteredCards.map(card => `
+      <div class="contract-card" data-contract-id="${card.id}" style="cursor:pointer;">
+        <div class="contract-header">
+          <div>
+            <div class="contract-name">${escapeHtml(card.clientName)}</div>
+            <div class="contract-freq">${escapeHtml(card.type)} • $${Math.round(card.value).toLocaleString()}</div>
+          </div>
+          <span class="status-badge ${card.statusClass}">${card.status === 'green' ? 'Healthy' : card.status === 'yellow' ? 'Watch List' : 'At Risk'}</span>
+        </div>
+        <div class="contract-details">
+          <div>Margin: ${card.actualMargin !== null ? card.actualMargin.toFixed(1) : 'N/A'}% (Target: ${card.targetMargin}%)</div>
+          ${card.reason ? `<div style="font-size:12px;color:#718096;">${escapeHtml(card.reason)}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Add click handlers -- scroll to the matching contract's detail card
+  // further down the same Contracts tab (a distinct id namespace from the
+  // pre-existing Margin Guardian contractCard- ids, to avoid duplicate IDs
+  // since that hidden tab's markup is still in the DOM).
+  container.querySelectorAll('.contract-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const contractId = card.getAttribute('data-contract-id');
+      const detailCard = document.getElementById('portfolioContractCard-' + contractId);
+      if (!detailCard) return;
+      detailCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      detailCard.classList.add('contract-card-highlight');
+      setTimeout(() => detailCard.classList.remove('contract-card-highlight'), 2000);
+    });
+  });
 }
 
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
@@ -5130,6 +5473,31 @@ async function analyzePhotoSecure(imageBase64) {
   }
 }
 
+// TOAST NOTIFICATIONS -- a single reused container (created once, appended
+// to only if missing), with each message a transient element that removes
+// itself after ~3s, so this never leaves permanent duplicate DOM nodes.
+function showToast(message) {
+  let container = document.getElementById('coneQuotesToastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'coneQuotesToastContainer';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add('toast-visible'));
+
+  setTimeout(() => {
+    toast.classList.remove('toast-visible');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
 // CSV / EXCEL EXPORT
 function escapeCsvField(value) {
   const stringValue = value === null || value === undefined
@@ -5143,9 +5511,9 @@ function escapeCsvField(value) {
     : escaped;
 }
 
-function exportToCSV(rows, filename) {
+function exportToCSV(rows, filename, itemLabel = 'rows') {
   if (!Array.isArray(rows) || rows.length === 0) {
-    alert('Nothing to export.');
+    showToast(`No ${itemLabel} available to export.`);
     return;
   }
 
@@ -5182,6 +5550,8 @@ function exportToCSV(rows, filename) {
   setTimeout(() => {
     URL.revokeObjectURL(url);
   }, 1000);
+
+  showToast(`Exported ${rows.length} ${itemLabel} to ${filename}`);
 }
 
 function exportQuotesToExcel() {
@@ -5223,11 +5593,26 @@ function exportQuotesToExcel() {
       EquipmentCostPerVisit: baseline.estimating?.equipmentCostPerVisit ?? '',
       TargetMarginPercent: getBaselineTargetMargin(baseline),
       CreatedAt: baseline.proposalCreatedAt ?? contract.proposalSentAt ?? '',
+      // Bid Health block -- reuses calculatePricing() via getBaselineBidHealth()
+      // (the same formula updateBidHealth() uses for the live Proposal
+      // Builder form), not a second pricing formula. Blank, not NaN/undefined,
+      // when the baseline is missing the sqft needed to compute it.
+      ...(() => {
+        const bidHealth = getBaselineBidHealth(contract);
+        return {
+          BidHealthStatus: bidHealth ? bidHealth.bidHealthStatus : '',
+          BreakEvenPrice: bidHealth ? Math.round(bidHealth.breakEvenPrice * 100) / 100 : '',
+          TargetMarginPrice: bidHealth ? Math.round(bidHealth.targetMarginPrice * 100) / 100 : '',
+          EnteredPrice: bidHealth ? Math.round(bidHealth.enteredPrice * 100) / 100 : '',
+          MarginAtEntered: bidHealth && bidHealth.marginAtEntered !== null ? Math.round(bidHealth.marginAtEntered * 10) / 10 : '',
+          TargetMargin: bidHealth ? bidHealth.targetMargin : '',
+        };
+      })(),
     };
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  exportToCSV(rows, `ConeQuotes_Quotes_${today}.csv`);
+  exportToCSV(rows, `ConeQuotes_Quotes_${today}.csv`, 'quotes');
 }
 
 function exportContractsToExcel() {
@@ -5256,17 +5641,25 @@ function exportContractsToExcel() {
       ActualExpenses: Math.round(snapshot.actualCost * 100) / 100,
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
+      // ActualMarginPercent is this contract's current margin -- the same
+      // value "CurrentMarginPercent" would report, so it is not duplicated
+      // under a second column name.
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderCount: snapshot.changeOrdersCount,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
       AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
       Status: contract.current_state?.status ?? contract.status ?? '',
+      // Single source of truth (getPortfolioStatus/getContractOneLineReason)
+      // -- same helpers the Portfolio Dashboard uses, so this export always
+      // agrees with what the dashboard shows.
+      PortfolioStatus: getPortfolioStatus(snapshot),
+      OneLineReason: getContractOneLineReason(snapshot),
     };
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  exportToCSV(rows, `ConeQuotes_Contracts_${today}.csv`);
+  exportToCSV(rows, `ConeQuotes_Contracts_${today}.csv`, 'contracts');
 }
 
 function exportLabourExpensesToExcel() {
@@ -5277,6 +5670,20 @@ function exportLabourExpensesToExcel() {
     const contractId = contract.id ?? '';
     const proposalId = contract.proposalId ?? '';
     const clientName = getContractClientName(contract);
+
+    // Computed once per contract, not once per row -- contracts without a
+    // baseline (old-format records) get blank rather than fabricated values.
+    const baseline = getContractBaseline(contract);
+    const frequency = getContractFrequency(contract);
+    const jobType = baseline ? (isOneTimeFrequency(frequency) ? 'One-time' : 'Recurring') : '';
+    const frequencyLabel = baseline ? getFrequencyLabel(frequency) : '';
+    let portfolioStatus = '';
+    let currentMarginPercent = '';
+    if (baseline) {
+      const snapshot = calculateContractMarginSnapshot(contract);
+      portfolioStatus = getPortfolioStatus(snapshot);
+      currentMarginPercent = snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10;
+    }
 
     getContractWeeklyLogs(contract).forEach(log => {
       rows.push({
@@ -5293,6 +5700,10 @@ function exportLabourExpensesToExcel() {
         // no meaningful per-row dollar amount for a labour activity.
         Amount: '',
         Notes: '',
+        PortfolioStatus: portfolioStatus,
+        CurrentMarginPercent: currentMarginPercent,
+        JobType: jobType,
+        Frequency: frequencyLabel,
       });
     });
 
@@ -5308,24 +5719,55 @@ function exportLabourExpensesToExcel() {
         Hours: '',
         Amount: expense?.amount ?? '',
         Notes: '',
+        PortfolioStatus: portfolioStatus,
+        CurrentMarginPercent: currentMarginPercent,
+        JobType: jobType,
+        Frequency: frequencyLabel,
       });
     });
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  exportToCSV(rows, `ConeQuotes_LabourExpenses_${today}.csv`);
+  exportToCSV(rows, `ConeQuotes_LabourExpenses_${today}.csv`, 'labour and expense records');
 }
 
 function exportChangeOrdersToExcel() {
   const contracts = getContracts();
   const rows = [];
 
+  // Export-only reporting label -- does not touch the real change-order
+  // status model (Draft / Awaiting Approval / Approved / Completed /
+  // Invoiced / Absorbed), which createChangeOrder()/updateChangeOrderStatus()/
+  // absorbChangeOrder() continue to own unchanged.
+  function getChangeOrderRecoveryStatus(status) {
+    if (status === 'Draft' || status === 'Awaiting Approval') return 'Pending';
+    if (status === 'Absorbed') return 'Absorbed';
+    if (status === 'Approved' || status === 'Completed') return 'Recoverable';
+    if (status === 'Invoiced') return 'Invoiced';
+    return '';
+  }
+
   contracts.forEach(contract => {
     const contractId = contract.id ?? '';
     const proposalId = contract.proposalId ?? '';
     const clientName = getContractClientName(contract);
 
+    // Computed once per contract, not once per change order.
+    const baseline = getContractBaseline(contract);
+    let portfolioStatus = '';
+    let contractCurrentMarginPercent = '';
+    if (baseline) {
+      const snapshot = calculateContractMarginSnapshot(contract);
+      portfolioStatus = getPortfolioStatus(snapshot);
+      contractCurrentMarginPercent = snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10;
+    }
+
     getContractChangeOrders(contract).forEach(order => {
+      const status = order?.status ?? '';
+      const recoveryStatus = getChangeOrderRecoveryStatus(status);
+      const totalCost = parseFloat(order?.totalCost);
+      const recommendedPrice = parseFloat(order?.recommendedPrice);
+
       rows.push({
         ContractID: contractId,
         ProposalID: proposalId,
@@ -5338,17 +5780,22 @@ function exportChangeOrdersToExcel() {
         TotalInternalCost: order?.totalCost ?? '',
         RecommendedCustomerPrice: order?.recommendedPrice ?? '',
         TargetMarginPercent: order?.targetMargin ?? '',
-        Status: order?.status ?? '',
+        Status: status,
         ApprovedAt: order?.approvedAt ?? '',
         CompletedAt: order?.completedAt ?? '',
         InvoicedAt: order?.invoicedAt ?? '',
         AbsorbedReason: order?.absorbedReason ?? '',
+        PortfolioStatus: portfolioStatus,
+        ContractCurrentMarginPercent: contractCurrentMarginPercent,
+        ChangeOrderRecoveryStatus: recoveryStatus,
+        UnrecoveredCost: status === 'Absorbed' && !isNaN(totalCost) ? totalCost : '',
+        RecoverableValue: (status === 'Approved' || status === 'Completed' || status === 'Invoiced') && !isNaN(recommendedPrice) ? recommendedPrice : '',
       });
     });
   });
 
   const today = new Date().toISOString().slice(0, 10);
-  exportToCSV(rows, `ConeQuotes_ChangeOrders_${today}.csv`);
+  exportToCSV(rows, `ConeQuotes_ChangeOrders_${today}.csv`, 'change orders');
 }
 
 function exportMarginReportToExcel() {
@@ -5370,6 +5817,7 @@ function exportMarginReportToExcel() {
       PeriodStart: contract.proposalSentAt ?? getContractBaseline(contract)?.proposalCreatedAt ?? '',
       PeriodEnd: today,
       JobType: isOneTimeJob ? 'One-time' : 'Recurring',
+      VisitsPerMonth: getVisitsPerMonth(frequency),
       BaselineLabourHours: Math.round(snapshot.baselineHours * 100) / 100,
       ActualLabourHours: Math.round(snapshot.actualHours * 100) / 100,
       LabourVarianceHours: Math.round(snapshot.labourVarianceHours * 100) / 100,
@@ -5377,14 +5825,19 @@ function exportMarginReportToExcel() {
       ActualCost: Math.round(snapshot.actualCost * 100) / 100,
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
+      // ActualMarginPercent already reports this contract's current margin
+      // (the "CurrentMarginPercent" the spec asks for), so it is not
+      // duplicated under a second column name.
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
       AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
+      PortfolioStatus: getPortfolioStatus(snapshot),
+      OneLineReason: getContractOneLineReason(snapshot),
     };
   });
 
-  exportToCSV(rows, `ConeQuotes_MarginReport_${today}.csv`);
+  exportToCSV(rows, `ConeQuotes_MarginReport_${today}.csv`, 'contracts');
 }
 </script>
 
