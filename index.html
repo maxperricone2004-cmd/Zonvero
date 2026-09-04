@@ -409,7 +409,7 @@
     <button class="tab-btn" data-tab="calculator">Quote</button>
     <button class="tab-btn" data-tab="proposal">Proposal</button>
     <button class="tab-btn" data-tab="contracts">Contracts</button>
-    <button class="tab-btn" data-tab="reports">Reports</button>
+    <button class="tab-btn" data-tab="margin">Margin Guardian</button>
   </nav>
 </header>
 
@@ -1089,89 +1089,63 @@
   <div style="padding:1rem; background:#f7fafc; border:1px solid #e2e8f0; border-radius:6px; margin-bottom:1.5rem;">
     <p style="font-size:13px; color:#4a5568; margin:0;">
       <strong style="color:#2d3748;">Your data is stored locally.</strong>
-      Export your contracts regularly to keep a backup. All exports are available in the Reports tab.
+      Export your contracts regularly to keep a backup. All exports are available in the Margin Guardian tab.
     </p>
   </div>
-  <button class="action-button" onclick="exportContractsToExcel()" style="margin-bottom: 0.35rem;">Export Contracts to CSV</button>
-  <p class="input-help" style="margin-bottom: 1.5rem;">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
 
-  <!-- PORTFOLIO DASHBOARD -->
-  <div class="portfolio-summary">
-    <h2>Portfolio Overview</h2>
-    <div class="summary-tiles">
-      <div class="stat-card">
-        <div class="stat-label">Total Contracts</div>
-        <div class="stat-value" id="totalContracts">0</div>
+  <!-- PORTFOLIO OVERVIEW -->
+  <div class="portfolio-summary" style="margin-bottom:2rem;">
+    <h3 style="margin-bottom:1rem;">Portfolio Overview</h3>
+    <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+      <div class="stat-card" style="padding:1.5rem; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
+        <div class="stat-label" style="font-size:13px; color:#718096; margin-bottom:0.5rem;">Total Contracts</div>
+        <div class="stat-value" id="totalContracts" style="font-size:32px; font-weight:700; color:#1a202c;">0</div>
       </div>
-      <div class="stat-card status-healthy">
-        <div class="stat-label">Healthy</div>
-        <div class="stat-value" id="healthyCount">0</div>
+      <div class="stat-card status-healthy" style="padding:1.5rem; border:1px solid #c6f6d5; border-radius:8px; text-align:center; background:#f0fff4;">
+        <div class="stat-label" style="font-size:13px; color:#276749; margin-bottom:0.5rem;">Healthy</div>
+        <div class="stat-value" id="healthyCount" style="font-size:32px; font-weight:700; color:#276749;">0</div>
       </div>
-      <div class="stat-card status-watch">
-        <div class="stat-label">Watch List</div>
-        <div class="stat-value" id="watchCount">0</div>
+      <div class="stat-card status-watch" style="padding:1.5rem; border:1px solid #feebc8; border-radius:8px; text-align:center; background:#fffaf0;">
+        <div class="stat-label" style="font-size:13px; color:#c05621; margin-bottom:0.5rem;">Watch List</div>
+        <div class="stat-value" id="watchCount" style="font-size:32px; font-weight:700; color:#c05621;">0</div>
       </div>
-      <div class="stat-card status-risk">
-        <div class="stat-label">At Risk</div>
-        <div class="stat-value" id="atRiskCount">0</div>
+      <div class="stat-card status-risk" style="padding:1.5rem; border:1px solid #fed7d7; border-radius:8px; text-align:center; background:#fff5f5;">
+        <div class="stat-label" style="font-size:13px; color:#c53030; margin-bottom:0.5rem;">At Risk</div>
+        <div class="stat-value" id="atRiskCount" style="font-size:32px; font-weight:700; color:#c53030;">0</div>
       </div>
     </div>
 
-    <div class="portfolio-filters">
-      <select id="statusFilter" onchange="renderPortfolioDashboard()">
+    <div class="portfolio-filters" style="display:flex; gap:0.5rem; margin:1.5rem 0; flex-wrap:wrap;">
+      <select id="statusFilter" style="padding:0.5rem 1rem; border:1px solid #cbd5e0; border-radius:4px; font-size:14px;">
         <option value="all">All Statuses</option>
         <option value="green">Green</option>
         <option value="yellow">Yellow</option>
         <option value="red">Red</option>
       </select>
-      <select id="facilityFilter" onchange="renderPortfolioDashboard()">
+      <select id="facilityFilter" style="padding:0.5rem 1rem; border:1px solid #cbd5e0; border-radius:4px; font-size:14px;">
         <option value="all">All Facility Types</option>
         <option value="office">Office</option>
         <option value="warehouse">Warehouse</option>
         <option value="medical">Medical</option>
         <option value="retail">Retail</option>
       </select>
-      <select id="jobTypeFilter" onchange="renderPortfolioDashboard()">
+      <select id="jobTypeFilter" style="padding:0.5rem 1rem; border:1px solid #cbd5e0; border-radius:4px; font-size:14px;">
         <option value="all">All Job Types</option>
         <option value="one-time">One-time</option>
         <option value="recurring">Recurring</option>
       </select>
-    </div>
-
-    <div id="portfolioContractList" class="contract-list">
-      <!-- Contract cards rendered here -->
     </div>
   </div>
 
   <div id="contractsList"></div>
 </div>
 
-<!-- REPORTS TAB -->
-<div id="reports" class="tab-content" style="display:none;">
-  <h2>Reports & Exports</h2>
-  <p class="section-intro">Export your data and review portfolio performance.</p>
-
-  <!-- Quick Stats -->
-  <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:2rem;">
-    <div class="stat-card" style="padding:1.5rem; border:1px solid #e2e8f0; border-radius:8px; text-align:center;">
-      <div class="stat-label" style="font-size:13px; color:#718096; margin-bottom:0.5rem;">Total Contracts</div>
-      <div class="stat-value" id="reportTotalContracts" style="font-size:32px; font-weight:700; color:#1a202c;">0</div>
-    </div>
-    <div class="stat-card status-healthy" style="padding:1.5rem; border:1px solid #c6f6d5; border-radius:8px; text-align:center; background:#f0fff4;">
-      <div class="stat-label" style="font-size:13px; color:#276749; margin-bottom:0.5rem;">Healthy</div>
-      <div class="stat-value" id="reportHealthyCount" style="font-size:32px; font-weight:700; color:#276749;">0</div>
-    </div>
-    <div class="stat-card status-watch" style="padding:1.5rem; border:1px solid #feebc8; border-radius:8px; text-align:center; background:#fffaf0;">
-      <div class="stat-label" style="font-size:13px; color:#c05621; margin-bottom:0.5rem;">Watch List</div>
-      <div class="stat-value" id="reportWatchCount" style="font-size:32px; font-weight:700; color:#c05621;">0</div>
-    </div>
-    <div class="stat-card status-risk" style="padding:1.5rem; border:1px solid #fed7d7; border-radius:8px; text-align:center; background:#fff5f5;">
-      <div class="stat-label" style="font-size:13px; color:#c53030; margin-bottom:0.5rem;">At Risk</div>
-      <div class="stat-value" id="reportAtRiskCount" style="font-size:32px; font-weight:700; color:#c53030;">0</div>
-    </div>
-  </div>
-
-  <!-- Export Buttons -->
+<!-- MARGIN GUARDIAN TAB -->
+<div id="margin" class="tab-content" style="display:none;">
+  <h2>Margin Guardian Dashboard</h2>
+  <p class="section-intro">
+    Track logged labour and expenses against each contract's original baseline.
+  </p>
   <div style="margin-bottom:2rem;">
     <h3 style="margin-bottom:1rem;">Export Data</h3>
     <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
@@ -1184,60 +1158,6 @@
     <p style="font-size:12px; color:#718096; margin-top:0.5rem;">
       All files download as CSV and open in Excel, Google Sheets, or Numbers.
     </p>
-  </div>
-
-  <!-- Portfolio Summary Table -->
-  <div style="margin-bottom:2rem;">
-    <h3 style="margin-bottom:1rem;">Portfolio Summary</h3>
-    <div style="overflow-x:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:14px;">
-        <thead>
-          <tr style="background:#f7fafc; border-bottom:2px solid #e2e8f0;">
-            <th style="padding:0.75rem; text-align:left; font-weight:600;">Client</th>
-            <th style="padding:0.75rem; text-align:left; font-weight:600;">Type</th>
-            <th style="padding:0.75rem; text-align:right; font-weight:600;">Monthly Value</th>
-            <th style="padding:0.75rem; text-align:right; font-weight:600;">Margin %</th>
-            <th style="padding:0.75rem; text-align:left; font-weight:600;">Status</th>
-            <th style="padding:0.75rem; text-align:left; font-weight:600;">Reason</th>
-          </tr>
-        </thead>
-        <tbody id="portfolioSummaryTable">
-          <!-- Rows rendered by JavaScript -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Utilities (moved here from the former "More" menu) -->
-  <div style="padding-top:1.5rem; border-top:1px solid #e2e8f0;">
-    <h3 style="margin-bottom:1rem;">Utilities</h3>
-    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:14px;">
-      <a href="#" id="reportsImportLink" style="color:#4a5568; text-decoration:none;">Import Contracts</a>
-      <a href="#" id="reportsSettingsLink" style="color:#4a5568; text-decoration:none;">Settings</a>
-      <a href="#" id="reportsHelpLink" style="color:#4a5568; text-decoration:none;">Help</a>
-    </div>
-  </div>
-</div>
-
-<!-- MARGIN GUARDIAN TAB -->
-<div id="margin" class="tab-content" style="display:none;">
-  <h2>Margin Guardian Dashboard</h2>
-  <p class="section-intro">
-    Track logged labour and expenses against each contract's original baseline.
-  </p>
-  <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
-    <div style="flex: 1; min-width: 220px;">
-      <button class="action-button" onclick="exportMarginReportToExcel()" style="margin-top: 0; width: 100%;">Export Margin Report to CSV</button>
-      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
-    </div>
-    <div style="flex: 1; min-width: 220px;">
-      <button class="action-button" onclick="exportLabourExpensesToExcel()" style="margin-top: 0; width: 100%;">Export Labour and Expenses to CSV</button>
-      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
-    </div>
-    <div style="flex: 1; min-width: 220px;">
-      <button class="action-button" onclick="exportChangeOrdersToExcel()" style="margin-top: 0; width: 100%;">Export Change Orders to CSV</button>
-      <p class="input-help">Downloads a CSV file that opens in Excel, Google Sheets, or Numbers.</p>
-    </div>
   </div>
   <div class="stats-grid">
     <div class="stat-card">
@@ -1273,6 +1193,16 @@
 
   <div id="marginSubTabContracts" class="mg-subtab-content" style="display: none;">
     <div id="contractsContainer"></div>
+  </div>
+
+  <!-- Utilities (moved here from the former "More" menu / Reports tab) -->
+  <div style="padding-top:1.5rem; margin-top:1.5rem; border-top:1px solid #e2e8f0;">
+    <h3 style="margin-bottom:1rem;">Utilities</h3>
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:14px;">
+      <a href="#" id="marginImportLink" style="color:#4a5568; text-decoration:none;">Import Contracts</a>
+      <a href="#" id="marginSettingsLink" style="color:#4a5568; text-decoration:none;">Settings</a>
+      <a href="#" id="marginHelpLink" style="color:#4a5568; text-decoration:none;">Help</a>
+    </div>
   </div>
 </div>
 
@@ -1716,8 +1646,8 @@ function calculateContractMarginSnapshot(contract) {
 
 // PORTFOLIO STATUS -- single source of truth for Green/Yellow/Red, built
 // entirely from calculateContractMarginSnapshot()'s own fields. Used by
-// renderPortfolioDashboard() and every export that needs a PortfolioStatus
-// column, so the dashboard and every export always agree.
+// renderContractsList() and every export that needs a PortfolioStatus
+// column, so the Contracts tab and every export always agree.
 function getPortfolioStatus(snapshot) {
   const targetMargin = snapshot.targetMargin;
   const actualMargin = snapshot.actualMargin;
@@ -1728,11 +1658,9 @@ function getPortfolioStatus(snapshot) {
   return 'Red';
 }
 
-// One-line reason for a contract's margin snapshot, for exports that need a
-// human-readable explanation alongside PortfolioStatus (Contracts export,
-// Margin Report export). Same variance thresholds renderPortfolioDashboard()
-// already uses for its own card reason text, plus the two extra fallback
-// branches (margin-variance-only, and "On target") the export columns need.
+// One-line reason for a contract's margin snapshot, shared by
+// renderContractsList()'s card text and every export that needs a
+// human-readable explanation alongside PortfolioStatus.
 function getContractOneLineReason(snapshot) {
   if (snapshot.baselineHours > 0 && snapshot.labourVarianceHours / snapshot.baselineHours > 0.10) {
     return `Labour +${Math.round(snapshot.labourVarianceHours / snapshot.baselineHours * 100)}% vs baseline`;
@@ -1822,7 +1750,6 @@ function switchTab(tabName) {
   if (tabName === 'margin') renderMarginGuardian();
   if (tabName === 'contracts') renderContractsList();
   if (tabName === 'crewIntelligence') populateCrewAnalysisSelect();
-  if (tabName === 'reports') renderReportsTab();
 }
 
 // Calculator
@@ -3743,23 +3670,67 @@ function sendProposal() {
 
 // CONTRACTS LIST VIEW
 function renderContractsList() {
-  const contracts = getContracts();
+  const contracts = getContracts().filter(c => getContractBaseline(c));
   const container = document.getElementById('contractsList');
 
-  if (contracts.length === 0) {
-    container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder.</div>';
+  // Portfolio stats + per-contract status/reason -- same single-source-of-truth
+  // helpers (getPortfolioStatus/getContractOneLineReason) the exports use, so
+  // this list, the Reports/Margin exports, and everything else always agree.
+  let healthy = 0, watch = 0, atRisk = 0;
+  const contractData = [];
+
+  contracts.forEach(contract => {
+    const baseline = getContractBaseline(contract);
+    const snapshot = calculateContractMarginSnapshot(contract);
+    const status = getPortfolioStatus(snapshot).toLowerCase();
+    const statusClass = status === 'green' ? 'status-healthy' : status === 'yellow' ? 'status-watch' : 'status-risk';
+    const statusLabel = status === 'green' ? 'Healthy' : status === 'yellow' ? 'Watch List' : 'At Risk';
+    const statusColor = status === 'green' ? '#276749' : status === 'yellow' ? '#c05621' : '#c53030';
+    if (status === 'green') healthy++;
+    else if (status === 'yellow') watch++;
+    else atRisk++;
+
+    const frequency = getContractFrequency(contract);
+    const isOneTime = isOneTimeFrequency(frequency);
+
+    contractData.push({
+      contract, baseline, statusClass, statusLabel, statusColor,
+      status, jobType: isOneTime ? 'one-time' : 'recurring',
+      facilityType: baseline.facility?.type || '',
+      reason: getContractOneLineReason(snapshot),
+    });
+  });
+
+  // Update summary tiles
+  const totalEl = document.getElementById('totalContracts');
+  if (totalEl) totalEl.textContent = contracts.length;
+  const healthyEl = document.getElementById('healthyCount');
+  if (healthyEl) healthyEl.textContent = healthy;
+  const watchEl = document.getElementById('watchCount');
+  if (watchEl) watchEl.textContent = watch;
+  const atRiskEl = document.getElementById('atRiskCount');
+  if (atRiskEl) atRiskEl.textContent = atRisk;
+
+  // Apply filters
+  const statusFilter = document.getElementById('statusFilter')?.value || 'all';
+  const facilityFilter = document.getElementById('facilityFilter')?.value || 'all';
+  const jobTypeFilter = document.getElementById('jobTypeFilter')?.value || 'all';
+
+  const filteredData = contractData.filter(data => {
+    if (statusFilter !== 'all' && data.status !== statusFilter) return false;
+    if (facilityFilter !== 'all' && data.facilityType !== facilityFilter) return false;
+    if (jobTypeFilter !== 'all' && data.jobType !== jobTypeFilter) return false;
+    return true;
+  });
+
+  if (filteredData.length === 0) {
+    container.innerHTML = contracts.length === 0
+      ? '<div class="empty-state">No contracts yet. Create one in Proposal Builder.</div>'
+      : '<div class="empty-state">No contracts match the selected filters.</div>';
     return;
   }
 
-  container.innerHTML = contracts.map(contract => {
-    // Handle both old and new contract formats
-    const baseline = getContractBaseline(contract);
-
-    if (!baseline) {
-      // Old contract format - skip
-      return '';
-    }
-
+  container.innerHTML = filteredData.map(({ contract, baseline, statusLabel, statusColor, reason }) => {
     const scopeHtml = Object.entries(baseline.scope || {}).map(([room, data]) => {
       const tasks = Object.entries(data.tasks).filter(([, checked]) => checked).map(([task]) => task);
       if (tasks.length === 0) return '';
@@ -3782,7 +3753,9 @@ function renderContractsList() {
         <div class="contract-header">
           <div>
             <div class="contract-name">${escapeHtml(getContractClientName(contract))}</div>
+            <span class="status-badge" style="display:inline-block; padding:0.25rem 0.75rem; border-radius:9999px; font-size:12px; font-weight:600; background:${statusColor}20; color:${statusColor}; margin-top:0.35rem;">${statusLabel}</span>
             <div class="contract-freq">${escapeHtml(baseline.facility?.sqft ?? '')} sq ft • ${escapeHtml(contract.proposalId)}</div>
+            ${reason ? `<div style="font-size:12px; color:#718096; margin-top:0.35rem;">${escapeHtml(reason)}</div>` : ''}
           </div>
           <span class="status-badge status-healthy">${escapeHtml(contract.current_state?.status ?? contract.status ?? '')}</span>
         </div>
@@ -3949,169 +3922,6 @@ function renderContractsList() {
       </div>
     `;
   }).join('');
-
-  renderPortfolioDashboard();
-}
-
-// PORTFOLIO DASHBOARD (top of Contracts tab) -- pure presentation layer over
-// calculateContractMarginSnapshot(); no new margin math here.
-function renderPortfolioDashboard() {
-  const contracts = getContracts().filter(c => getContractBaseline(c));
-
-  let healthy = 0, watch = 0, atRisk = 0;
-  const contractCards = [];
-
-  contracts.forEach(contract => {
-    const baseline = getContractBaseline(contract);
-    const snapshot = calculateContractMarginSnapshot(contract);
-    const targetMargin = snapshot.targetMargin;
-    const actualMargin = snapshot.actualMargin;
-
-    // Single source of truth for Green/Yellow/Red -- same helper the
-    // exports use, kept lowercase here only to match this function's own
-    // pre-existing status-filter/statusClass convention.
-    const status = getPortfolioStatus(snapshot).toLowerCase();
-    const statusClass = status === 'green' ? 'status-healthy' : status === 'yellow' ? 'status-watch' : 'status-risk';
-    if (status === 'green') healthy++;
-    else if (status === 'yellow') watch++;
-    else atRisk++;
-
-    // Determine one-line reason
-    let reason = '';
-    if (snapshot.baselineHours > 0 && snapshot.labourVarianceHours / snapshot.baselineHours > 0.1) {
-      reason = `Labour +${Math.round(snapshot.labourVarianceHours / snapshot.baselineHours * 100)}% vs baseline`;
-    } else if (snapshot.baselineCost > 0 && snapshot.costVariance / snapshot.baselineCost > 0.15) {
-      reason = `Costs +${Math.round(snapshot.costVariance / snapshot.baselineCost * 100)}% vs baseline`;
-    } else if (snapshot.absorbedCost > 0) {
-      reason = `Absorbed CO $${Math.round(snapshot.absorbedCost)}`;
-    }
-
-    const frequency = getContractFrequency(contract);
-    contractCards.push({
-      id: contract.id,
-      clientName: getContractClientName(contract),
-      type: frequency === 'one-time' ? 'One-time' : 'Recurring',
-      jobType: frequency === 'one-time' ? 'one-time' : 'recurring',
-      facilityType: baseline.facility?.type || '',
-      value: snapshot.monthlyPrice,
-      actualMargin,
-      targetMargin,
-      status,
-      statusClass,
-      reason
-    });
-  });
-
-  // Update summary tiles
-  document.getElementById('totalContracts').textContent = contracts.length;
-  document.getElementById('healthyCount').textContent = healthy;
-  document.getElementById('watchCount').textContent = watch;
-  document.getElementById('atRiskCount').textContent = atRisk;
-
-  // Apply filters
-  const statusFilter = document.getElementById('statusFilter').value;
-  const facilityFilter = document.getElementById('facilityFilter').value;
-  const jobTypeFilter = document.getElementById('jobTypeFilter').value;
-  const filteredCards = contractCards.filter(card => {
-    if (statusFilter !== 'all' && card.status !== statusFilter) return false;
-    if (facilityFilter !== 'all' && card.facilityType !== facilityFilter) return false;
-    if (jobTypeFilter !== 'all' && card.jobType !== jobTypeFilter) return false;
-    return true;
-  });
-
-  // Render contract list
-  const container = document.getElementById('portfolioContractList');
-  if (filteredCards.length === 0) {
-    container.innerHTML = '<div class="empty-state">No contracts match the selected filters.</div>';
-  } else {
-    container.innerHTML = filteredCards.map(card => `
-      <div class="contract-card" data-contract-id="${card.id}" style="cursor:pointer;">
-        <div class="contract-header">
-          <div>
-            <div class="contract-name">${escapeHtml(card.clientName)}</div>
-            <div class="contract-freq">${escapeHtml(card.type)} • $${Math.round(card.value).toLocaleString()}</div>
-          </div>
-          <span class="status-badge ${card.statusClass}">${card.status === 'green' ? 'Healthy' : card.status === 'yellow' ? 'Watch List' : 'At Risk'}</span>
-        </div>
-        <div class="contract-details">
-          <div>Margin: ${card.actualMargin !== null ? card.actualMargin.toFixed(1) : 'N/A'}% (Target: ${card.targetMargin}%)</div>
-          ${card.reason ? `<div style="font-size:12px;color:#718096;">${escapeHtml(card.reason)}</div>` : ''}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Add click handlers -- scroll to the matching contract's detail card
-  // further down the same Contracts tab (a distinct id namespace from the
-  // pre-existing Margin Guardian contractCard- ids, to avoid duplicate IDs
-  // since that hidden tab's markup is still in the DOM).
-  container.querySelectorAll('.contract-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const contractId = card.getAttribute('data-contract-id');
-      const detailCard = document.getElementById('portfolioContractCard-' + contractId);
-      if (!detailCard) return;
-      detailCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      detailCard.classList.add('contract-card-highlight');
-      setTimeout(() => detailCard.classList.remove('contract-card-highlight'), 2000);
-    });
-  });
-}
-
-// REPORTS TAB -- same single-source-of-truth helpers as the Portfolio
-// Dashboard (getPortfolioStatus/getContractOneLineReason), not a third
-// re-implementation of the Green/Yellow/Red thresholds.
-function renderReportsTab() {
-  const contracts = getContracts().filter(c => getContractBaseline(c));
-
-  let healthy = 0, watch = 0, atRisk = 0;
-  const statusLabels = { Green: 'Healthy', Yellow: 'Watch List', Red: 'At Risk' };
-  const statusColors = { Green: '#276749', Yellow: '#c05621', Red: '#c53030' };
-  const tableRows = [];
-
-  contracts.forEach(contract => {
-    const snapshot = calculateContractMarginSnapshot(contract);
-    const status = getPortfolioStatus(snapshot);
-
-    if (status === 'Green') healthy++;
-    else if (status === 'Yellow') watch++;
-    else atRisk++;
-
-    const frequency = getContractFrequency(contract);
-    const isOneTime = isOneTimeFrequency(frequency);
-
-    tableRows.push({
-      clientName: getContractClientName(contract),
-      type: isOneTime ? 'One-time' : 'Recurring',
-      value: snapshot.monthlyPrice,
-      margin: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
-      statusLabel: statusLabels[status],
-      statusColor: statusColors[status],
-      reason: getContractOneLineReason(snapshot)
-    });
-  });
-
-  // Update summary tiles
-  document.getElementById('reportTotalContracts').textContent = contracts.length;
-  document.getElementById('reportHealthyCount').textContent = healthy;
-  document.getElementById('reportWatchCount').textContent = watch;
-  document.getElementById('reportAtRiskCount').textContent = atRisk;
-
-  // Render table
-  const tbody = document.getElementById('portfolioSummaryTable');
-  tbody.innerHTML = tableRows.map(row => `
-    <tr style="border-bottom:1px solid #e2e8f0;">
-      <td style="padding:0.75rem;">${escapeHtml(row.clientName)}</td>
-      <td style="padding:0.75rem;">${escapeHtml(row.type)}</td>
-      <td style="padding:0.75rem; text-align:right;">$${Math.round(row.value).toLocaleString()}</td>
-      <td style="padding:0.75rem; text-align:right;">${row.margin}%</td>
-      <td style="padding:0.75rem;">
-        <span style="display:inline-block; padding:0.25rem 0.75rem; border-radius:9999px; font-size:12px; font-weight:600; background:${row.statusColor}20; color:${row.statusColor};">
-          ${row.statusLabel}
-        </span>
-      </td>
-      <td style="padding:0.75rem; font-size:13px; color:#718096;">${escapeHtml(row.reason)}</td>
-    </tr>
-  `).join('');
 }
 
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
@@ -5519,9 +5329,10 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
   });
 
-  // Reports-tab utility links (formerly the "More" dropdown, which was
-  // removed -- these three items moved here instead of being dropped).
-  const importLink = document.getElementById('reportsImportLink');
+  // Margin Guardian utility links (formerly the "More" dropdown, then the
+  // Reports tab -- both removed; these three items moved here instead of
+  // being dropped, since Margin Guardian is where the exports live now).
+  const importLink = document.getElementById('marginImportLink');
   if (importLink) {
     importLink.addEventListener('click', (e) => {
       e.preventDefault();
@@ -5538,7 +5349,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  const settingsLink = document.getElementById('reportsSettingsLink');
+  const settingsLink = document.getElementById('marginSettingsLink');
   if (settingsLink) {
     settingsLink.addEventListener('click', (e) => {
       e.preventDefault();
@@ -5546,13 +5357,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  const helpLink = document.getElementById('reportsHelpLink');
+  const helpLink = document.getElementById('marginHelpLink');
   if (helpLink) {
     helpLink.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.href = 'mailto:conequotes.service@outlook.com?subject=ConeQuotes Help Request';
     });
   }
+
+  // Contracts-tab portfolio filters -- re-render the (now merged) contract
+  // list, not a separate dashboard function.
+  const statusFilterEl = document.getElementById('statusFilter');
+  if (statusFilterEl) statusFilterEl.addEventListener('change', renderContractsList);
+  const facilityFilterEl = document.getElementById('facilityFilter');
+  if (facilityFilterEl) facilityFilterEl.addEventListener('change', renderContractsList);
+  const jobTypeFilterEl = document.getElementById('jobTypeFilter');
+  if (jobTypeFilterEl) jobTypeFilterEl.addEventListener('change', renderContractsList);
 });
 
 window.addEventListener('hashchange', function() {
