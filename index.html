@@ -5479,7 +5479,7 @@ function showToast(message) {
 }
 
 // CSV / EXCEL EXPORT
-function escapeCsvField(value) {
+function escapeCSV(value) {
   const stringValue = value === null || value === undefined
     ? ''
     : String(value);
@@ -5500,10 +5500,10 @@ function exportToCSV(rows, filename, itemLabel = 'rows') {
   const headers = Object.keys(rows[0]);
 
   const lines = [
-    headers.map(escapeCsvField).join(','),
+    headers.map(escapeCSV).join(','),
     ...rows.map(row =>
       headers
-        .map(header => escapeCsvField(row[header]))
+        .map(header => escapeCSV(row[header]))
         .join(',')
     )
   ];
@@ -5625,7 +5625,7 @@ function exportContractsToExcel() {
       // Explicitly requested alongside ActualMarginPercent (which already
       // carries the same figure) -- kept as its own column, formatted per
       // spec, for anyone reading by this exact column name.
-      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
+      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'NA',
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderCount: snapshot.changeOrdersCount,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
@@ -5807,7 +5807,7 @@ function exportMarginReportToExcel() {
       CostVariance: Math.round(snapshot.costVariance * 100) / 100,
       TargetMarginPercent: snapshot.targetMargin,
       ActualMarginPercent: snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10,
-      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'N/A',
+      CurrentMarginPercent: snapshot.actualMargin !== null ? snapshot.actualMargin.toFixed(1) : 'NA',
       MarginVariancePoints: snapshot.marginVariancePoints === null ? '' : Math.round(snapshot.marginVariancePoints * 10) / 10,
       ChangeOrderValue: Math.round(snapshot.changeOrdersValue * 100) / 100,
       AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
