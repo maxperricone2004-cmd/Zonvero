@@ -1134,6 +1134,13 @@
         <option value="one-time">One-time</option>
         <option value="recurring">Recurring</option>
       </select>
+      <select id="lifecycleFilter" style="padding:0.5rem 1rem; border:1px solid #cbd5e0; border-radius:4px; font-size:14px;">
+        <option value="all">All Contract States</option>
+        <option value="Active">Active</option>
+        <option value="Paused">Paused</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Completed">Completed</option>
+      </select>
     </div>
   </div>
 
@@ -1198,11 +1205,23 @@
   <!-- Utilities (moved here from the former "More" menu / Reports tab) -->
   <div style="padding-top:1.5rem; margin-top:1.5rem; border-top:1px solid #e2e8f0;">
     <h3 style="margin-bottom:1rem;">Utilities</h3>
-    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:14px;">
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:14px; margin-bottom: 1.5rem;">
       <a href="#" id="marginImportLink" style="color:#4a5568; text-decoration:none;">Import Contracts</a>
       <a href="#" id="marginSettingsLink" style="color:#4a5568; text-decoration:none;">Settings</a>
       <a href="#" id="marginHelpLink" style="color:#4a5568; text-decoration:none;">Help</a>
     </div>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 14px;">
+      <button
+        class="action-button"
+        onclick="clearAllData()"
+        style="background: #dc2626;"
+      >
+        Clear All Data
+      </button>
+    </div>
+    <p style="font-size: 12px; color: #718096; margin-top: 0.5rem;">
+      This will delete all contracts, labour logs, expenses, and margin leak data from this browser. Cannot be undone.
+    </p>
   </div>
 </div>
 
@@ -1565,6 +1584,29 @@ function getContractExpenseEntries(contract) {
   return Array.isArray(contract?.expenses)
     ? contract.expenses
     : [];
+}
+
+// CONTRACT LIFECYCLE (Active / Paused / Cancelled / Completed) -- distinct
+// from current_state.status (the proposal/workflow status like "Proposal
+// Sent") and from Delete, which stays reserved for test/duplicate/mistaken
+// contracts. Lives on current_state (the same object that already tracks
+// status/currentPrice/lastModified), not a separate top-level field, so it
+// travels with the rest of a contract's evolving state. A saved contract
+// with no lifecycleStatus yet (every contract created before this feature)
+// is treated as Active.
+function getContractLifecycleStatus(contract) {
+  const status = contract?.current_state?.lifecycleStatus || contract?.lifecycleStatus || 'Active';
+
+  const validStatuses = ['Active', 'Paused', 'Cancelled', 'Completed'];
+  return validStatuses.includes(status) ? status : 'Active';
+}
+
+function getLifecycleStatusClass(status) {
+  if (status === 'Active') return 'status-healthy';
+  if (status === 'Paused') return 'status-watch';
+  if (status === 'Cancelled') return 'status-risk';
+  if (status === 'Completed') return 'status-healthy';
+  return 'status-healthy';
 }
 
 // Shared margin math used by Margin Guardian cards, leak detection, Weekly
@@ -3612,6 +3654,7 @@ function sendProposal() {
     // CURRENT STATE (can evolve later)
     current_state: {
       status: 'Proposal Sent',
+      lifecycleStatus: 'Active',
       currentPrice: price,
       lastModified: new Date().toISOString(),
     },
@@ -3744,17 +3787,23 @@ function renderContractsList() {
   const statusFilter = document.getElementById('statusFilter')?.value || 'all';
   const facilityFilter = document.getElementById('facilityFilter')?.value || 'all';
   const jobTypeFilter = document.getElementById('jobTypeFilter')?.value || 'all';
+  const lifecycleFilter = document.getElementById('lifecycleFilter')?.value || 'all';
 
   const filteredData = contractData.filter(data => {
     if (statusFilter !== 'all' && data.status !== statusFilter) return false;
     if (facilityFilter !== 'all' && data.facilityType !== facilityFilter) return false;
     if (jobTypeFilter !== 'all' && data.jobType !== jobTypeFilter) return false;
+    if (lifecycleFilter !== 'all' && getContractLifecycleStatus(data.contract) !== lifecycleFilter) return false;
     return true;
   });
 
   if (filteredData.length === 0) {
     container.innerHTML = contracts.length === 0
-      ? '<div class="empty-state">No contracts yet. Create one in Proposal Builder.</div>'
+      ? `<div class="empty-state">
+          <h3 style="margin-bottom: 0.5rem; color: #1a202c;">No contracts yet</h3>
+          <p style="margin-bottom: 1.5rem;">Create your first contract in Proposal Builder to start tracking margin.</p>
+          <button class="action-button" onclick="switchTab('proposal')">Create First Contract →</button>
+        </div>`
       : '<div class="empty-state">No contracts match the selected filters.</div>';
     return;
   }
@@ -3948,9 +3997,203 @@ function renderContractsList() {
             Contract ID: ${contract.id} | Proposal: ${escapeHtml(contract.proposalId)} | Created: ${new Date(contract.proposalSentAt).toLocaleDateString()}
           </p>
         </div>
+
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <div style="font-size: 12px; color: #718096; margin-bottom: 0.5rem;">
+            Contract lifecycle
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <span class="status-badge ${getLifecycleStatusClass(getContractLifecycleStatus(contract))}">
+              ${escapeHtml(getContractLifecycleStatus(contract))}
+            </span>
+
+            <select
+              id="lifecycle-${contract.id}"
+              style="padding: 0.55rem 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 13px;"
+            >
+              <option value="Active" ${getContractLifecycleStatus(contract) === 'Active' ? 'selected' : ''}>Active</option>
+              <option value="Paused" ${getContractLifecycleStatus(contract) === 'Paused' ? 'selected' : ''}>Paused</option>
+              <option value="Cancelled" ${getContractLifecycleStatus(contract) === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+              <option value="Completed" ${getContractLifecycleStatus(contract) === 'Completed' ? 'selected' : ''}>Completed</option>
+            </select>
+
+            <button
+              class="action-button"
+              onclick="updateContractLifecycleStatus(${contract.id})"
+              style="margin-top: 0;"
+            >
+              Update Status
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #fee2e2;">
+          <div style="font-size: 12px; color: #dc2626; font-weight: 600; margin-bottom: 0.5rem;">
+            Danger zone
+          </div>
+          <button
+            class="action-button"
+            onclick="deleteContract(${contract.id})"
+            style="background: #dc2626;"
+          >
+            Delete Contract
+          </button>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+// Deletes a contract, offering a one-row CSV export of it first. Also prunes
+// any margin-leak records tied to the deleted contract -- recomputeMarginLeaks()
+// on its own only adds/refreshes leaks for contracts that still exist, it
+// never removes leaks for ones that don't, so without this the Margin Leak
+// Inbox would keep showing stale entries for a contract that no longer exists.
+function deleteContract(contractId) {
+  const contracts = getContracts();
+  const contract = contracts.find(c => c.id === contractId);
+
+  if (!contract) {
+    alert('Contract not found');
+    return;
+  }
+
+  const exportFirst = confirm(`Delete contract "${getContractClientName(contract)}"?
+
+Click OK to export to CSV first, then delete.
+Click Cancel to delete without exporting.`);
+
+  if (exportFirst) {
+    // Export this single contract to CSV
+    const rows = [{
+      ProposalID: contract.proposalId ?? '',
+      ClientName: getContractClientName(contract),
+      ClientEmail: getContractClientEmail(contract),
+      MonthlyPrice: getContractMonthlyPrice(contract),
+      Frequency: getContractFrequency(contract),
+      CreatedAt: contract.proposalSentAt ?? ''
+    }];
+
+    const headers = Object.keys(rows[0]);
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => headers.map(h => {
+        const val = row[h] ?? '';
+        if (String(val).includes(',') || String(val).includes('"') || String(val).includes('\n')) {
+          return '"' + String(val).replace(/"/g, '""') + '"';
+        }
+        return val;
+      }).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ConeQuotes_${contract.proposalId || contract.id}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  const confirmed = confirm('Delete is for test, duplicate, or mistakenly created contracts.\n\nFor a real contract that has ended, use Cancelled or Completed instead so its financial history is kept.\n\nAre you sure you want to permanently delete this contract?');
+  if (!confirmed) return;
+
+  const filtered = contracts.filter(c => c.id !== contractId);
+  const saved = saveContracts(filtered);
+
+  if (saved) {
+    // Refresh leaks for contracts that still exist, then prune any leak
+    // records left over from the one just deleted.
+    recomputeMarginLeaks(filtered.filter(c => getContractLifecycleStatus(c) === 'Active'), { force: true });
+    const validIds = new Set(filtered.map(c => c.id));
+    const marginLeaksData = getMarginLeaks();
+    marginLeaksData.leaks = marginLeaksData.leaks.filter(l => validIds.has(l.contractId));
+    saveMarginLeaks(marginLeaksData);
+
+    showToast('Contract deleted');
+    renderContractsList();
+    renderMarginGuardian();
+  } else {
+    alert('Failed to delete contract. Please try again.');
+  }
+}
+
+function clearAllData() {
+  const confirmed = confirm('WARNING: This will delete ALL contracts, labour logs, expenses, and margin leak data from this browser. This cannot be undone. Are you sure?');
+  if (!confirmed) return;
+
+  localStorage.removeItem('coneQuotesContracts');
+  localStorage.removeItem('coneQuotesMarginLeaks');
+
+  showToast('All data cleared');
+  setTimeout(() => location.reload(), 500);
+}
+
+function updateContractLifecycleStatus(contractId) {
+  const select = document.getElementById(`lifecycle-${contractId}`);
+  const nextStatus = select?.value;
+
+  const validStatuses = ['Active', 'Paused', 'Cancelled', 'Completed'];
+  if (!validStatuses.includes(nextStatus)) {
+    alert('Please select a valid contract status.');
+    return;
+  }
+
+  const contracts = getContracts();
+  const contract = contracts.find(c => String(c.id) === String(contractId));
+
+  if (!contract) {
+    alert('Contract not found.');
+    return;
+  }
+
+  if (!contract.current_state) {
+    contract.current_state = {};
+  }
+
+  const previousStatus = getContractLifecycleStatus(contract);
+
+  if (previousStatus === nextStatus) {
+    showToast(`Contract is already ${nextStatus}.`);
+    return;
+  }
+
+  const confirmed = confirm(
+    `Change "${getContractClientName(contract)}" from ${previousStatus} to ${nextStatus}?`
+  );
+
+  if (!confirmed) {
+    select.value = previousStatus;
+    return;
+  }
+
+  contract.current_state.lifecycleStatus = nextStatus;
+  contract.current_state.lastModified = new Date().toISOString();
+
+  const saved = saveContracts(contracts);
+
+  if (!saved) {
+    alert('Failed to update contract status. Please try again.');
+    return;
+  }
+
+  const activeContracts = contracts.filter(c => getContractLifecycleStatus(c) === 'Active');
+  recomputeMarginLeaks(activeContracts, { force: true });
+  // recomputeMarginLeaks() only adds/refreshes leaks for contracts in the
+  // list passed to it, it never removes leaks for ones that aren't -- so a
+  // contract that just moved away from Active would otherwise leave its old
+  // leak records sitting in the inbox as if it were still active.
+  const activeIds = new Set(activeContracts.map(c => c.id));
+  const marginLeaksData = getMarginLeaks();
+  marginLeaksData.leaks = marginLeaksData.leaks.filter(l => activeIds.has(l.contractId));
+  saveMarginLeaks(marginLeaksData);
+
+  showToast(`Contract marked ${nextStatus}.`);
+  renderContractsList();
+  renderMarginGuardian();
 }
 
 // MARGIN LEAK INBOX & WEEKLY MARGIN REVIEW (Phase 4)
@@ -4652,7 +4895,12 @@ function renderCrewIntelligence() {
 
 // MARGIN GUARDIAN (updated to read baseline)
 function renderMarginGuardian() {
-  const contracts = getContracts();
+  // Margin Guardian is an active-operations view -- Paused/Cancelled/
+  // Completed contracts are preserved (still visible in the Contracts tab
+  // and exports) but excluded from its counts, leak inbox, weekly review,
+  // and contract list, per getContractLifecycleStatus().
+  const allContracts = getContracts();
+  const contracts = allContracts.filter(c => getContractLifecycleStatus(c) === 'Active');
   const container = document.getElementById('contractsContainer');
 
   const leaks = recomputeMarginLeaks(contracts);
@@ -4660,7 +4908,9 @@ function renderMarginGuardian() {
   renderWeeklyReview(computeWeeklyReview(contracts, leaks, currentWeeklyReviewWeekStart(), currentWeeklyReviewWeekEnd()));
 
   if (contracts.length === 0) {
-    container.innerHTML = '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>';
+    container.innerHTML = allContracts.length === 0
+      ? '<div class="empty-state">No contracts yet. Create one in Proposal Builder to get started.</div>'
+      : '<div class="empty-state">No active contracts. Paused, cancelled, and completed contracts are still available in the Contracts tab.</div>';
     updateStats(contracts);
     return;
   }
@@ -5402,6 +5652,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (facilityFilterEl) facilityFilterEl.addEventListener('change', renderContractsList);
   const jobTypeFilterEl = document.getElementById('jobTypeFilter');
   if (jobTypeFilterEl) jobTypeFilterEl.addEventListener('change', renderContractsList);
+  const lifecycleFilterEl = document.getElementById('lifecycleFilter');
+  if (lifecycleFilterEl) lifecycleFilterEl.addEventListener('change', renderContractsList);
 });
 
 window.addEventListener('hashchange', function() {
@@ -5636,6 +5888,7 @@ function exportContractsToExcel() {
       // agrees with what the dashboard shows.
       PortfolioStatus: getPortfolioStatus(snapshot),
       OneLineReason: getContractOneLineReason(snapshot),
+      LifecycleStatus: getContractLifecycleStatus(contract),
     };
   });
 
@@ -5665,6 +5918,7 @@ function exportLabourExpensesToExcel() {
       portfolioStatus = getPortfolioStatus(snapshot);
       currentMarginPercent = snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10;
     }
+    const lifecycleStatus = getContractLifecycleStatus(contract);
 
     getContractWeeklyLogs(contract).forEach(log => {
       rows.push({
@@ -5685,6 +5939,7 @@ function exportLabourExpensesToExcel() {
         CurrentMarginPercent: currentMarginPercent,
         JobType: jobType,
         Frequency: frequencyLabel,
+        LifecycleStatus: lifecycleStatus,
       });
     });
 
@@ -5704,6 +5959,7 @@ function exportLabourExpensesToExcel() {
         CurrentMarginPercent: currentMarginPercent,
         JobType: jobType,
         Frequency: frequencyLabel,
+        LifecycleStatus: lifecycleStatus,
       });
     });
   });
@@ -5742,6 +5998,7 @@ function exportChangeOrdersToExcel() {
       portfolioStatus = getPortfolioStatus(snapshot);
       contractCurrentMarginPercent = snapshot.actualMargin === null ? '' : Math.round(snapshot.actualMargin * 10) / 10;
     }
+    const lifecycleStatus = getContractLifecycleStatus(contract);
 
     getContractChangeOrders(contract).forEach(order => {
       const status = order?.status ?? '';
@@ -5771,6 +6028,7 @@ function exportChangeOrdersToExcel() {
         ChangeOrderRecoveryStatus: recoveryStatus,
         UnrecoveredCost: status === 'Absorbed' && !isNaN(totalCost) ? totalCost : '',
         RecoverableValue: (status === 'Approved' || status === 'Completed' || status === 'Invoiced') && !isNaN(recommendedPrice) ? recommendedPrice : '',
+        LifecycleStatus: lifecycleStatus,
       });
     });
   });
@@ -5813,6 +6071,7 @@ function exportMarginReportToExcel() {
       AbsorbedCost: Math.round(snapshot.absorbedCost * 100) / 100,
       PortfolioStatus: getPortfolioStatus(snapshot),
       OneLineReason: getContractOneLineReason(snapshot),
+      LifecycleStatus: getContractLifecycleStatus(contract),
     };
   });
 
